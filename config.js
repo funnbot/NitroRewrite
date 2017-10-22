@@ -1,10 +1,11 @@
-const { TOKEN, DBNAME, DBPASS, SENTRY, MEMCACHED, LISTS, SHARDS } = require("./auth.js");
+const { TOKEN, DBNAME, DBPASS, SENTRY, LISTS, SHARDS } = require("./auth.js");
 
 module.exports = {
     TABLES: [
         "guild",
         "user",
-        "channel"
+        "channel",
+        "system"
     ],
 
     //Auth stuff
@@ -14,5 +15,4 @@ module.exports = {
     SENTRY,
     SHARDS,
     LISTS,
-    MEMCACHED
 }

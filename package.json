@@ -17,7 +17,7 @@
     "chalk": "^2.2.0",
     "discord.js": "github:hydrabolt/discord.js",
     "erlpack": "github:discordapp/erlpack",
-    "memcached": "^2.2.2",
+    "node-opus": "^0.2.7",
     "raven": "^2.2.1",
     "rethinkdbdash": "^2.3.31",
     "uws": "^8.14.1"

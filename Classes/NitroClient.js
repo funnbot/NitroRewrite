@@ -22,13 +22,12 @@ class NitroClient extends Discord.Client {
             user: {}
         };
 
-        this.mem = new Memcached(config.MEMCACHED);
-
         this.initTime = Date.now();
     }
 
     async init() {
         await this.Database.formatDb();
+        await this.Database.load();
         this.login(config.TOKEN);
     }
 }

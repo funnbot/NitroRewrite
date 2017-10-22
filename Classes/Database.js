@@ -3,7 +3,11 @@ let r = require("rethinkdbdash")();
 
 class Database {
     constructor() {
+        
+    }
 
+    async load() {
+        
     }
 
     async formatDb() {
