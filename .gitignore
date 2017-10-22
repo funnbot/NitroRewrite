@@ -1,0 +1,4 @@
+rethinkdb_data/
+auth.js
+.jsbeautifyrc
+node_modules/
