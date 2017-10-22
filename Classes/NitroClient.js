@@ -1,7 +1,8 @@
 global.Promise = require("bluebird");
 
 const Discord = require("discord.js");
-const Sentry = require("raven")
+const Sentry = require("raven");
+const Memcached = require("memcached");
 const Database = require("./Database.js");
 const Logger = require("./Logger.js");
 const config = require("../config.js");
@@ -31,3 +32,5 @@ class NitroClient extends Discord.Client {
         this.login(config.TOKEN);
     }
 }
+
+module.exports = NitroClient;

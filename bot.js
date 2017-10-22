@@ -8,5 +8,4 @@ const start = async () => {
     await bot.init();
     module.exports = bot;
 }
-
 start();

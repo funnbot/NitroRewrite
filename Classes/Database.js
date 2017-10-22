@@ -20,3 +20,5 @@ class Database {
         return;
     }
 }
+
+module.exports = Database;
