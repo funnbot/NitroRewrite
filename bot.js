@@ -7,5 +7,7 @@ const bot = new Classes.NitroClient({
 const start = async () => {
     await bot.init();
     module.exports = bot;
+    require("./Events/guild.js");
+    const message = new Classes.MessageHandler(bot);
 }
 start();

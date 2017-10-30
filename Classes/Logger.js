@@ -1,19 +1,34 @@
 const chalk = require("chalk");
+const moment = require("moment");
+
+function msg(lvl, m) {
+    return `[${moment().format("HH[:]mm[:]ss")}] ${lvl}: ${m}`; 
+}
+
+function log(color, lvl, msgs) {
+    console.log(chalk[color](msg(lvl, msgs.join(" "))));
+    return console.log
+}
 
 class Logger {
-    static info(info) {
-        console.log(chalk.blue(info));
-        return console.log
+    static info(...info) {
+        return log("blue", "INFO", info);
     }
 
-    static warn(warn) {
-        console.log(chalk.yellow(warn));
-        return console.log
+    static debug(...debug) {
+        return log("white", "DEBUG", debug);
     }
 
-    static err(err) {
-        console.log(chalk.red(err))
-        return console.log
+    static warn(...warn) {
+        return log("yellow", "WARN", warn);
+    }
+
+    static err(...err) {
+        return log("red", "ERROR", err);
+    }
+
+    static db(...db) {
+        return log("green", "DB", db);
     }
 }
 
