@@ -57,7 +57,7 @@ const makeRequest = (url, body, auth) => {
     auth && req.set("Authorization", auth);
     req.set("Content-Type", "application/json")
         .send(body)
-        .then().catch(e => console.log(e));
+        .then().catch(e => logger.warn(e));
 }
 
 const defaultChannel = guild => guild.channels

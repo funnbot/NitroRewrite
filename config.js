@@ -1,7 +1,7 @@
 const { TOKEN, DBNAME, DBPASS, SENTRY, LISTS, SHARDS } = require("./auth.js");
 
 module.exports = {
-    PREFIX: "n.",
+    PREFIX: "?",
 
     DisabledGroups: [],
     DisabledCommands: [],
@@ -81,31 +81,31 @@ module.exports = {
     STOCKS: {
         FunnCorp: {
             key: "FNN",
-            base: 38.90,
+            base: 1.00
         },
         Nitro: {
             key: "NTO",
-            base: 11.41
+            base: 0.70
         },
         MopBot: {
             key: "MPB",
-            base: 9.16
+            base: 0.68
         },
         Discord: {
             key: "DSC",
-            base: 5.98
+            base: 0.64
         },
         Pancake: {
             key: "PAN",
-            base: 3.91
+            base: 0.60
         },
         Martin: {
             key: "MTN",
-            base: 1.62
+            base: 0.57
         },
         Alfred: {
             key: "ALF",
-            base: 0.55
+            base: 0.35
         }
     },
     //Numbers

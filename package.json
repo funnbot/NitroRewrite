@@ -14,7 +14,7 @@
   "author": "Funnbot",
   "license": "MIT",
   "dependencies": {
-    "canvas": "^1.6.7",
+    "canvas": "github:Automattic/node-canvas",
     "chalk": "^2.2.0",
     "discord.js": "github:hydrabolt/discord.js",
     "duration-js": "^4.0.0",
@@ -24,9 +24,9 @@
     "moment": "^2.19.1",
     "node-opus": "^0.2.7",
     "raven": "^2.2.1",
+    "request": "^2.83.0",
     "rethinkdbdash": "^2.3.31",
     "sharp": "^0.18.4",
-    "uws": "^8.14.1",
-    "vm2": "^3.5.2"
+    "uws": "^8.14.1"
   }
 }

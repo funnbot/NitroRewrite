@@ -58,7 +58,7 @@ class Command {
     }
 
     async run(message, bot, send) {
-        if (typeof this.runCommand === "string") send(this.runCommand).catch(console.log)
+        if (typeof this.runCommand === "string") send(this.runCommand).catch(logger.warn)
         else if (typeof this.runCommand === "function") {
             try {
                 if (this.args.length > 0) {
@@ -70,7 +70,7 @@ class Command {
                 await this.runCommand(message, bot, send)
                 message.channel.stopTyping()
             } catch (err) {
-                send("Command Error, Please alert the developer.").catch(console.log)
+                send("Command Error, Please alert the developer.").catch(logger.warn)
                 logger.err(message.command + " - " + err.stack)
             }
         } else throw new Error("Invalid command type")

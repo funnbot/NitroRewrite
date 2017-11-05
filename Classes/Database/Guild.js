@@ -13,16 +13,44 @@ class Guild extends Extension {
     }
 
     get alias() {
-        return this.g("alias", {})
+        return this.g("alias");
     }
 
     set alias(val) {
-        this.s("alias", val)
+        this.s("alias", val);
     }
 
+    get mlchannel() {
+        return this.g("mlchannel", null);
+    }
 
+    set mlchannel(val) {
+        this.s("mlchannel", val);
+    }
 
+    get mljoin() {
+        return this.g("mljoin", null);
+    }
 
+    set mljoin(val) {
+        this.s("mljoin", val)
+    }
+
+    get mlleave() {
+        return this.g("mlleave", null);
+    }
+
+    set mlleave(val) {
+        this.s("mlleave", val);
+    }
+
+    get mljoindm() {
+        return this.g("mljoindm", null);
+    }
+
+    set mljoindm(val) {
+        this.s("mljoindm", val)
+    }
 
 
     g(item, def) {

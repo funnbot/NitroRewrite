@@ -30,7 +30,7 @@ class Message extends Extension {
         try {
             var messages = await this.channel.messages.fetch({ limit: 3 })
         } catch (e) {
-            return console.log(e);
+            return logger.warn(e);
         }
         for (let m of messages.values()) {
             if (m.attachments.size) {

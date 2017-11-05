@@ -26,7 +26,7 @@ class Message extends EventEmitter {
             if (message.guild) message.guild.members.fetch(message.author);
             if (message.channel.type === "text" && !message.member) return;
             this.emit("create", message)
-            if (!message.content.startsWith(message.prefix) && !message.content.startsWith(`<@${bot.user.id}>`) && !message.content.startsWith(`<@!${bot.user.id}>`)) return
+            if (!message.content.startsWith(message.prefix) && !message.content.startsWith(`<@${bot.user.id}>`) && !message.content.startsWith(`<@!${bot.user.id}>`)) return;
             if (message.guild) alias.mapCustom(message.guild.alias);
             message.command = alias.run(message)
 

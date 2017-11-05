@@ -22,9 +22,11 @@ User.extend(Discord.User);
 //Extensions
 const Message = require("../Extensions/Message.js");
 const ShardClientUtil = require("../Extensions/ShardClientUtil.js");
+const MessageEmbed = require("../Extensions/MessageEmbed.js");
 require("../Extensions/NativeExtensions.js");
 
 Message.extend(Discord.Message);
+MessageEmbed.extend(Discord.MessageEmbed);
 ShardClientUtil.extend(Discord.ShardClientUtil);
 //Extensions
 
@@ -49,6 +51,8 @@ class NitroClient extends Discord.Client {
         };
 
         this.initTime = Date.now();
+
+        this._unhandledRejection();
     }
 
     async init() {
@@ -56,6 +60,11 @@ class NitroClient extends Discord.Client {
         await this.Database.load();
         this.commands = this.CommandLoader.load()
         this.login(config.TOKEN);
+    }
+
+    _unhandledRejection() {
+        //Log all uncaught exceptions
+        process.on("unhandledRejection", (e) => logger.err(e.stack))
     }
 }
 

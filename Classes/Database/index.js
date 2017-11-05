@@ -16,17 +16,18 @@ class Database {
 
     get(db, id, item, def) {
         if (def === undefined) def = {};
-        if (db !== "user" || db !== "channel" ||
-            db !== "guild" || db !== "system" ||
+        if ((db !== "user" && db !== "channel" &&
+                db !== "guild" && db !== "system") ||
             typeof id !== "string" ||
-            typeof item !== "string"
+            typeof item !== "string" ||
+            !this[db][id]
         ) return def;
-        return this[db][id] ? this[db][id][item] : def;
+        return this[db][id][item] || def;
     }
 
     set(db, id, item, value) {
-        if (db !== "user" || db !== "channel" ||
-            db !== "guild" || db !== "system" ||
+        if ((db !== "user" && db !== "channel" &&
+                db !== "guild" && db !== "system") ||
             typeof id !== "string" ||
             typeof item !== "string" ||
             value === undefined

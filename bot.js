@@ -8,6 +8,7 @@ const start = async () => {
     await bot.init();
     module.exports = bot;
     require("./Events/guild.js");
+    require("./Events/member.js");
     const message = new Classes.MessageHandler(bot);
 }
 start();
