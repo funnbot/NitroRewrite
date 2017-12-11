@@ -35,16 +35,41 @@ class Database {
         if (!this[db][id]) this[db][id] = {};
         this[db][id][item] = value;
         if (!this[db][id][item]) delete this[db][id][item];
+        if (Object.keys(this[db][id]).length === 0)
+            return this.deleteId(db, id);
         return this.save(db, id);
     }
 
     save(db, id) {
-        if (!this[db][id]) return;
-        if (Object.keys(this[db][id]).length === 0)
-            return r.table(db).filter({ id }).delete()
-                .then(logger.db).catch(logger.err);
-        return r.table(db).insert({ id, data: this[db][id] })
-            .then(logger.db).catch(logger.err);
+        if (!TABLES.includes(db) ||
+            typeof id !== "string" ||
+            !this[db][id]
+        ) return 0;
+        r.table(db).insert({
+            id,
+            data: this[db][id]
+        }, { conflict: "replace" })
+        .catch(logger.db);
+    }
+
+    deleteItem(db, id, item) {
+        if (!TABLES.includes(db) ||
+            typeof id !== "string" ||
+            typeof item !== "string" ||
+            !this[db][id]
+        ) return 0;
+        delete this[db][id][item];
+        this.save(db, id);
+    }
+
+    deleteId(db, id) {
+        if (!TABLES.includes(db) ||
+            typeof id !== "string"
+        ) return 0;
+        r.table(db)
+            .filter({ id })
+            .delete()
+            .catch(logger.db)
     }
 
     feed(table) {

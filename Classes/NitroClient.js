@@ -53,6 +53,34 @@ class NitroClient extends Discord.Client {
         this.initTime = Date.now();
 
         this._unhandledRejection();
+
+        this.on("ready", () => {
+            this.presence(this);
+        })
+
+    }
+
+    presence(bot) {
+        bot.user.setPresence({
+            activity: {
+                name: `Shard ${bot.shard.id + 1}`,
+                type: 0,
+                state: "Serving Users",
+                url: "//https://nitro.ws",
+                details: `Users ${bot.users.size} - Guilds ${bot.guilds.size}`,
+                application: "264087705124601856",
+                timestamps: {
+                    start: bot.readyTimestamp,
+                    end: bot.readyTimestamp + 6e7
+                },
+                assets: {
+                    largeImage: "nitro",
+                    smallImage: "smalllight",
+                    largeText: "Nitro is Awesome!",
+                    smallText: "Secret Message!"
+                }
+            }
+        }).then(console.log).catch(console.log);
     }
 
     async init() {
@@ -69,3 +97,23 @@ class NitroClient extends Discord.Client {
 }
 
 module.exports = NitroClient;
+
+thing = {
+    status: 'online',
+    activity: {
+        name: 'Shard 1',
+        type: 'PLAYING',
+        url: 'https://nitro.ws',
+        details: 'Users 28720 - Guilds 992',
+        state: null,
+        applicationID: '264087705124601856',
+        timestamps: { start: "2017 - 11 - 10 T00: 31: 06.140 Z", end: null },
+        party: null,
+        assets: {
+            largeText: 'Nitro is Awesome!',
+            smallText: null,
+            largeImage: '378290752423329792',
+            smallImage: '378296948651720704'
+        }
+    }
+}

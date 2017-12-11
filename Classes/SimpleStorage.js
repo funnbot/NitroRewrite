@@ -59,7 +59,7 @@ class SimpleStorage {
     }
 
     /**
-     * Delete all id's set to this key
+     * Delete all ids set to this key
      * 
      * @param {any} key 
      * @returns 

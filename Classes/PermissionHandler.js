@@ -24,18 +24,7 @@ class PermissionHandler {
             admin: message.member.roles.find("name", perms[3]),
             nitro: message.member.roles.find("name", perms[4])
         }
-        if (perm === 0) {
-            let userRole = bot.table("UserPerm").get(message.guild)
-            if (userRole) {
-                if (has.user) return false
-                else {
-                    message.channel.send("**This command requires you to have a role named `" + perms[perm] + "`**")
-                    return true
-                }
-            } else {
-                return false
-            }
-        }
+        if (perm === 0) return false;
         if (perm === 5 && message.author.id === FUNNBOT) return false
 
         if (perm === 4 && has.nitro) return false

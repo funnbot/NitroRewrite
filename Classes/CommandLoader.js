@@ -33,6 +33,7 @@ class CommandLoader {
 
     reload(group, command) {
         try {
+            delete require.cache[require.resolve(`.${this.path}${group}/${command}`)];
             var loaded = require(`.${this.path}${group}/${command}`);
         } catch (e) {
             logger.warn(e);

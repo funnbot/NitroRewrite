@@ -4,54 +4,16 @@ const Storage = require("../SimpleStorage.js");
 
 class Guild extends Extension {
 
-    get prefix() {
-        return this.g("prefix", PREFIX);
+    static get items() {
+        return {
+            prefix: PREFIX,
+            alias: {},
+            mlchannel: null,
+            mljoin: null,
+            mlleave: null,
+            mljoindm: null
+        }
     }
-
-    set prefix(val) {
-        this.s("prefix", val);
-    }
-
-    get alias() {
-        return this.g("alias");
-    }
-
-    set alias(val) {
-        this.s("alias", val);
-    }
-
-    get mlchannel() {
-        return this.g("mlchannel", null);
-    }
-
-    set mlchannel(val) {
-        this.s("mlchannel", val);
-    }
-
-    get mljoin() {
-        return this.g("mljoin", null);
-    }
-
-    set mljoin(val) {
-        this.s("mljoin", val)
-    }
-
-    get mlleave() {
-        return this.g("mlleave", null);
-    }
-
-    set mlleave(val) {
-        this.s("mlleave", val);
-    }
-
-    get mljoindm() {
-        return this.g("mljoindm", null);
-    }
-
-    set mljoindm(val) {
-        this.s("mljoindm", val)
-    }
-
 
     g(item, def) {
         return this.client.Database.get("guild", this.id, item, def);
@@ -65,6 +27,17 @@ class Guild extends Extension {
         if (!this.Storage) this.Storage = new Storage(this.client, this.id, "guild")
         else return this.Storage;
     }
+}
+
+for (let [item, def] of Object.entries(Guild.items)) {
+    Object.defineProperty(Guild.prototype, item, {
+        get: function() {
+            return this.g(item, def);
+        },
+        set: function(val) {
+            this.s(item, val);
+        }
+    });
 }
 
 module.exports = Guild;

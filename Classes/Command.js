@@ -38,7 +38,6 @@ class Command {
      * @param {CommandOptions} options - Command Options
      */
     constructor(options) {
-
         this.help = options.help || "The help message is missing."
         this.help += this.help.endsWith(".") ? "" : "."
         this.example = options.example || options.usage || "There is no example."
