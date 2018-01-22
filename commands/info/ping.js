@@ -6,12 +6,12 @@ module.exports = new Nitro.Command({
     example: "${p}ping",
     userPerms: 0,
     
-    run: async(message, bot, send) => {
-        const m = await send("Testing Ping...");
+    run: async(message, bot, send, t) => {
+        const m = await send(t.PING_TEST());
         const ping = m.createdTimestamp - Date.now();
         const ws = bot.ping;
 
-        await m.edit(`**Pong!** Latency: ${ping}MS Websocket: ${ws}MS`);
+        await m.edit(t.PING_DONE(ping, ws));
         return;
     }
 })

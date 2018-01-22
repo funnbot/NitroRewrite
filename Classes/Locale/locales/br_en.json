@@ -1,0 +1,11 @@
+{
+    "LANG": "br_en",
+
+    
+    "PING_TEST": "Testing ping with a cup of tea...",
+    "PING_DONE": "**Pong! Oops! I spilled my tea** Latency: {}MS Websocket: {}MS.",
+
+    "SETLANG_LIST": "Here are the available locales:\n${1}",
+    "SETLANG_SET": "Locale set to: `{}`.",
+    "SETLANG_INVALID": "The locale `{}` does not exist."
+}

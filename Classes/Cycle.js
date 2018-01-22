@@ -45,7 +45,7 @@ class Cycler {
     }
 
     /**
-     * Decrement the cylcer by an amount or 1.
+     * Decrement the cycler by an amount or 1.
      * @param {Number} [am=1] 
      * @returns {Number}
      */

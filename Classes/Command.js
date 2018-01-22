@@ -56,7 +56,7 @@ class Command {
         if (!this.runCommand) throw new Error("Command function undefined")
     }
 
-    async run(message, bot, send) {
+    async run(message, bot, send, t) {
         if (typeof this.runCommand === "string") send(this.runCommand).catch(logger.warn)
         else if (typeof this.runCommand === "function") {
             try {
@@ -66,7 +66,7 @@ class Command {
                     message = handleArguments
                 }
                 message.channel.startTyping()
-                await this.runCommand(message, bot, send)
+                await this.runCommand(message, bot, send, t)
                 message.channel.stopTyping()
             } catch (err) {
                 send("Command Error, Please alert the developer.").catch(logger.warn)

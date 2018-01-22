@@ -11,7 +11,8 @@ class Guild extends Extension {
             mlchannel: null,
             mljoin: null,
             mlleave: null,
-            mljoindm: null
+            mljoindm: null,
+            locale: "en"
         }
     }
 

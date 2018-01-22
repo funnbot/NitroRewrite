@@ -3,7 +3,10 @@ const Alias = require("./Alias.js")
 const CoolDown = require("./Cooldown.js")
 const ArgumentHandler = require("./ArgumentHandler/index.js")
 const PermissionHandler = require("./PermissionHandler.js")
+const Locale = require("./Locale/index.js");
 const EventEmitter = require("events")
+
+const Translator = new Locale();
 
 class Message extends EventEmitter {
     /**
@@ -37,7 +40,8 @@ class Message extends EventEmitter {
             if (message.channel.type === "text" && message.channel.permissionsFor(bot.user) && !message.channel.permissionsFor(bot.user).has("SEND_MESSAGES"))
                 return message.author.send("**I lack permission to send messages in this channel.**").catch(logger.debug);
             if (cooldown && cooldown.run(message, command)) return
-            command.run(message, bot, message.send)
+            Translator.setLang(message);
+            command.run(message, bot, message.send, Translator)
         })
 
         bot.on("messageUpdate", (oldMessage, newMessage) => {
