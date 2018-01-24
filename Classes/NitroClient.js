@@ -36,11 +36,8 @@ class NitroClient extends Discord.Client {
 
         Sentry.config(config.SENTRY).install();
         this.sentry = Sentry;
-
         this.Database = new Database();
-
         this.CommandLoader = new CommandLoader();
-
         this.Embed = Discord.MessageEmbed;
 
         this.SimpleStorage = {
@@ -51,11 +48,11 @@ class NitroClient extends Discord.Client {
         };
 
         this.initTime = Date.now();
-
         this._unhandledRejection();
-
         this.on("ready", () => {
-            
+            logger.info("Bot online.")
+            logger.warn("The bananas are lose.")
+            logger.err("Welp you fucked this one.");
         })
 
     }

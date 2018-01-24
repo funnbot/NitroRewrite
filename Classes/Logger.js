@@ -1,12 +1,9 @@
 const chalk = require("chalk");
 const moment = require("moment");
 
-function msg(lvl, m) {
-    return `[${moment().format("HH[:]mm[:]ss")}] ${lvl}: ${m}`; 
-}
-
 function log(color, lvl, msgs) {
-    console.log(chalk[color](msg(lvl, msgs.join(" "))));
+    const msg = `[${moment().format("HH[:]mm[:]ss")}] ${lvl}: ${msgs.join(" ")}`; 
+    console.log(chalk[color](msg));
     return console.log
 }
 

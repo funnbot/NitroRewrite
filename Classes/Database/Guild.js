@@ -12,7 +12,8 @@ class Guild extends Extension {
             mljoin: null,
             mlleave: null,
             mljoindm: null,
-            locale: "en"
+            locale: "en",
+            users: {}
         }
     }
 
@@ -27,6 +28,25 @@ class Guild extends Extension {
     get storage() {
         if (!this.Storage) this.Storage = new Storage(this.client, this.id, "guild")
         else return this.Storage;
+    }
+
+    /**
+     * Get or change a user's balance
+     * @param {String} id - a user's id 
+     * @param {Number} val - amount, if undefined gets the user balance;
+     * @param {Boolean} [addTo=false] - Wether to add to the balance 
+     */
+    balance(id, val, addTo = false) {
+        if (typeof val !== "number") return;
+        let userData = this.g("users", {});
+        let user = userData[id] || {};
+        let bal = user["balance"] || 0;
+        if (val === undefined) return bal;
+        bal = addTo ? bal + val : val;
+        user["balance"] = bal;
+        userData[id] = user;
+        this.s("users", userData);
+        return bal;
     }
 }
 

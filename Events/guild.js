@@ -1,7 +1,7 @@
 const snekfetch = require("snekfetch");
 const Long = require("long");
 const bot = require("../bot.js");
-const { novo, botsdiscordpw, carbonitex, discordbots  } = require("../config.js");
+const { carbonitex, discordbots } = require("../config.js");
 
 const embed = new bot.Embed();
 embed.setTitle("So, you invited Nitro...")
@@ -29,12 +29,6 @@ const postStats = async() => {
     if (bot.isBeta) return;
     let guildcount = await bot.shard.clientValuesReduced("guilds.size");
 
-    makeRequest("https://bots.discord.pw/api/bots/264087705124601856/stats", {
-        shard_id: bot.shard.id,
-        shard_count: bot.shard.count,
-        server_count: bot.guilds.size
-    }, botsdiscordpw);
-
     makeRequest("https://discordbots.org/api/bots/264087705124601856/stats", {
         shard_id: bot.shard.id,
         shard_count: bot.shard.count,
@@ -46,10 +40,6 @@ const postStats = async() => {
         servercount: guildcount || 0,
         shardcount: bot.shard.count
     })
-
-    makeRequest("https://novo.archbox.pro/api/bots/264087705124601856", {
-        server_count: guildcount || 0
-    }, novo)
 }
 
 const makeRequest = (url, body, auth) => {

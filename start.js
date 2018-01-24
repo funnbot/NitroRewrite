@@ -5,4 +5,4 @@ const sharder = new ShardingManager("./bot.js", {
     token: TOKEN
 });
 
-sharder.spawn()
+sharder.spawn();

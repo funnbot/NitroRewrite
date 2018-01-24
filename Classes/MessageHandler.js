@@ -16,11 +16,8 @@ class Message extends EventEmitter {
         super()
 
         const alias = new Alias(bot.commands)
-
         const cooldown = new CoolDown()
-
         bot.ArgumentHandler = ArgumentHandler
-
         const permissions = new PermissionHandler()
 
         bot.on("message", async message => {
