@@ -72,8 +72,8 @@ module.exports = new Nitro.Command({
 })
 
 async function play(message, bot, send) {
-    if (message.channel.storage.check("trivia")) return message.fail("A game is in progress")
-    message.channel.storage.add("trivia")
+    if (message.channel.cache.exists("trivia")) return message.fail("A game is in progress")
+    message.channel.cache.set("trivia")
     let { question, correct_answer, difficulty, category, worth } = trivia
     correct_answer = h2p(correct_answer)
 
@@ -99,7 +99,7 @@ async function play(message, bot, send) {
     }, { time: 30000 })
 
     collector.on("end", (c, reason) => {
-        message.channel.del("trivia")
+        message.channel.cache.del("trivia")
         if (reason === "time") {
             return message.fail("Noone guessed in time, the correct answer was:", correct_answer);
             return message.fail("You're all idiots and coudn't guess a simple trivia question, it was actually: " + correct_answer);
@@ -108,7 +108,7 @@ async function play(message, bot, send) {
 }
 
 function win(bot, message, user, worth) {
-    message.channel.storage.del("trivia")
+    message.channel.cache.del("trivia")
     message.succ(`${user.tag} answered the question correctly, here is your reward.`)
     message.guild.balance(message.author.id, worth, true);
     message.author.trivia++;

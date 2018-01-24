@@ -18,7 +18,7 @@ class SimpleStorage {
      * @returns {any}
      * @memberof SimpleStorage
      */
-    set(key, value) {
+    set(key, value = true) {
         this.sc[key] || (this.sc[key] = {});
         this.sc[key][this.id] = value;  
         return this.sc[key][this.id];
@@ -42,7 +42,7 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     exists(key) {
-        return this.sc[key] ? !!this.sc[key][this.id] : false;
+        return this.sc[key] ? !!this.sc[key][this.id] : !1;
     }
 
     /**

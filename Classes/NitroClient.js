@@ -51,8 +51,6 @@ class NitroClient extends Discord.Client {
         this._unhandledRejection();
         this.on("ready", () => {
             logger.info("Bot online.")
-            logger.warn("The bananas are lose.")
-            logger.err("Welp you fucked this one.");
         })
 
     }

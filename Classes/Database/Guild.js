@@ -25,7 +25,7 @@ class Guild extends Extension {
         return this.client.Database.set("guild", this.id, item, value);
     }
 
-    get storage() {
+    get cache() {
         if (!this.Storage) this.Storage = new Storage(this.client, this.id, "guild")
         else return this.Storage;
     }

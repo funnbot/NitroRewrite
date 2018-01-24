@@ -16,7 +16,7 @@ class User extends Extension {
         return this.set("guild", this.id, item, value);
     }
 
-    get storage() {
+    get cache() {
         if (!this.Storage) this.Storage = new Storage(this.client, this.id, "user")
         else return this.Storage;
     }

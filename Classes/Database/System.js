@@ -15,7 +15,7 @@ class System extends Extension {
         return this.client.Database.set("system", "1", item, value);
     }
       
-    get storage() {
+    get cache() {
         if (!this.Storage) this.Storage = new Storage(this.client, this.id, "system")
         else return this.Storage;
     }

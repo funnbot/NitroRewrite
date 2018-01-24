@@ -1,5 +1,4 @@
 const Nitro = require("../../Nitro.js")
-const Discord = require("discord.js")
 
 module.exports = new Nitro.Command({
     help: "Check if Nitro is alive.",
@@ -15,3 +14,4 @@ module.exports = new Nitro.Command({
         return;
     }
 })
+

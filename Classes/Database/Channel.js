@@ -15,7 +15,7 @@ class Channel extends Extension {
         return this.client.Database.set("channel", this.id, item, value);
     }
 
-    get storage() {
+    get cache() {
         if (!this.Storage) this.Storage = new Storage(this.client, this.id, "channel")
         else return this.Storage;
     }
@@ -23,17 +23,6 @@ class Channel extends Extension {
 
 for (let [item, def] of Object.entries(Channel.items)) {
     Object.defineProperty(Channel.prototype, item, {
-        get: function() {
-            return this.g(item, def);
-        },
-        set: function(val) {
-            this.s(item, val);
-        }
-    });
-}
-
-for (let [item, def] of Object.entries(Channel.items)) {
-    Object.defineProperty(Guild.prototype, item, {
         get: function() {
             return this.g(item, def);
         },
