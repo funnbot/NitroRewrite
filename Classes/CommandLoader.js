@@ -1,4 +1,5 @@
-const { DisabledGroups, DisabledCommands } = require("../config.js");
+const { DisabledCommands, DisabledGroups } = require("../config");
+const Command = require("./Command");
 const fs = require("fs");
 
 class CommandLoader {
@@ -24,11 +25,20 @@ class CommandLoader {
                     logger.warn(e);
                     continue;
                 }
-                this.commands[name] = loaded;
+                this.commands[name] = this.initialize(loaded);
                 this.groups[group][name] = true;
             }
         }
         return this.commands;
+    }
+
+    initialize(CommandChild) {      
+        if (!(CommandChild.prototype instanceof Command)) return;
+        CommandChild.prototype.constructor = function() {
+            this.super(...arguments);
+        }
+        const command = new CommandChild();
+        return command;
     }
 
     reload(group, command) {
@@ -41,7 +51,7 @@ class CommandLoader {
         }
         this.groups[group] = this.groups[group] || {};
         this.groups[group][command] = true;
-        this.commands[command] = loaded;
+        this.commands[command] = this.initialize(loaded);
         logger.info(`Reloaded ${group}/${command}`);
         return null;
     }

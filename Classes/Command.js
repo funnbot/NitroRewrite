@@ -20,60 +20,56 @@
  * @property {String} [example="There is no example."] - Example usage.
  * @property {String} [argExample=""] - Required arguments.
  * @property {Boolean} [dm=false] - Allowed in DM channels.
- * @property {Number} [coolDown=1] - Command cooldown in seconds.
+ * @property {Number} [cooldown=1] - Command cooldown in seconds.
  * @property {Array<ArgumentOptions>} [args=[]] - Command arguments.
- * @property {Number} [perm=0] - Required permission 0-User, 1-Mod, 2-Admin, 3-Nitro Commander, 4-Dev
+ * @property {Number} [userPerm=0] - Required permission 0-User, 1-Mod, 2-Admin, 3-Nitro Commander, 4-Dev
  * @property {Array<String>} [botPerms=[]] - Required bot permissions to execute.
  * @property {Array<String>} [alias=[]] - Command aliases.
  * @property {(Function|String)} run - The command code.
  */
 
-/**
- * Create a nitro command.
- * @class
- */
+const Locale = new (require("./Locale/index.js"));
+
 class Command {
-    /**
-     * Creates an instance of Command.
-     * @param {CommandOptions} options - Command Options
-     */
-    constructor(options) {
-        this.help = options.help || "The help message is missing."
-        this.help += this.help.endsWith(".") ? "" : "."
-        this.example = options.example || options.usage || "There is no example."
-        this.argExample = options.argExample || options.paramExample || ""
-
-        this.dm = options.dm || false
-        this.coolDown = options.coolDown || options.cooldown || 1
-        this.args = options.args || options.argumentHandler || []
-
-        this.perm = options.userPerms || options.perm || 0
-        this.botPerms = options.botPerms || options.botperms || []
-
-        this.alias = options.alias || []
-
-        this.runCommand = options.run
-        if (!this.runCommand) throw new Error("Command function undefined")
+    constructor() {
+        this.validateOptions();
     }
 
-    async run(message, bot, send, t) {
-        if (typeof this.runCommand === "string") send(this.runCommand).catch(logger.warn)
-        else if (typeof this.runCommand === "function") {
-            try {
-                if (this.args.length > 0) {
-                    let handleArguments = await bot.ArgumentHandler.run(message, this.args)
-                    if (handleArguments == null) return
-                    message = handleArguments
-                }
-                message.channel.startTyping()
-                await this.runCommand(message, bot, send, t)
-                message.channel.stopTyping()
-            } catch (err) {
-                send("Command Error, Please alert the developer.").catch(logger.warn)
-                logger.err(message.command + " - " + err.stack)
-            }
-        } else throw new Error("Invalid command type")
+    validateOptions() {
+        const opts = this.options();
+        this.help = opts.help || "None";
+        this.example = opts.example || "";
+
+        this.dm = opts.dm || false
+        this.cooldown = opts.cooldown || 1
+        this.args = opts.args || []
+
+        this.userPerm = opts.userPerm || 0
+        this.botPerms = opts.botPerms || []
+
+        this.alias = opts.alias || []
+        delete this.options;
+    }   
+
+    async exec(message) {
+        this.message = message;
+        this.bot = message.client;
+        // Define the language
+        Locale.setLang(message.guild ? message.guild.locale : "en");
+        this.t = Locale;
+        // Send shortcut
+        this.send = message.send;
+        try {
+            await this.run(this);
+        } catch (e) {
+            await this.error(this, e);
+        }
     }
+
+    async run(args) { return; }
+    async error(args, error) { return; }
+    options() { return {}}
+
 }
 
 module.exports = Command;

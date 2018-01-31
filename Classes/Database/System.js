@@ -16,8 +16,8 @@ class System extends Extension {
     }
       
     get cache() {
-        if (!this.Storage) this.Storage = new Storage(this.client, this.id, "system")
-        else return this.Storage;
+        if (!this._Storage) this._Storage = new Storage(this.client, this.id, "system")
+        return this._Storage;
     }
 }
 

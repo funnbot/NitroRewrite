@@ -1,4 +1,4 @@
-const Nitro = require("../../Nitro.js")
+const { Command } = require("../../Nitro");
 const snekfetch = require("snekfetch")
 const h2p = require("html2plaintext")
 const stringSim = require("string-similarity")
@@ -30,99 +30,145 @@ let categories = {
     cartoons: 32
 }
 
-module.exports = new Nitro.Command({
-    help: "Play trivia",
-    example: "${p}trivia easy general knowledge",
-    argExample: "{category} {difficulty}",
-    alias: ["quiz"],
-    args: [{
-        type: "selection",
-        prompt: "What difficulty?",
-        opts: ["easy", "medium", "hard", "random"],
-        optional: true
-    }, {
-        type: "selection",
-        prompt: "Which category?",
-        opts: [...Object.keys(categories), "random"],
-        optional: true
-    }],
+class TriviaCommand extends Command {
 
-    run: async(message, bot, send) => {
+    async run({ message, bot, send, t }) {
         let diff = message.args[0] || "random"
         let cat = message.args[1] || "random"
 
         snekfetch.get(genUrl(diff, cat)).then(response => {
             let res = response.body
-            if (res.response_code !== 0 || !res.results || !res.results[0]) return message.fail("Api Error")
+            if (res.response_code !== 0 || !res.results || !res.results[0]) return send("Api Error")
             let trivia = res.results[0]
             if (!trivia.question ||
                 !trivia.correct_answer ||
                 !trivia.difficulty ||
-                !trivia.category) return message.fail("Api Error")
+                !trivia.category) return send("Api Error")
 
-            trivia.worth = { "easy": 0.50, "medium": 0.75, "hard": 1.00 }[trivia.difficulty] || 0.00
+            trivia.worth = {
+                "easy": 20,
+                "medium": 50,
+                "hard": 100
+            }[trivia.difficulty] || 0
 
             play(message, bot, send, trivia)
 
         }).catch(e => {
             console.log(e)
-            return message.fail("Api Error")
+            return send("Api Error")
         })
     }
-})
 
-async function play(message, bot, send) {
-    if (message.channel.cache.exists("trivia")) return message.fail("A game is in progress")
-    message.channel.cache.set("trivia")
-    let { question, correct_answer, difficulty, category, worth } = trivia
+    options() {
+        return {
+            help: "Play trivia",
+            usage: "{}trivia <difficulty> <category> eg. {}trivia medium geography",
+            alias: ["quiz"],
+            args: [{
+                type: "selection",
+                prompt: "What difficulty?",
+                opts: ["easy", "medium", "hard", "random"],
+                optional: true
+            }, {
+                type: "selection",
+                prompt: "Which category?",
+                opts: [...Object.keys(categories), "random"],
+                optional: true
+            }],
+        }
+    }
+}
+
+module.exports = TriviaCommand;
+
+async function play(message, bot, send, trivia) {
+    if (cur[message.channel.id]) return send("A game is in progress")
+    cur[message.channel.id] = true;
+    let {
+        question,
+        correct_answer,
+        incorrect_answers,
+        difficulty,
+        category,
+        worth
+    } = trivia
     correct_answer = h2p(correct_answer)
-
-    let embed = new bot.Embed()
+    incorrect_answers = incorrect_answers.map(s => h2p(s));
+    incorrect_answers.push(correct_answer);
+    incorrect_answers = shuffle(incorrect_answers);
+    let embed = new bot.embed()
     embed.title = "`Trivia`"
-    embed.addField("Question", h2p(question))
-        .addField("Category", category)
+    embed.addField("Category", category)
         .addField("Difficulty", difficulty)
-        .addField("Reward", Nitro.util.formatBal(worth))
-        .setFooter("You have 30 seconds to answer.")
-        .nitroColor()
-        .setAuthor(message.guild.name, message.guild.iconURL())
+        .addField("Reward", worth + ":dollar:")
+        .addField("Question", h2p(question))
+        .addField("Choices", "**" + incorrect_answers.map((k, i) => (i + 1) + ". " + k).join(" - ") + "**")
+        .setFooter("You have 20 seconds to answer. Answer using the corresponding number, you get one try.")
+        .setColor("#4DD0D9")
+        .setAuthor(message.guild.name, message.guild.iconURL)
 
-    send({ embed })
-
+    send({
+        embed
+    })
+    let guessed = {};
     let collector = message.channel.createMessageCollector(m => {
         if (m.author.bot) return false
-        if (checkAnswer(correct_answer, m.content)) {
+        let guess = parseInt(m.content);
+        if (!guess) return false;
+        if (guessed[m.author.id]) return false;
+        guessed[m.author.id] = true;
+        if (checkAnswer(correct_answer, incorrect_answers, guess)) {
             collector.stop("WINNED")
             win(bot, message, m.author, worth)
         }
         return false
-    }, { time: 30000 })
+    }, {
+        time: 20000
+    })
 
     collector.on("end", (c, reason) => {
-        message.channel.cache.del("trivia")
+        delete cur[message.channel.id]
         if (reason === "time") {
-            return message.fail("Noone guessed in time, the correct answer was:", correct_answer);
-            return message.fail("You're all idiots and coudn't guess a simple trivia question, it was actually: " + correct_answer);
+            return send("**Noone guessed in time, the correct answer was: " + correct_answer + "**");
+        }
+        if (reason === "wrong") {
+            return send("**Wrong! The correct answer was: " + correct_answer + "**");
         }
     })
 }
 
 function win(bot, message, user, worth) {
-    message.channel.cache.del("trivia")
-    message.succ(`${user.tag} answered the question correctly, here is your reward.`)
-    message.guild.balance(message.author.id, worth, true);
-    message.author.trivia++;
+    delete cur[message.channel.id]
+    message.send(`**${user.tag} answered the question correctly, here is your reward.**`)
+    bot.profile.addMoney(user.id, worth);
 }
 
-function checkAnswer(correct, input) {
-    let c = correct.toLowerCase()
-    let i = input.toLowerCase()
-    if (stringSim.compareTwoStrings(c, i) > .7) return true
-    else return false
+function shuffle(array) {
+    var i = 0,
+        j = 0,
+        temp = null
+
+    for (i = array.length - 1; i > 0; i -= 1) {
+        j = Math.floor(Math.random() * (i + 1))
+        temp = array[i]
+        array[i] = array[j]
+        array[j] = temp
+    }
+
+    return array;
+}
+
+function checkAnswer(correct, answers, input) {
+    let a = answers[input - 1];
+    if (!a) return false;
+    return a === correct;
 }
 
 function genUrl(d, c) {
+    if (d !== "easy" && d !== "medium" && d !== "hard" && d !== "random")
+        d = "random";
+    if (!categories[c]) c = "random";
     let diff = d === "random" ? "" : "&difficulty=" + d
     let cat = c === "random" ? "" : "&category=" + (categories[c])
-    return `https://opentdb.com/api.php?amount=1${cat}${diff}&type=multiple`
+    return `https://opentdb.com/api.php?amount=1${cat}${diff}`
 }

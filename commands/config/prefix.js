@@ -1,15 +1,8 @@
-const Nitro = require("../../Nitro.js")
+const { Command } = require("../../Nitro");
 
-module.exports = new Nitro.Command({
-    help: "Change the prefix for commands.",
-    example: '`${p}prefix !!` - The ping command would be called with `!!ping`\n`${p}prefix "nitro "` - This prefix has a space so it is wrapped in double quotes `nitro ping`',
-    argExample: '<newPrefix> || "<newPrefix with space>"',
-    dm: false,
-    coolDown: 4,
-    userPerms: 2,
-    alias: ["setprefix"],
+class PrefixCommand extends Command {
 
-    run: async(message, bot, send) => {
+    async run ({message, bot, send, t}) {
         if (!message.checkSuffix) return send("**Use the prefix command to change the character you put before commands when calling them\nIf you want to include a space in the prefix, wrap it in double quotes.**");
         if (message.suffix.replace(/[^\"]/g, "").length === 2) {
             let split = message.suffix.split("\"")
@@ -25,4 +18,14 @@ module.exports = new Nitro.Command({
             return send("**The prefix was set to `" + pre + "`\nTest - `" + pre + "ping`**");
         }
     }
-})
+
+    options() { return {
+        help: "Change the prefix for commands.",
+        usage: '`{}prefix !!` - The ping command would be called with `!!ping`\n`{}prefix "nitro "` - This prefix has a space so it is wrapped in double quotes `nitro ping`',
+        userPerm: 2,
+        cooldown: 20,
+        alias: ["setprefix"]
+    }}
+}
+
+module.exports = PrefixCommand;

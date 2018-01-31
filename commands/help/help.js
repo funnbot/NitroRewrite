@@ -1,19 +1,9 @@
-const Nitro = require("../../Nitro.js")
-let modules = Nitro.config.HELP;
+const { Command, config } = require("../../Nitro");
+let modules = config.HELP;
 
-module.exports = new Nitro.Command({
-    help: "A list of commands.",
-    example: "${p}help",
-    dm: true,
-    coolDown: 1,
-    userPerms: 0,
-    alias: ["commands"],
+class HelpCommand extends Command {
 
-    run: async(message, bot, send) => {
-
-    },
-
-    run: async(message, bot, send) => {
+    async run ({message, bot, send, t}) {
         let commands = bot.commands;
         let groups = bot.CommandLoader.groups
         if (!message.checkSuffix) {
@@ -62,4 +52,13 @@ module.exports = new Nitro.Command({
             .setColor(embed.randomColor);
         return send("", { embed })
     }
-})
+
+    options() { return {
+        help: "List all commands",
+        usage: "{}help or {}help <command>",
+        dm: true,
+        alias: ["commands", "cmds"]
+    }}
+}
+
+module.exports = HelpCommand;

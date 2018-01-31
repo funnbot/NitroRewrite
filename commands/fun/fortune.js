@@ -1,13 +1,10 @@
-const Nitro = require("../../Nitro.js")
+const { Command } = require("../../Nitro");
 const snekfetch = require("snekfetch");
 const f = "<:fortunecookie:357743549959372807>"
 
-module.exports = new Nitro.Command({
-    help: "Read your fortune.",
-    example: "${p}fortune",
-    cooldown: 2,
+class FortuneCommand extends Command {
 
-    run: async(message, bot, send) => {
+    async run ({message, bot, send, t}) {
         const request = await snekfetch.get("http://fortunecookieapi.herokuapp.com/v1/cookie");
         if (!request || !request.body || !request.body[0]) return send("**Bad Cookie**")
         const cookie = request.body[0];
@@ -29,4 +26,12 @@ module.exports = new Nitro.Command({
         await timeout(500);
         await msg.edit(txt);
     }
-})
+
+    options() { return {
+        help: "Open a fortune cookie",
+        usage: "{}fortune",
+        cooldown: 5
+    }}
+}
+
+module.exports = FortuneCommand;

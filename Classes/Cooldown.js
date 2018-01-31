@@ -4,9 +4,9 @@ class Cooldown {
     }
 
     run(message, command) {
-        let check = this.check(message.author.id, message.command, command.coolDown);
+        let check = this.check(message.author.id, message.command, command.cooldown);
         if (check) {
-            message.send("**CoolDown:** Please wait " + check / 1000 + " seconds before using this command.").then(m => m.delete({ timeout: check }));
+            message.send("**Cooldown:** Please wait " + check / 1000 + " seconds before using this command.").then(m => m.delete({ timeout: check }));
             return true;
         }
     }

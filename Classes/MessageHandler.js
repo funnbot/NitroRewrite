@@ -1,12 +1,9 @@
-const CommandLoader = require("./CommandLoader.js")
+const CommandLoader = require("./CommandLoader");
 const Alias = require("./Alias.js")
-const CoolDown = require("./Cooldown.js")
+const Cooldown = require("./Cooldown.js")
 const ArgumentHandler = require("./ArgumentHandler/index.js")
 const PermissionHandler = require("./PermissionHandler.js")
-const Locale = require("./Locale/index.js");
 const EventEmitter = require("events")
-
-const Translator = new Locale();
 
 class Message extends EventEmitter {
     /**
@@ -16,7 +13,7 @@ class Message extends EventEmitter {
         super()
 
         const alias = new Alias(bot.commands)
-        const cooldown = new CoolDown()
+        const cooldown = new Cooldown()
         bot.ArgumentHandler = ArgumentHandler
         const permissions = new PermissionHandler()
 
@@ -37,8 +34,7 @@ class Message extends EventEmitter {
             if (message.channel.type === "text" && message.channel.permissionsFor(bot.user) && !message.channel.permissionsFor(bot.user).has("SEND_MESSAGES"))
                 return message.author.send("**I lack permission to send messages in this channel.**").catch(logger.debug);
             if (cooldown && cooldown.run(message, command)) return
-            Translator.setLang(message);
-            command.run(message, bot, message.send, Translator)
+            executeCommand(command, message);
         })
 
         bot.on("messageUpdate", (oldMessage, newMessage) => {
@@ -49,6 +45,19 @@ class Message extends EventEmitter {
             this.emit("delete", message)
         })
     }
+}
+
+async function executeCommand(command, message) {
+    try {
+        if (command.args.length > 0) {
+            let handleArguments = await bot.ArgumentHandler.run(message, command.args);
+            if (handleArguments == null) return;
+            message = handleArguments;
+        }
+    } catch (err) {
+        logger.err(err);
+    }
+    await command.exec(message);
 }
 
 module.exports = Message

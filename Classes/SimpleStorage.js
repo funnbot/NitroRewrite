@@ -19,7 +19,7 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     set(key, value = true) {
-        this.sc[key] || (this.sc[key] = {});
+        if (!this.sc[key]) this.sc[key] = {}
         this.sc[key][this.id] = value;  
         return this.sc[key][this.id];
     }

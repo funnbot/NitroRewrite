@@ -1,19 +1,25 @@
-const Nitro = require("../../Nitro.js")
+const { Command } = require("../../Nitro");
 
-module.exports = new Nitro.Command({
-  help: "Set the locale.",
-  example: "${p}setlang en",
-  argExample: "<language-code>",
-  userPerms: 4,
-  alias: ["language"],
+class LanguageCommand extends Command {
 
-  run: async (message, bot, send, t) => {
-    if (!message.checkSuffix) {
-        return send(t.SETLANG_LIST(t.languages.join(", ")));
+    async run({ message, bot, send, t }) {
+        if (!message.checkSuffix) {
+            return send(t.SETLANG_LIST(t.languages.join(", ")));
+        }
+        if (t.languages.includes(message.suffix)) {
+            message.guild.locale = message.suffix;
+            return send(t.SETLANG_SET(message.suffix));
+        } else return send(t.SETLANG_INVALID(message.suffix));
     }
-    if (t.languages.includes(message.suffix)) {
-        message.guild.locale = message.suffix;
-        return send(t.SETLANG_SET(message.suffix));
-    } else return send(t.SETLANG_INVALID(message.suffix));
-  }
-})
+
+    options() {
+        return {
+            help: "Set the locale.",
+            usage: "{}setlang en",
+            userPerm: 4,
+            alias: ["language", "locale"]
+        }
+    }
+}
+
+module.exports = LanguageCommand;

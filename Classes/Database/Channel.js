@@ -16,9 +16,10 @@ class Channel extends Extension {
     }
 
     get cache() {
-        if (!this.Storage) this.Storage = new Storage(this.client, this.id, "channel")
-        else return this.Storage;
+        if (!this._Storage) this._Storage = new Storage(this.client, this.id, "channel")
+        return this._Storage;
     }
+    
 }
 
 for (let [item, def] of Object.entries(Channel.items)) {

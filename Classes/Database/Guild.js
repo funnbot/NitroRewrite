@@ -3,7 +3,6 @@ const { PREFIX } = require("../../config.js");
 const Storage = require("../SimpleStorage.js");
 
 class Guild extends Extension {
-
     static get items() {
         return {
             prefix: PREFIX,
@@ -26,8 +25,8 @@ class Guild extends Extension {
     }
 
     get cache() {
-        if (!this.Storage) this.Storage = new Storage(this.client, this.id, "guild")
-        else return this.Storage;
+        if (!this._Storage) this._Storage = new Storage(this.client, this.id, "guild")
+        return this._Storage;
     }
 
     /**

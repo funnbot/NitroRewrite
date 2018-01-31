@@ -1,24 +1,14 @@
-const Nitro = require("../../Nitro.js");
+const { Command, config } = require("../../Nitro.js");
 const util = require("util");
 const snekfetch = require("snekfetch");
 const Discord = require("discord.js");
 const moment = require("moment");
 const Duration = require("duration-js");
 
+class EvalCommand extends Command {
 
-module.exports = new Nitro.Command({
-    help: "Eval some code.",
-    example: "${p}eval 1 + 1",
-    argExample: "<code>",
-    dm: true,
-    coolDown: 0,
-    userPerms: 4,
-    botPerms: [],
-
-    args: [],
-
-    run: async(message, bot, send) => {
-        if (message.author.id !== Nitro.config.FUNNBOT) return
+    async run ({message, bot, send, t}) {
+        if (message.author.id !== config.FUNNBOT) return
         if (!message.checkSuffix) {
             let txt = evalTxt("Funnbot", "Output", "100000", "An idiot who does not provide code when he evals.")
             return send(txt)
@@ -39,10 +29,18 @@ module.exports = new Nitro.Command({
             txt = clean(txt)
             return send(txt)
         }
-
     }
-})
 
+    options() { return {
+        help: "Eval some code",
+        usage: "k",
+        userPerms: 4,
+        cooldown: 0,
+        dm: true
+    }}
+}
+
+module.exports = EvalCommand;
 
 let evalTxt = (a, b, c, d) => {
     return `
@@ -56,7 +54,7 @@ ${d}\`\`\`
 }
 
 let clean = (t) => {
-    let split = Nitro.config.TOKEN.split(".");
+    let split = config.TOKEN.split(".");
     let r = new RegExp(`(${split[1]})|(${split[2]})`, "g");
     t = t.toString().replace(r, "[SECRET]");
     return t

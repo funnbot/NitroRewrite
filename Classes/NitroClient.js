@@ -1,12 +1,13 @@
 global.Promise = require("bluebird");
 
 const Discord = require("discord.js");
+const CommandLoader = require("./CommandLoader");
+const Enum = require("./Enum");
 const Sentry = require("raven");
-const CommandLoader = require("./CommandLoader.js");
 const Logger = require("./Logger.js");
 const config = require("../config.js");
 
-//Database
+// sDatabase
 const Database = require("./Database/index.js");
 const Channel = require("./Database/Channel.js");
 const Guild = require("./Database/Guild.js");
@@ -17,9 +18,8 @@ Channel.extend(Discord.GuildChannel);
 Guild.extend(Discord.Guild);
 System.extend(Discord.Client);
 User.extend(Discord.User);
-//Database
 
-//Extensions
+// Extensions
 const Message = require("../Extensions/Message.js");
 const ShardClientUtil = require("../Extensions/ShardClientUtil.js");
 const MessageEmbed = require("../Extensions/MessageEmbed.js");
@@ -28,7 +28,9 @@ require("../Extensions/NativeExtensions.js");
 Message.extend(Discord.Message);
 MessageEmbed.extend(Discord.MessageEmbed);
 ShardClientUtil.extend(Discord.ShardClientUtil);
-//Extensions
+
+// Enums
+global.UserPerm = new Enum([ "User", "DJ", "Mod", "Admin", "Commander", "Dev"]);
 
 class NitroClient extends Discord.Client {
     constructor(...args) {
