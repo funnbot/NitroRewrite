@@ -1,29 +1,32 @@
 class Paginator {
-    constructor(array) {
-        if (!Array.isArray(array)) throw new Error("INVALID_TYPE", typeof array)
-        this.array = array
-    }
-
-    getPage(page) {
-        if (!this.pages) throw new Error("GETPAGE_BEFORE_PAGINATE")
-        if (!page) page = 0
-        if (this.pages.length <= page) page = this.pages.length - 1
-        return this.pages[page] ? this.pages[page] : []
-    }
-
-    paginate(perPage = 10) {
-        this.pages = []
-        for (let [i, a] of this.array.entries()) {
+    // new Paginator(["item1", "item2", "item3", "item4"], 2)
+    // [
+    //  [ [0, "item1"], [1, "item2"] ],
+    //  [ [2, "item3"], [2, "item4"] ]
+    // ]
+    constructor(array, perPage = 10) {
+        let pages = [];
+        for (let i = 0; i < array.length; i++) {
             let index = Math.floor(i / perPage);
-            (!this.pages[index]) ? (this.pages[index] = []) : 0
-            this.pages[index].push([i, a])
+            if (!pages[index]) pages[index] = [];
+            pages[index].push([i, array[i]]);
         }
-        return this.pages
+        this.pages = pages;
+        this.pageCount = pages.length;
     }
 
-    sort(sortFunction) {
-        this.array = this.array.sort(sortFunction)
+    getPage(page = 1) {
+        return this.pages[page - 1] || this.pages[0] || [];
+    }
+
+    loopPage(p = 0, action = () => {}) {
+        const page = this.getPage(p);
+        for (let i = 0; i < page.length; i++) {
+            const index = page[i][0];
+            const item = page[i][1];
+            action(index, item);
+        }
     }
 }
 
-module.exports = Paginator
+module.exports = Paginator;

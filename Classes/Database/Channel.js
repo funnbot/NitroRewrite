@@ -7,12 +7,12 @@ class Channel extends Extension {
         return {};
     }
 
-    g(item, def) {
+    getItem(item, def) {
         return this.client.Database.get("channel", this.id, item, def);
     }
 
-    s(item, value) {
-        return this.client.Database.set("channel", this.id, item, value);
+    setItem(item, def, value) {
+        return this.client.Database.set("channel", this.id, item, value, def);
     }
 
     get cache() {
@@ -24,11 +24,12 @@ class Channel extends Extension {
 
 for (let [item, def] of Object.entries(Channel.items)) {
     Object.defineProperty(Channel.prototype, item, {
-        get: function() {
-            return this.g(item, def);
-        },
-        set: function(val) {
-            this.s(item, val);
+        [item]: function (val) {
+            if (val === undefined) {
+                return this.getItem(item, def);
+            } else {
+                return this.setItem(item, val);
+            }
         }
     });
 }

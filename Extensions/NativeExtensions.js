@@ -54,6 +54,19 @@ function typeof2(value) {
     return value instanceof Array ? "array" : typeof value;
 }
 
+function betterFor(iterator, callback) {
+    let type = typeof2(iterator), iterations;
+    if (type === "object") iterations = Object.keys(iterator).length;
+    else if (type === "array" || type === "string") iterations = iterator.length;
+    else if (type === "number") iterations = iterator;
+    else throw new Error("INVALID_ITERATOR_TYPE: " + type);
+
+    let i = 0;
+    while (i < iterations) {
+        
+    }
+}
+
 function forOf(iter, callback) {
     typeof2(iter) !== "object" || (iter = Object.entries(iter));
     let iterations = iter.length === undefined ? iter : iter.length

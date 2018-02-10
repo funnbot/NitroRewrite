@@ -1,4 +1,3 @@
-//Classes
 const Database = require("./Classes/Database/index.js");
 const NitroClient = require("./Classes/NitroClient.js");
 const MessageHandler = require("./Classes/MessageHandler.js");
@@ -11,13 +10,15 @@ const logger = require("./Classes/Logger.js");
 const config = require("./config.js");
 
 module.exports = {
+    // Class
     Database,
     NitroClient,
     MessageHandler,
     Cycle,
-    Paginator,
     Command,
     Image,
+    Paginator,
+    // Functions
     util,
     logger,
     config

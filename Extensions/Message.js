@@ -1,10 +1,13 @@
 const Extension = require("./Extension")
 const { PREFIX } = require("../config.js");
 
+const Locale = new (require("../Classes/Locale/index.js"));
+
 class Message extends Extension {
 
-    SetupExtension() {
-        this.prefix = this.guild ? this.guild.prefix : PREFIX;
+    async SetupExtension() {
+        this.content = this.cleanInput(this.content);
+        this.prefix = this.guild ? await this.guild.prefix() : PREFIX;
         let mentionRegex = new RegExp(`<@!?${this.client.user.id}>`);
         this._cutPrefix = this._mention(this.content) ? this.content.replace(mentionRegex, "").trim() : this.content.slice(this.prefix.length)
         this._contentSplit = this._cutPrefix.split(" ")
@@ -12,6 +15,16 @@ class Message extends Extension {
         this.command = this._contentSplit[0]
         this.args = this._suffixSplit.filter(t => t != "")
         this.suffix = this._suffixSplit.join(" ")
+
+        this.t = await Locale.setLang(this)
+    }
+
+    cleanInput(txt) {
+        txt = txt.replace(/[”“’‘]/g, c => {
+            if (c === "”" || c === "“") return '"';
+            if (c === "’" || c === "‘") return "'";
+        });
+        return txt;
     }
 
     get checkSuffix() {

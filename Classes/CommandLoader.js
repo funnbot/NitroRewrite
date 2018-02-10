@@ -34,8 +34,8 @@ class CommandLoader {
 
     initialize(CommandChild) {      
         if (!(CommandChild.prototype instanceof Command)) return;
-        CommandChild.prototype.constructor = function() {
-            this.super(...arguments);
+        CommandChild.prototype.constructor = function(...args) {
+            this.super(...args);
         }
         const command = new CommandChild();
         return command;

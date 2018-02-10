@@ -8,12 +8,12 @@ class User extends Extension {
         };
     }
 
-    g(item, def) {
+    getItem(item, def) {
         return this.get("guild", this.id, item, def);
     }
 
-    s(item, value) {
-        return this.set("guild", this.id, item, value);
+    setItem(item, def, value) {
+        return this.set("guild", this.id, item, value, def);
     }
 
     get cache() {
@@ -24,11 +24,12 @@ class User extends Extension {
 
 for (let [item, def] of Object.entries(User.items)) {
     Object.defineProperty(User.prototype, item, {
-        get: function() {
-            return this.g(item, def);
-        },
-        set: function(val) {
-            this.s(item, val);
+        [item]: function (val) {
+            if (val === undefined) {
+                return this.getItem(item, def);
+            } else {
+                return this.setItem(item, val);
+            }
         }
     });
 }

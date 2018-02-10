@@ -10,11 +10,11 @@ class PrefixCommand extends Command {
             if (quote.length < 1) return send("` ` is not a valid prefix.");
             if (quote.startsWith(" ")) return send("`" + pre + "` is not a valid prefix.");
             if (quote.length > 20) return send("The prefix cannot be more than 20 characters");
-            message.guild.prefix = quote;
+            await message.guild.prefix(quote);
             return send("**The prefix was set to `" + quote + "`\nTest - `" + quote + "ping`**");
         } else {
             let pre = message.suffix.trim();
-            message.guild.prefix = pre;
+            await message.guild.prefix(pre);
             return send("**The prefix was set to `" + pre + "`\nTest - `" + pre + "ping`**");
         }
     }

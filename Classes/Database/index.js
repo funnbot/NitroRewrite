@@ -6,100 +6,49 @@ const Channel = require("./Channel.js");
 const Guild = require("./Guild.js");
 const System = require("./System.js");
 
+function testInput(db, id, item, value) {
+    if (db !== undefined)
+        if (!TABLES.includes(db)) return;
+    if (id !== undefined)
+        if (typeof id !== "string") return;
+    if (item !== undefined)
+        if (typeof item !== "string") return;
+    if (value !== undefined) return;
+    return true;
+}
+
 class Database {
-    constructor() {
-        this.user = {};
-        this.channel = {};
-        this.guild = {};
-        this.system = {};
-    }
-
-    get(db, id, item, def) {
-        if (def === undefined) def = {};
-        if ((db !== "user" && db !== "channel" &&
-                db !== "guild" && db !== "system") ||
-            typeof id !== "string" ||
-            typeof item !== "string" ||
-            !this[db][id]
-        ) return def;
-        return this[db][id][item] || def;
-    }
-
-    set(db, id, item, value) {
-        if ((db !== "user" && db !== "channel" &&
-                db !== "guild" && db !== "system") ||
-            typeof id !== "string" ||
-            typeof item !== "string" ||
-            value === undefined
-        ) return;
-        if (!this[db][id]) this[db][id] = {};
-        this[db][id][item] = value;
-        if (!this[db][id][item]) delete this[db][id][item];
-        if (Object.keys(this[db][id]).length === 0)
-            return this.deleteId(db, id);
-        return this.save(db, id);
-    }
-
-    save(db, id) {
-        if (!TABLES.includes(db) ||
-            typeof id !== "string" ||
-            !this[db][id]
-        ) return 0;
-        r.table(db).insert({
-            id,
-            data: this[db][id]
-        }, { conflict: "replace" })
-        .catch(logger.db);
-    }
-
-    deleteItem(db, id, item) {
-        if (!TABLES.includes(db) ||
-            typeof id !== "string" ||
-            typeof item !== "string" ||
-            !this[db][id]
-        ) return 0;
-        delete this[db][id][item];
-        this.save(db, id);
-    }
-
-    deleteId(db, id) {
-        if (!TABLES.includes(db) ||
-            typeof id !== "string"
-        ) return 0;
-        r.table(db)
-            .filter({ id })
-            .delete()
-            .catch(logger.db)
-    }
-
-    feed(table) {
-        r.table(table).changes().then(feed => {
-            feed.each((err, row) => {
-                if (err) return logger.err(err);
-                let val = row.new_val
-                if (!val || !val.id || !val.data) return
-                this[table][val.id] = val.data
-            })
-        }).catch(logger.err)
-    }
-
-    async load() {
-        let load = async(a) => {
-            let b = await r.table(a);
-            for (let c of b) {
-                if (!c.id || !c.data) continue;
-                this[a][c.id] = c.data;
-            }
-            this.feed(a);
-            return;
+    async get(db, id, item, def = {}) {
+        if (!testInput(db, id, item)) return def;
+        let data = {}
+        try {
+            data = (await r.table(db).get(id)) || {};
+        } catch (e) {
+            logger.db(e);
         }
+        const val = data[item] || def;
+        return val;
+    }
 
-        await load("user");
-        await load("channel");
-        await load("guild");
-        await load("system");
+    async set(db, id, item, value, def = {}) {
+        if (!testInput(db, id, item, value)) return 0;
+        if (value === def) await deleteItem(db, id, item);
+        try {
+            if (value === def) await r.table(db).get(id).replace(r.row.without(item));
+            else await r.table(db).insert({ id, [item]: value }, { conflict: "update" });
+        } catch (e) {
+            logger.db(e);
+        }
+        return value;
+    }
 
-        logger.db("Loaded Database");
+    async deleteId(db, id) {
+        if (!testInput(db, id)) return 0;
+        try {
+            await r.table(db).get(id).delete();
+        } catch (e) {
+            logger.db(e);
+        }
     }
 
     async formatDb() {

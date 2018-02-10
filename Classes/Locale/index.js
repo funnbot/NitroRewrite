@@ -12,9 +12,10 @@ module.exports = class Locale {
         this.buildFunctions();
     }
 
-    setLang(message) {
-        this.lang = message.guild ? message.guild.locale : "en";
+    async setLang(message) {
+        this.lang = message.guild ? (await message.guild.locale()) : "en";
         this.set = this.locales.find(f => f.LANG === this.lang);
+        return this;
     }
 
     buildFunctions() {

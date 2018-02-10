@@ -28,8 +28,6 @@
  * @property {(Function|String)} run - The command code.
  */
 
-const Locale = new (require("./Locale/index.js"));
-
 class Command {
     constructor() {
         this.validateOptions();
@@ -54,20 +52,23 @@ class Command {
     async exec(message) {
         this.message = message;
         this.bot = message.client;
-        // Define the language
-        Locale.setLang(message.guild ? message.guild.locale : "en");
-        this.t = Locale;
-        // Send shortcut
-        this.send = message.send;
+        this.t = message.t;
+
+        this.send = (...args) => message.channel.send(...args);
+        
+        logger.cmd(message.command)
         try {
             await this.run(this);
         } catch (e) {
             await this.error(this, e);
         }
+        return;
     }
 
     async run(args) { return; }
-    async error(args, error) { return; }
+    async error(args, error) {
+        logger.err(error);
+    }
     options() { return {}}
 
 }

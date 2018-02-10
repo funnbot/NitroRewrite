@@ -16,12 +16,12 @@ class Guild extends Extension {
         }
     }
 
-    g(item, def) {
+    getItem(item, def) {
         return this.client.Database.get("guild", this.id, item, def);
     }
 
-    s(item, value) {
-        return this.client.Database.set("guild", this.id, item, value);
+    setItem(item, def, value) {
+        return this.client.Database.set("guild", this.id, item, value, def);
     }
 
     get cache() {
@@ -37,25 +37,26 @@ class Guild extends Extension {
      */
     balance(id, val, addTo = false) {
         if (typeof val !== "number") return;
-        let userData = this.g("users", {});
+        let userData = this.getItem("users", {});
         let user = userData[id] || {};
         let bal = user["balance"] || 0;
         if (val === undefined) return bal;
         bal = addTo ? bal + val : val;
         user["balance"] = bal;
         userData[id] = user;
-        this.s("users", userData);
+        this.setItem("users", userData, {});
         return bal;
     }
 }
 
 for (let [item, def] of Object.entries(Guild.items)) {
     Object.defineProperty(Guild.prototype, item, {
-        get: function() {
-            return this.g(item, def);
-        },
-        set: function(val) {
-            this.s(item, val);
+        value: function (val) {
+            if (val === undefined) {
+                return this.getItem(item, def);
+            } else {
+                return this.setItem(item, val);
+            }
         }
     });
 }

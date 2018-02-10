@@ -3,11 +3,10 @@ global.Promise = require("bluebird");
 const Discord = require("discord.js");
 const CommandLoader = require("./CommandLoader");
 const Enum = require("./Enum");
-const Sentry = require("raven");
 const Logger = require("./Logger.js");
 const config = require("../config.js");
 
-// sDatabase
+// Database
 const Database = require("./Database/index.js");
 const Channel = require("./Database/Channel.js");
 const Guild = require("./Database/Guild.js");
@@ -35,9 +34,7 @@ global.UserPerm = new Enum([ "User", "DJ", "Mod", "Admin", "Commander", "Dev"]);
 class NitroClient extends Discord.Client {
     constructor(...args) {
         super(...args);
-
-        Sentry.config(config.SENTRY).install();
-        this.sentry = Sentry;
+        
         this.Database = new Database();
         this.CommandLoader = new CommandLoader();
         this.Embed = Discord.MessageEmbed;
@@ -59,7 +56,6 @@ class NitroClient extends Discord.Client {
 
     async init() {
         await this.Database.formatDb();
-        await this.Database.load();
         this.commands = this.CommandLoader.load()
         this.login(config.TOKEN);
     }

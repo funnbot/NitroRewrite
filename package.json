@@ -17,21 +17,21 @@
   "license": "MIT",
   "dependencies": {
     "canvas": "github:Automattic/node-canvas",
-    "chalk": "^2.2.0",
+    "chalk": "^2.3.0",
     "discord.js": "github:hydrabolt/discord.js",
     "duration-js": "^4.0.0",
     "erlpack": "github:discordapp/erlpack",
     "format-currency": "^1.0.0",
-    "gm": "^1.23.0",
+    "gm": "^1.23.1",
     "html2plaintext": "^2.0.1",
-    "moment": "^2.19.1",
+    "moment": "^2.20.1",
     "node-opus": "^0.2.7",
-    "raven": "^2.2.1",
     "request": "^2.83.0",
     "rethinkdbdash": "^2.3.31",
     "sharp": "^0.18.4",
-    "snekfetch": "^3.6.1",
+    "snekfetch": "^3.6.4",
     "string-similarity": "^1.2.0",
-    "uws": "^8.14.1"
+    "uws": "^8.14.1",
+    "zlib-sync": "^0.1.4"
   }
 }

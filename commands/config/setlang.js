@@ -7,7 +7,7 @@ class LanguageCommand extends Command {
             return send(t.SETLANG_LIST(t.languages.join(", ")));
         }
         if (t.languages.includes(message.suffix)) {
-            message.guild.locale = message.suffix;
+            await message.guild.locale(message.suffix);
             return send(t.SETLANG_SET(message.suffix));
         } else return send(t.SETLANG_INVALID(message.suffix));
     }

@@ -1,4 +1,4 @@
-const { TOKEN, DBNAME, DBPASS, SENTRY, LISTS, SHARDS } = require("./auth.js");
+const { TOKEN, DBNAME, DBPASS, DBDIR, SENTRY, LISTS, SHARDS } = require("./auth.js");
 
 module.exports = {
     PREFIX: "?",
@@ -191,6 +191,7 @@ module.exports = {
     TOKEN,
     DBNAME,
     DBPASS,
+    DBDIR,
     SENTRY,
     SHARDS,
     LISTS,
