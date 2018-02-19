@@ -1,12 +1,11 @@
 const Extension = require("../../Extensions/Extension.js");
 const Storage = require("../SimpleStorage.js");
 
+const items = {
+
+}
+
 class Channel extends Extension {
-
-    static get items() {
-        return {};
-    }
-
     getItem(item, def) {
         return this.client.Database.get("channel", this.id, item, def);
     }
@@ -22,16 +21,16 @@ class Channel extends Extension {
     
 }
 
-for (let [item, def] of Object.entries(Channel.items)) {
-    Object.defineProperty(Channel.prototype, item, {
-        [item]: function (val) {
-            if (val === undefined) {
-                return this.getItem(item, def);
-            } else {
-                return this.setItem(item, val);
-            }
+Channel.prototype.def = {};
+for (let [item, def] of Object.entries(items)) {
+    Channel.prototype[item] = function (val) {
+        if (val === undefined) {
+            return this.getItem(item, this.def[item]);
+        } else {
+            return this.setItem(item, this.def[item], val);
         }
-    });
+    }
+    Channel.prototype.def[item] = def;
 }
 
 module.exports = Channel;

@@ -66,14 +66,14 @@ class TriviaCommand extends Command {
             alias: ["quiz"],
             args: [{
                 type: "selection",
-                prompt: "What difficulty?",
-                opts: ["easy", "medium", "hard", "random"],
-                optional: true
+                info: "What difficulty?",
+                items: ["easy", "medium", "hard", "random"],
+                default: "random"
             }, {
                 type: "selection",
-                prompt: "Which category?",
-                opts: [...Object.keys(categories), "random"],
-                optional: true
+                info: "Which category?",
+                items: [...Object.keys(categories), "random"],
+                default: "random"
             }],
         }
     }
@@ -82,8 +82,8 @@ class TriviaCommand extends Command {
 module.exports = TriviaCommand;
 
 async function play(message, bot, send, trivia) {
-    if (cur[message.channel.id]) return send("A game is in progress")
-    cur[message.channel.id] = true;
+    if (message.channel.cache.exists("trivia")) return send("A game is already in progress");
+    message.channel.cache.set("trivia");
     let {
         question,
         correct_answer,
@@ -96,7 +96,7 @@ async function play(message, bot, send, trivia) {
     incorrect_answers = incorrect_answers.map(s => h2p(s));
     incorrect_answers.push(correct_answer);
     incorrect_answers = shuffle(incorrect_answers);
-    let embed = new bot.embed()
+    let embed = new bot.Embed()
     embed.title = "`Trivia`"
     embed.addField("Category", category)
         .addField("Difficulty", difficulty)
@@ -127,7 +127,7 @@ async function play(message, bot, send, trivia) {
     })
 
     collector.on("end", (c, reason) => {
-        delete cur[message.channel.id]
+        message.channel.cache.delete("trivia");
         if (reason === "time") {
             return send("**Noone guessed in time, the correct answer was: " + correct_answer + "**");
         }
@@ -138,9 +138,9 @@ async function play(message, bot, send, trivia) {
 }
 
 function win(bot, message, user, worth) {
-    delete cur[message.channel.id]
-    message.send(`**${user.tag} answered the question correctly, here is your reward.**`)
-    bot.profile.addMoney(user.id, worth);
+    message.channel.cache.delete("trivia");
+    message.channel.send(`**${user.tag} answered the question correctly, here is your reward.**`)
+    message.guild.balance(user.id, worth, true);
 }
 
 function shuffle(array) {
@@ -165,9 +165,6 @@ function checkAnswer(correct, answers, input) {
 }
 
 function genUrl(d, c) {
-    if (d !== "easy" && d !== "medium" && d !== "hard" && d !== "random")
-        d = "random";
-    if (!categories[c]) c = "random";
     let diff = d === "random" ? "" : "&difficulty=" + d
     let cat = c === "random" ? "" : "&category=" + (categories[c])
     return `https://opentdb.com/api.php?amount=1${cat}${diff}`

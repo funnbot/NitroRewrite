@@ -46,7 +46,7 @@ class PermissionHandler {
         if (not.length > 0) {
             let s = not.length > 1 ? "s" : ""
             not = not.map(p => PERMISSIONS[p])
-            message.send("I (Nitro) lack the permission" + s + ": `" + not.join("`, `") + "`")
+            message.channel.send("I (Nitro) lack the permission" + s + ": `" + not.join("`, `") + "`")
             return true
         } else return false
     }

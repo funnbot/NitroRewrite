@@ -2,20 +2,25 @@ const Extension = require("../../Extensions/Extension.js");
 const { PREFIX } = require("../../config.js");
 const Storage = require("../SimpleStorage.js");
 
-class Guild extends Extension {
-    static get items() {
-        return {
-            prefix: PREFIX,
-            alias: {},
-            mlchannel: null,
-            mljoin: null,
-            mlleave: null,
-            mljoindm: null,
-            locale: "en",
-            users: {}
-        }
+const items = {
+    prefix: PREFIX,
+    alias: {},
+    mlchannel: null,
+    mljoin: null,
+    mlleave: null,
+    mljoindm: null,
+    locale: "en",
+    userData: {},
+    tags: {},
+    groups: {
+        dj: { users: {}, perms: {} },
+        helper: { users: {}, perms: {} },
+        mod: { users: {}, perms: {} },
+        admin: { users: {}, perms: {} },
     }
+}
 
+class Guild extends Extension {
     getItem(item, def) {
         return this.client.Database.get("guild", this.id, item, def);
     }
@@ -31,13 +36,13 @@ class Guild extends Extension {
 
     /**
      * Get or change a user's balance
-     * @param {String} id - a user's id 
-     * @param {Number} val - amount, if undefined gets the user balance;
+     * @param {String} id a user's id 
+     * @param {Number} amount amount to add, if undefined returns balance;
      * @param {Boolean} [addTo=false] - Wether to add to the balance 
      */
-    balance(id, val, addTo = false) {
+    balance(id, amount, addTo = false) {
         if (typeof val !== "number") return;
-        let userData = this.getItem("users", {});
+        let userData = this.getItem("userData", {});
         let user = userData[id] || {};
         let bal = user["balance"] || 0;
         if (val === undefined) return bal;
@@ -49,16 +54,16 @@ class Guild extends Extension {
     }
 }
 
-for (let [item, def] of Object.entries(Guild.items)) {
-    Object.defineProperty(Guild.prototype, item, {
-        value: function (val) {
-            if (val === undefined) {
-                return this.getItem(item, def);
-            } else {
-                return this.setItem(item, val);
-            }
+Guild.prototype.def = {};
+for (let [item, def] of Object.entries(items)) {
+    Guild.prototype[item] = function(val) {
+        if (val === undefined) {
+            return this.getItem(item, this.def[item]);
+        } else {
+            return this.setItem(item, this.def[item], val);
         }
-    });
+    }
+    Guild.prototype.def[item] = def;
 }
 
 module.exports = Guild;

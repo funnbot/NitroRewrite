@@ -47,7 +47,7 @@ class Command {
 
         this.alias = opts.alias || []
         delete this.options;
-    }   
+    }
 
     async exec(message) {
         this.message = message;
@@ -55,7 +55,9 @@ class Command {
         this.t = message.t;
 
         this.send = (...args) => message.channel.send(...args);
-        
+
+        this.reply = setupReply(message);
+
         logger.cmd(message.command)
         try {
             await this.run(this);
@@ -69,8 +71,23 @@ class Command {
     async error(args, error) {
         logger.err(error);
     }
-    options() { return {}}
+    options() { return {} }
 
+}
+
+function setupReply(message) {
+    let reply = (...args) => message.channel.send(...args);
+    reply.succ = (...args) =>
+        reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
+    reply.fail = (...args) =>
+        reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
+    reply.warn = (...args) =>
+        reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
+    reply.succReact = () =>
+        message.react('341741537425621002');
+    reply.failReact = () =>
+        message.react('341741537258110978');
+    return reply;
 }
 
 module.exports = Command;

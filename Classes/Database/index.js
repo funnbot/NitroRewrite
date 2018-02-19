@@ -6,17 +6,6 @@ const Channel = require("./Channel.js");
 const Guild = require("./Guild.js");
 const System = require("./System.js");
 
-function testInput(db, id, item, value) {
-    if (db !== undefined)
-        if (!TABLES.includes(db)) return;
-    if (id !== undefined)
-        if (typeof id !== "string") return;
-    if (item !== undefined)
-        if (typeof item !== "string") return;
-    if (value !== undefined) return;
-    return true;
-}
-
 class Database {
     async get(db, id, item, def = {}) {
         if (!testInput(db, id, item)) return def;
@@ -26,15 +15,13 @@ class Database {
         } catch (e) {
             logger.db(e);
         }
-        const val = data[item] || def;
-        return val;
+        return data[item] || def;
     }
 
     async set(db, id, item, value, def = {}) {
         if (!testInput(db, id, item, value)) return 0;
-        if (value === def) await deleteItem(db, id, item);
         try {
-            if (value === def) await r.table(db).get(id).replace(r.row.without(item));
+            if (isDefault(value, def)) await r.table(db).insert(await r.table(db).get(id).without(item), { conflict: "replace" });
             else await r.table(db).insert({ id, [item]: value }, { conflict: "update" });
         } catch (e) {
             logger.db(e);
@@ -50,6 +37,8 @@ class Database {
             logger.db(e);
         }
     }
+
+
 
     async formatDb() {
         let dbs = await r.dbList();
@@ -70,6 +59,21 @@ class Database {
     }
 }
 
+function isDefault(value, def) {
+    const type = typeof2(value);
+    if (type == "array" && value.length < 1) return true;
+    if (type == "object" && Object.keys(value).length < 1) return true;
+    return value === def;
+}
 
+function testInput(db, id, item, value) {
+    if (db !== undefined)
+        if (!TABLES.includes(db)) return;
+    if (id !== undefined)
+        if (typeof id !== "string") return;
+    if (item !== undefined)
+        if (typeof item !== "string") return;
+    return true;
+}
 
 module.exports = Database;

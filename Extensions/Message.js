@@ -35,10 +35,6 @@ class Message extends Extension {
         return this._suffixSplit.slice(index).join(" ").trim()
     }
 
-    get send() {
-        return this.channel.send.bind(this.channel)
-    }
-
     async fetchImage(returnAvatarOnFail) {
         try {
             var messages = await this.channel.messages.fetch({ limit: 3 })

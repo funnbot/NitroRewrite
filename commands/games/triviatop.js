@@ -3,13 +3,15 @@
  class TriviaTopCommand extends Command {
 
      async run({ message, bot, send, t }) {
-         const pageNum = message.args[0] || 1;
+         return send("WIP");
+         const pageNum = message.args[0];
+         const userData = await message.guild.userData();
          let usersPaged = new Paginator(
-             bot.Database.user
+             userData.filter(u => u.trivia)
              .map(u => u.trivia)
              .sort((a, b) => b - a), 20);
          usersPaged.loopPage(pageNum, page => {
-             
+
          })
          let num = 1;
          let txt = [];
@@ -41,9 +43,9 @@
              usage: "{}triviatop 2",
              alias: ["trivialeaderboard"],
              args: [{
-                 type: "number",
-                 desc: "The trivia leaderboard page.",
-                 optional: true,
+                 type: "int",
+                 info: "The trivia leaderboard page.",
+                 default: 1,
                  min: 1
              }]
          }

@@ -1,14 +1,13 @@
-const Classes = require("./Nitro.js");
+(async () => {
 
-const bot = new Classes.NitroClient({
-    disabledEvents: ["TYPING_START"]
-})
-
-const start = async () => {
+    const { NitroClient, MessageHandler } = require("./Nitro.js");
+    const bot = new NitroClient({
+        disabledEvents: ["TYPING_START"]
+    })
     await bot.init();
     module.exports = bot;
     require("./Events/guild.js");
     require("./Events/member.js");
-    const message = new Classes.MessageHandler(bot);
-}
-start();
+    (new MessageHandler(bot));
+
+})()

@@ -1,13 +1,11 @@
 const Extension = require("../../Extensions/Extension.js");
 const Storage = require("../SimpleStorage.js");
 
-class User extends Extension {
-    static get items() {
-        return {
-            trivia: 0
-        };
-    }
+const items = {
+    trivia: 0
+}
 
+class User extends Extension {
     getItem(item, def) {
         return this.get("guild", this.id, item, def);
     }
@@ -22,16 +20,16 @@ class User extends Extension {
     }
 }
 
-for (let [item, def] of Object.entries(User.items)) {
-    Object.defineProperty(User.prototype, item, {
-        [item]: function (val) {
-            if (val === undefined) {
-                return this.getItem(item, def);
-            } else {
-                return this.setItem(item, val);
-            }
+User.prototype.def = {};
+for (let [item, def] of Object.entries(items)) {
+    User.prototype[item] = function (val) {
+        if (val === undefined) {
+            return this.getItem(item, this.def[item]);
+        } else {
+            return this.setItem(item, this.def[item], val);
         }
-    });
+    }
+    User.prototype.def[item] = def;
 }
 
 module.exports = User;

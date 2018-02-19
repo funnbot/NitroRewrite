@@ -7,7 +7,7 @@ const Duration = require("duration-js");
 
 class EvalCommand extends Command {
 
-    async run ({message, bot, send, t}) {
+    async run ({message, bot, reply, t}) {
         if (message.author.id !== config.FUNNBOT) return
         if (!message.checkSuffix) {
             let txt = evalTxt("Funnbot", "Output", "100000", "An idiot who does not provide code when he evals.")
@@ -16,27 +16,33 @@ class EvalCommand extends Command {
         let processtime,
             start = (new Date()).getTime()
         try {
-            let evaled = await eval(message.suffix)
+            const t = `(async () => { ${message.args[0]} })()`
+            let evaled = await eval(t);
             processtime = (new Date()).getTime() - start
             if (typeof evaled === "object" || typeof evaled === "function") evaled = util.inspect(evaled)
             if (typeof evaled === "string") evaled = evaled.substring(0, 1800).replace("`", "")
             let txt = evalTxt(message.suffix, "Output", processtime, evaled)
             txt = clean(txt)
-            return send(txt)
+            return reply(txt)
         } catch (e) {
             processtime = (new Date()).getTime() - start
             let txt = evalTxt(message.suffix, "Error", processtime, e)
             txt = clean(txt)
-            return send(txt)
+            return reply(txt)
         }
     }
 
     options() { return {
         help: "Eval some code",
-        usage: "k",
+        usage: "1+1",
         userPerms: 4,
         cooldown: 0,
-        dm: true
+        dm: true,
+        args: [{
+            type: "string",
+            info: "code",
+            example: "1+1"
+        }]
     }}
 }
 
