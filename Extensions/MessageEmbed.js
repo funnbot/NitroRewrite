@@ -35,7 +35,7 @@ ${fields}
 
     /**
      * Set a random nitro color.
-     * @returns {Void}
+     * @returns {Object}
      */
     nitroColor() {
         let index = Math.floor(Math.random() * COLORS.length);

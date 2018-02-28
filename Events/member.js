@@ -13,20 +13,20 @@ bot.on("guildMemberAdd", (member) => {
 })
 
 //Member Leave
-bot.on("guildMemberRemove", (member) => {
+bot.on("guildMemberRemove", async (member) => {
     guildMember(member, false)
 })
 
-let guildMember = (member, type) => {
+let guildMember = async (member, type) => {
     const guild = member.guild;
     if (!guild) return;
     const user = member.user;
     if (!user) return;
 
-    const mlchannel = guild.mlchannel;
-    const mljoin = guild.mljoin;
-    const mlleave = guild.mlleave;
-    const mljoindm = guild.mljoindm;
+    const mlchannel = await guild.mlchannel();
+    const mljoin = await guild.mljoin();
+    const mlleave = await guild.mlleave();
+    const mljoindm = await guild.mljoindm();
 
     if (mljoindm && type) joinDM(user, mljoindm);
 

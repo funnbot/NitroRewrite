@@ -2,39 +2,29 @@ global.Promise = require("bluebird");
 
 const Discord = require("discord.js");
 const CommandLoader = require("./CommandLoader");
+const Database = require("./Database.js");
 const Enum = require("./Enum");
 const Logger = require("./Logger.js");
 const config = require("../config.js");
-
-// Database
-const Database = require("./Database/index.js");
-const Channel = require("./Database/Channel.js");
-const Guild = require("./Database/Guild.js");
-const System = require("./Database/System.js");
-const User = require("./Database/User.js");
-
-Channel.extend(Discord.GuildChannel);
-Guild.extend(Discord.Guild);
-System.extend(Discord.Client);
-User.extend(Discord.User);
 
 // Extensions
 const Message = require("../Extensions/Message.js");
 const ShardClientUtil = require("../Extensions/ShardClientUtil.js");
 const MessageEmbed = require("../Extensions/MessageEmbed.js");
+const GuildMember = require("../Extensions/GuildMember");
+const User = require("../Extensions/User");
 require("../Extensions/NativeExtensions.js");
 
 Message.extend(Discord.Message);
 MessageEmbed.extend(Discord.MessageEmbed);
 ShardClientUtil.extend(Discord.ShardClientUtil);
-
-// Enums
-global.UserPerm = new Enum([ "User", "DJ", "Mod", "Admin", "Commander", "Dev"]);
+GuildMember.extend(Discord.GuildMember);
+User.extend(Discord.User);
 
 class NitroClient extends Discord.Client {
     constructor(...args) {
         super(...args);
-        
+
         this.Database = new Database();
         this.CommandLoader = new CommandLoader();
         this.Embed = Discord.MessageEmbed;
@@ -64,6 +54,8 @@ class NitroClient extends Discord.Client {
         //Log all uncaught exceptions
         process.on("unhandledRejection", (e) => logger.err(e))
     }
+
+    get embed() { return new Discord.MessageEmbed() }
 }
 
 module.exports = NitroClient;

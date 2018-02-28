@@ -1,12 +1,16 @@
-const { TABLES, DBNAME, DBPASS } = require("../../config.js");
+const Discord = require("discord.js");
+const { TABLES, DBNAME, DBPASS, ITEMS } = require("../config.js");
+const Storage = require("./SimpleStorage");
 let r = require("rethinkdbdash")();
 
-const User = require("./User.js");
-const Channel = require("./Channel.js");
-const Guild = require("./Guild.js");
-const System = require("./System.js");
-
 class Database {
+    constructor() {
+        ExtendDatabaseClass(Discord.Guild, "guild");
+        ExtendDatabaseClass(Discord.GuildChannel, "channel");
+        ExtendDatabaseClass(Discord.User, "user");
+        ExtendDatabaseClass(Discord.Client, "system");
+    }
+
     async get(db, id, item, def = {}) {
         if (!testInput(db, id, item)) return def;
         let data = {}
@@ -38,8 +42,6 @@ class Database {
         }
     }
 
-
-
     async formatDb() {
         let dbs = await r.dbList();
         if (!dbs.includes(DBNAME)) {
@@ -56,6 +58,37 @@ class Database {
             }
         }
         return;
+    }
+}
+
+function ExtendDatabaseClass(target, name) {
+    Object.defineProperties(target.prototype, {
+        getItem: {
+            value: function(item, def) {
+                return this.client.Database.get(name, this.id, item, def);
+            }
+        },
+        setItem: {
+            value: function(item, def, value) {
+                return this.client.Database.set(name, this.id, item, value, def);
+            }
+        },
+        get cache() {
+            if (!this._Storage) this._Storage = new Storage(this.client, this.id, name)
+            return this._Storage;
+        }
+    })
+
+    target.prototype.def = {};
+    for (let [item, def] of Object.entries(ITEMS[name])) {
+        target.prototype[item] = function(val) {
+            if (val === undefined) {
+                return this.getItem(item, this.def[item]);
+            } else {
+                return this.setItem(item, this.def[item], val);
+            }
+        }
+        target.prototype.def[item] = def;
     }
 }
 

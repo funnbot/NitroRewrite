@@ -1,6 +1,4 @@
-const { TOKEN, DBNAME, DBPASS, DBDIR, SENTRY, LISTS, SHARDS } = require("./auth.js");
-
-module.exports = {
+const config = {
     PREFIX: "?",
 
     DisabledGroups: [],
@@ -16,9 +14,7 @@ module.exports = {
     FUNNBOT: "163735744995655680",
 
     CUR: {
-        toString() {
-            return "USD"
-        },
+        toString: () => "USD",
         code: ":dollar:",
         sym: "$"
     },
@@ -120,22 +116,6 @@ module.exports = {
         ":seven:",
         ":eight:",
         ":nine:",
-        ":one::zero:",
-        ":one::one:",
-        ":one::two:",
-        ":one::three:",
-        ":one::four:",
-        ":one::five:",
-        ":one::six:",
-        ":one::seven:",
-        ":one::eight:",
-        ":one::nine:",
-        ":two::zero:",
-        ":two::one:",
-        ":two::two:",
-        ":two::three:",
-        ":two::four:",
-        ":two::five:"
     ],
     //Map permission names to a easier to read format
     PERMISSIONS: {
@@ -147,7 +127,7 @@ module.exports = {
         MANAGE_GUILD: "Manage Server",
         ADD_REACTIONS: "Add Reactions",
         VIEW_AUDIT_LOG: "View Audit Log",
-        READ_MESSAGES: "Read Messages",
+        VIEW_CHANNEL: "View Channel",
         SEND_MESSAGES: "Send Messages",
         SEND_TTS_MESSAGES: "Send TTS Messages",
         MANAGE_MESSAGES: "Manage Messages",
@@ -187,12 +167,32 @@ module.exports = {
         "#0091EA"
     ],
 
-    //Auth stuff
-    TOKEN,
-    DBNAME,
-    DBPASS,
-    DBDIR,
-    SENTRY,
-    SHARDS,
-    LISTS,
+    ...require("./auth.js")
 }
+
+config.ITEMS = {
+    guild: {
+        prefix: config.PREFIX,
+        alias: {},
+        mlchannel: null,
+        mljoin: null,
+        mlleave: null,
+        mljoindm: null,
+        locale: "en",
+        userData: {},
+        tags: {},
+        perms: {},
+        requserperm: false
+    },
+    user: {
+        trivia: 0
+    },
+    channel: {
+
+    },
+    system: {
+
+    }
+}
+
+module.exports = config;

@@ -11,7 +11,6 @@
  * @property {Array<String>} opts - Selection options.
  * @property {Boolean} [ignoreCase=true] - Ignore selection case.
  * @property {String} regex - Regex for custom type.
- */
 
 /**
  * Command options.
@@ -42,14 +41,19 @@ class Command {
         this.cooldown = opts.cooldown || 1
         this.args = opts.args || []
 
-        this.userPerm = opts.userPerm || 0
+        this.userPerms = opts.userPerms || []
         this.botPerms = opts.botPerms || []
 
         this.alias = opts.alias || []
+
+        this.wip = opts.wip || false;
+
         delete this.options;
     }
 
     async exec(message) {
+        if (wipCheck(message)) return message.channel.send("**This command is a WIP**");
+
         this.message = message;
         this.bot = message.client;
         this.t = message.t;
@@ -65,6 +69,11 @@ class Command {
             await this.error(this, e);
         }
         return;
+    }
+
+    wipCheck(msg) {
+        if (!this.wip) return false;
+        return this.wip && msg.author.isDeveloper();
     }
 
     async run(args) { return; }

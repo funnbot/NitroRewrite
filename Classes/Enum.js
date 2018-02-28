@@ -4,7 +4,7 @@ class Enum {
         let num = 0;
         if (Array.isArray(items)) {
             for (let i of items) {
-                this[i] = `${typeCheck}-${num++}`;
+                this[i] = `${typeCheck}-${num}`;
                 this[`${typeCheck}-${num++}`] = i;
             }
         } else {

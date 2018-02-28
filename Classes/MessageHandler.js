@@ -9,7 +9,6 @@ class MessageHandler {
         this.bot = bot;
         this.alias = new Alias(bot.commands);
         this.cooldown = new Cooldown();
-        this.permissions = new PermissionHandler();
 
         this.onMessage(this);
     }
@@ -40,9 +39,8 @@ class MessageHandler {
         // Get the command
         let command = bot.commands[message.command];
         if (!command) return;
-        // Check permissions
-        if (permissions.user(message, bot, command.userPerm)) return;
         if (message.guild) {
+            if (PermissionHandler.run(message, command)) return;
             // Check if bot has permission in this channel
             const perms = message.channel.permissionsFor(bot.user);
             if (perms && !perms.has("SEND_MESSAGES"))

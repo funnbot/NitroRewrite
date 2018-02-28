@@ -1,4 +1,4 @@
-const Database = require("./Classes/Database/index.js");
+const Database = require("./Classes/Database.js");
 const NitroClient = require("./Classes/NitroClient.js");
 const MessageHandler = require("./Classes/MessageHandler.js");
 const Cycle = require("./Classes/Cycle.js");

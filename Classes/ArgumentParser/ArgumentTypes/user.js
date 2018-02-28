@@ -53,10 +53,11 @@ function memberFilterInexact(search) {
 
 async function findUserByID(id, msg) {
     let mem = msg.guild.members.get(id);
-    if (mem) return mem.user;
+    if (mem) return [mem.user, null];
     await msg.guild.members.fetch();
     mem = msg.guild.members.get(id);
-    return [mem.user, "User with ID `" + id + "` not found"];
+    const user = mem ? mem.user : null;
+    return [user, "User with ID `" + id + "` not found"];
 }
 
 module.exports = UserArgument;

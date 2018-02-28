@@ -3,15 +3,16 @@
  class TriviaTopCommand extends Command {
 
      async run({ message, bot, send, t }) {
-         return send("WIP");
          const pageNum = message.args[0];
          const userData = await message.guild.userData();
-         let usersPaged = new Paginator(
-             userData.filter(u => u.trivia)
-             .map(u => u.trivia)
-             .sort((a, b) => b - a), 20);
-         usersPaged.loopPage(pageNum, page => {
+         const users = Object.entries(userData)
+             .map(async u => {
+                 try { return await bot.users.get(u[0]); } catch { return null; }
+             }).filter(u => u[0] && u[1] && u[1].trivia);
 
+         const usersPaged = new Paginator(users, 20);
+         usersPaged.loopPage(pageNum, info => {
+             
          })
          let num = 1;
          let txt = [];

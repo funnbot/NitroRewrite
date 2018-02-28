@@ -13,6 +13,7 @@ class PingCommand extends Command {
         return {
             help: "Check if Nitro is alive.",
             usage: "${p}ping",
+            userPerms: ["ADMINISTRATOR"]
         }
     }
 }

@@ -1,54 +1,31 @@
 const { PERMISSIONS, FUNNBOT } = require("../config.js")
 
 class PermissionHandler {
-    user(message, bot, perm = 5) {
-        if (message.author.id === FUNNBOT) return false;
-        if (!message.guild) {
-            if (perm === 5 && message.author.id === FUNNBOT) return false
-            else if (perm !== 5) return false
-            return true
-        }
-        if (perm !== 5 && message.author.id === message.guild.ownerID) return false
-        let perms = [
-            "User",
-            "DJ",
-            "Moderator",
-            "Admin",
-            "Nitro Commander",
-            "Dev"
-        ]
-        let has = {
-            user: message.member.roles.find("name", perms[0]),
-            dj: message.member.roles.find("name", perms[1]),
-            mod: message.member.roles.find("name", perms[2]),
-            admin: message.member.roles.find("name", perms[3]),
-            nitro: message.member.roles.find("name", perms[4])
-        }
-        if (perm === 0) return false;
-        if (perm === 5 && message.author.id === FUNNBOT) return false
-
-        if (perm === 4 && has.nitro) return false
-        if (perm === 3 && (has.admin || has.nitro)) return false
-        if (perm === 2 && (has.mod || has.admin || has.nitro)) return false
-        if (perm === 1 && (has.dj ||has.mod || has.admin || has.nitro)) return false;
-        message.channel.send("**This command requires you to have a role named `" + perms[perm] + "`**")
-        return true
+    static run(message, command) {
+        const { client, author, channel } = message;
+        const { userPerms, botPerms } = command;
+        if (this.checkPerms(channel, author, userPerms)) return true;
+        else if (this.checkPerms(channel, client.user, botPerms, true)) return true;
+        else return false;
     }
 
-    bot(message, bot, perms = []) {
-        let not = []
-        perms.forEach(p => {
-            if (!message.channel.permissionsFor(bot.user).has(p)) {
-                not.push(p)
-            }
-        })
+    static checkPerms(channel, user, perms, self = false) {
+        const miss = this.missingPerms(channel, user, perms);
+        if (miss.length > 0) {
+            const s = miss.length > 1 ? "s" : "";
+            const ps = miss.map(p => PERMISSIONS[p]).join(", ");
+            const sub = self ? "I (Nitro)" : "You";
+            channel.send(`**${sub} lack the permission${s}:** \`${ps}\``);
+            return miss;
+        } else return false;
+    }
 
-        if (not.length > 0) {
-            let s = not.length > 1 ? "s" : ""
-            not = not.map(p => PERMISSIONS[p])
-            message.channel.send("I (Nitro) lack the permission" + s + ": `" + not.join("`, `") + "`")
-            return true
-        } else return false
+    static missingPerms(channel, user, perms) {
+        let missing = [];
+        const permissions = channel.permissionsFor(user);
+        for (let i = 0; i < perms.length; i++)
+            if (!permissions.has(perms[i])) missing.push(perms[i]);
+        return missing;
     }
 }
 
