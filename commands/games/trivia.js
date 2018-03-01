@@ -67,11 +67,13 @@ class TriviaCommand extends Command {
             args: [{
                 type: "selection",
                 info: "What difficulty?",
+                example: "medium",
                 items: ["easy", "medium", "hard", "random"],
                 default: "random"
             }, {
                 type: "selection",
                 info: "Which category?",
+                example: "geography",
                 items: [...Object.keys(categories), "random"],
                 default: "random"
             }],
@@ -107,9 +109,7 @@ async function play(message, bot, send, trivia) {
         .setColor("#4DD0D9")
         .setAuthor(message.guild.name, message.guild.iconURL)
 
-    send({
-        embed
-    })
+    send({ embed })
     let guessed = {};
     let collector = message.channel.createMessageCollector(m => {
         if (m.author.bot) return false
@@ -120,11 +120,11 @@ async function play(message, bot, send, trivia) {
         if (checkAnswer(correct_answer, incorrect_answers, guess)) {
             collector.stop("WINNED")
             win(bot, message, m.author, worth)
+        } else {
+            m.failReact();
         }
         return false
-    }, {
-        time: 20000
-    })
+    }, { time: 20000 })
 
     collector.on("end", (c, reason) => {
         message.channel.cache.delete("trivia");
@@ -137,10 +137,11 @@ async function play(message, bot, send, trivia) {
     })
 }
 
-function win(bot, message, user, worth) {
+async function win(bot, message, user, worth) {
     message.channel.cache.delete("trivia");
     message.channel.send(`**${user.tag} answered the question correctly, here is your reward.**`)
-    message.guild.balance(user.id, worth, true);
+    await message.guild.triviaWin(user.id);
+    await message.guild.balance(user.id, worth, true);
 }
 
 function shuffle(array) {
@@ -148,7 +149,7 @@ function shuffle(array) {
         j = 0,
         temp = null
 
-    for (i = array.length - 1; i > 0; i -= 1) {
+    for (i = array.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1))
         temp = array[i]
         array[i] = array[j]

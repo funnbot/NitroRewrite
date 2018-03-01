@@ -52,7 +52,7 @@ class Command {
     }
 
     async exec(message) {
-        if (wipCheck(message)) return message.channel.send("**This command is a WIP**");
+        if (this.wipCheck(message)) return message.channel.send("**This command is a WIP**");
 
         this.message = message;
         this.bot = message.client;
@@ -73,7 +73,7 @@ class Command {
 
     wipCheck(msg) {
         if (!this.wip) return false;
-        return this.wip && msg.author.isDeveloper();
+        return this.wip && msg.author.isDeveloper;
     }
 
     async run(args) { return; }

@@ -26,7 +26,7 @@ class EvalCommand extends Command {
             return reply(txt)
         } catch (e) {
             processtime = (new Date()).getTime() - start
-            let txt = evalTxt(message.suffix, "Error", processtime, e)
+            let txt = evalTxt(message.suffix, "Error", processtime, e.stack)
             txt = clean(txt)
             return reply(txt)
         }

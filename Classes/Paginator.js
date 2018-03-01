@@ -24,7 +24,7 @@ class Paginator {
         for (let i = 0; i < page.length; i++) {
             const index = page[i][0];
             const item = page[i][1];
-            action(index, item);
+            action(item, index);
         }
     }
 }

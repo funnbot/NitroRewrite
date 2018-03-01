@@ -6,10 +6,10 @@ class LockDownCommand extends Command {
         const ms = message.args[0];
         const role = (message.args[1] || message.guild).id;
 
-        const current = message.channel.permissionOverwrites.get(role);
-        if (!current) current = null;
-        else if (current.allow & 1 << 11) current = true;
-        else if (current.deny & 1 << 11) current = false;
+        const overwrites = message.channel.permissionOverwrites.get(role);
+        let current = null;
+        if (overwrites.allowed.has("SEND_MESSAGES")) current = true;
+        else if (overwrites.denied.has("SEND_MESSAGES")) current = false;
 
         await message.channel.overwritePermissions(role, { SEND_MESSAGES: false });
         await reply.warn(`Channel locked down for ${ms.toString()}.`, ' type `unlock` to end the lockdown.');
@@ -17,6 +17,7 @@ class LockDownCommand extends Command {
         async function end() {
             await message.channel.overwritePermissions(role, { SEND_MESSAGES: current });
             await reply.succ("Lockdown has ended.");
+            c.stop();
         }
 
         const timer = setTimeout(end, ms.milliseconds());

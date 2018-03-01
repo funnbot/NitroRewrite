@@ -1,7 +1,7 @@
 const Extension = require("./Extension")
 const { PREFIX } = require("../config.js");
 
-const Locale = new (require("../Classes/Locale/index.js"));
+const Locale = new(require("../Classes/Locale/index.js"));
 
 class Message extends Extension {
 
@@ -35,6 +35,26 @@ class Message extends Extension {
         return this._suffixSplit.slice(index).join(" ").trim()
     }
 
+    send(...args) {
+        this.channel.send(...args);
+    }
+    succ(...args) {
+        this.send(`✅ | **${args.shift()}** ${args.join(" ")}`);
+    }
+    fail(...args) {
+        this.send(`⛔ | **${args.shift()}** ${args.join(" ")}`);
+    }
+    warn(...args) {
+        this.send(`⚠ | **${args.shift()}** ${args.join(" ")}`);
+    }
+    succReact() {
+        this.react('341741537425621002');
+    }
+    failReact() {
+        this.react('341741537258110978');
+    }
+
+
     async fetchImage(returnAvatarOnFail) {
         try {
             var messages = await this.channel.messages.fetch({ limit: 3 })
@@ -65,18 +85,6 @@ class Message extends Extension {
 
     _mention(text) {
         return text.startsWith(`<@${this.client.user.id}>`) || text.startsWith(`<@!${this.client.user.id}>`);
-    }
-
-    succ(text, data) {
-        return this.channel.send(`:white_check_mark: **| ${text.replace(/\*\*/g, "")}** ${data === undefined ? "" : data}`)
-    }
-
-    warn(text, data) {
-        return this.channel.send(`:warning: **| ${text.replace(/\*\*/g, "")}** ${data === undefined ? "" : data}`)
-    }
-
-    fail(text, data) {
-        return this.channel.send(`:no_entry_sign: **| ${text.replace(/\*\*/g, "")}** ${data === undefined ? "" : data}`)
     }
 
     async collectMessage(truthy, falsy, filter, time) {

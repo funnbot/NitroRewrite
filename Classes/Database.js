@@ -11,7 +11,9 @@ class Database {
         ExtendDatabaseClass(Discord.Client, "system");
     }
 
-    async get(db, id, item, def = {}) {
+    async get(db, id, item) {
+        let def = ITEMS[db][item];
+        if (typeof def === "object") def = Object.assign({}, def);
         if (!testInput(db, id, item)) return def;
         let data = {}
         try {
@@ -22,11 +24,15 @@ class Database {
         return data[item] || def;
     }
 
-    async set(db, id, item, value, def = {}) {
+    async set(db, id, item, value) {
         if (!testInput(db, id, item, value)) return 0;
+        const def = ITEMS[db][item];
         try {
-            if (isDefault(value, def)) await r.table(db).insert(await r.table(db).get(id).without(item), { conflict: "replace" });
-            else await r.table(db).insert({ id, [item]: value }, { conflict: "update" });
+            if (isDefault(value, def)) {
+                const data = await r.table(db).get(id);
+                if (!data) return value;
+                await r.table(db).insert(data.without(item), { conflict: "replace" })
+            } else await r.table(db).insert({ id, [item]: value }, { conflict: "update" });
         } catch (e) {
             logger.db(e);
         }
@@ -64,38 +70,38 @@ class Database {
 function ExtendDatabaseClass(target, name) {
     Object.defineProperties(target.prototype, {
         getItem: {
-            value: function(item, def) {
-                return this.client.Database.get(name, this.id, item, def);
+            value: function(item) {
+                return this.client.Database.get(name, this.id, item);
             }
         },
         setItem: {
-            value: function(item, def, value) {
-                return this.client.Database.set(name, this.id, item, value, def);
+            value: function(item, value) {
+                return this.client.Database.set(name, this.id, item, value);
             }
         },
-        get cache() {
-            if (!this._Storage) this._Storage = new Storage(this.client, this.id, name)
-            return this._Storage;
-        }
+        cache: {
+            get: function() {
+                if (!this._Storage) this._Storage = new Storage(this.client, this.id, name);
+                return this._Storage;
+            }
+        },
     })
 
-    target.prototype.def = {};
-    for (let [item, def] of Object.entries(ITEMS[name])) {
+    for (let item of Object.keys(ITEMS[name])) {
         target.prototype[item] = function(val) {
             if (val === undefined) {
-                return this.getItem(item, this.def[item]);
+                return this.getItem(item);
             } else {
-                return this.setItem(item, this.def[item], val);
+                return this.setItem(item, val);
             }
         }
-        target.prototype.def[item] = def;
     }
 }
 
 function isDefault(value, def) {
     const type = typeof2(value);
-    if (type == "array" && value.length < 1) return true;
-    if (type == "object" && Object.keys(value).length < 1) return true;
+    if (type === "array" && value.length < 1) return true;
+    if (type === "object" && Object.keys(value).length < 1) return true;
     return value === def;
 }
 

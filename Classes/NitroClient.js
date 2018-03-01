@@ -12,6 +12,7 @@ const Message = require("../Extensions/Message.js");
 const ShardClientUtil = require("../Extensions/ShardClientUtil.js");
 const MessageEmbed = require("../Extensions/MessageEmbed.js");
 const GuildMember = require("../Extensions/GuildMember");
+const Guild = require("../Extensions/Guild");
 const User = require("../Extensions/User");
 require("../Extensions/NativeExtensions.js");
 
@@ -19,6 +20,7 @@ Message.extend(Discord.Message);
 MessageEmbed.extend(Discord.MessageEmbed);
 ShardClientUtil.extend(Discord.ShardClientUtil);
 GuildMember.extend(Discord.GuildMember);
+Guild.extend(Discord.Guild);
 User.extend(Discord.User);
 
 class NitroClient extends Discord.Client {

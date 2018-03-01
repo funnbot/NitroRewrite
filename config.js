@@ -1,4 +1,4 @@
-const config = {
+let config = {
     PREFIX: "?",
 
     DisabledGroups: [],
@@ -193,6 +193,6 @@ config.ITEMS = {
     system: {
 
     }
-}
+};
 
 module.exports = config;

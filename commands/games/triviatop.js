@@ -1,41 +1,35 @@
- const { Command, Paginator } = require("../../Nitro");
+ const { Command, Paginator, util } = require("../../Nitro");
 
  class TriviaTopCommand extends Command {
 
-     async run({ message, bot, send, t }) {
+     async run({ message, bot, reply, t }) {
          const pageNum = message.args[0];
          const userData = await message.guild.userData();
          const users = Object.entries(userData)
              .map(async u => {
-                 try { return await bot.users.get(u[0]); } catch { return null; }
-             }).filter(u => u[0] && u[1] && u[1].trivia);
-
+                 const wins = u[1] ? u[1].trivia : 0;
+                 try { var user = await bot.users.get(u[0]); } catch (e) { var user = null; }
+                 const username = user ? user.username : null;
+                 console.log(username);
+                 return { username, wins };
+             }).filter(u => u.user && u.wins)
+             .sort((a, b) => b.wins = a.wins);
+    
          const usersPaged = new Paginator(users, 20);
-         usersPaged.loopPage(pageNum, info => {
-             
-         })
-         let num = 1;
          let txt = [];
-         for (let [id, wins] of users) {
-             let user = {};
-             try {
-                 user = bot.users.get(id);
-                 if (!user) user = await bot.users.fetch(id);
-             } catch (e) {
-                 user.tag = "User Left";
-                 console.log(e);
-             }
-             let tag = Nitro.util.escapeMarkdown(user.tag);
-             txt.push(`**${num}.** ${tag} (${wins})`);
-             num++;
-         }
+         usersPaged.loopPage(pageNum, (item, index) => {
+             const username = util.escapeMarkdown(item.username);
+             const wins = item.trivia;
+             txt.push(`**${index+1}.** ${username} ${wins}`);
+         })
+
          let embed = new bot.Embed();
          embed.description = txt.join("\n");
          embed.setTitle("`Trivia Leaderboard`")
              .setColor(embed.randomColor)
-             .setFooter("");
+             .setFooter(`Page ${pageNum}/${usersPaged.pages.length}`);
 
-         send({ embed });
+         reply({ embed });
      }
 
      options() {
