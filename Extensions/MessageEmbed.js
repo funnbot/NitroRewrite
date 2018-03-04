@@ -3,6 +3,23 @@ const { COLORS } = require("../config.js")
 const moment = require("moment");
 
 class MessageEmbed extends Extension {
+
+    sendTo(channel) {
+        return channel.send(this);
+    }
+
+    addBetterField(title, content) {
+        this.description = this.description || "";
+        this.description += `\n**${title}:** ${content}`;
+        return this;
+    }
+
+    addFieldDef(title, content) {
+        title = title || "\u200B";
+        content = content || "\u200B";
+        return this.addField(title, content);
+    }
+
     /**
      * Get the embed as text.
      */
@@ -44,7 +61,7 @@ ${fields}
     }
 
     actionColor(action) {
-        return {
+        const color = {
             ban: "#B71C1C",
             tempban: "#D32F2F",
             softban: "#F44336",
@@ -52,7 +69,9 @@ ${fields}
             mute: "#FF9800",
             warn: "#FDD835",
             unban: "#76FF03"
-        }[action]
+        }[action];
+        this.setColor(color);
+        return this;
     }
 
 }

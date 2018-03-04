@@ -1,5 +1,4 @@
 (async () => {
-
     const { NitroClient, MessageHandler } = require("./Nitro.js");
     const bot = new NitroClient({
         disabledEvents: ["TYPING_START"]
@@ -9,5 +8,4 @@
     require("./Events/guild.js");
     require("./Events/member.js");
     (new MessageHandler(bot));
-
 })()

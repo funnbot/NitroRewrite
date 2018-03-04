@@ -1,4 +1,6 @@
 const Extension = require("./Extension.js");
+const Discord = require("discord.js");
+const moment = require("moment");
 
 class Guild extends Extension {
     /**
@@ -28,6 +30,28 @@ class Guild extends Extension {
         userData[id] = user;
         await this.userData(userData);
         return user.trivia;
+    }
+
+    async userAction(id, action, reason) {
+        let userData = await this.userData();
+        let user = userData[id] || {};
+        if (!user.mem) user.mem = {};
+        if (!user.mem[action]) user.mem[action] = []
+        user.mem[action].push(reason);
+        userData[id] = user;
+        await this.userData(userData);
+        return user.mem;
+    }
+
+    async modAction(id, action) {
+        let userData = await this.userData();
+        let user = userData[id] || {};
+        if (!user.mod) user.mod = {};
+        if (!user.mod[action]) user.mod[action] = 0;
+        user.mod[action]++;
+        userData[id] = user;
+        await this.userData(userData);
+        return user.mod;
     }
 }
 

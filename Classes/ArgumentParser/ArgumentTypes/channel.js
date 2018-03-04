@@ -12,8 +12,8 @@ class ChannelArgument {
         return { valid: !!channel, val: channel, error }
     }
 
-    static default () {
-        return null;
+    static default (msg) {
+        return msg.channel;
     }
 }
 

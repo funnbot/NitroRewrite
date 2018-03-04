@@ -29,14 +29,23 @@ class Cycler {
         this._typeCheck();
     }
 
+    get val() {
+        return this.int;
+    }
+
+    set val(value) {
+        if (value - this.int >= 0) this.inc();
+        else this.dec();
+    }
+
     /**
      * Increment the cycler by an amount or 1.
      * @param {Number} [am=1] 
      * @returns {Number}
      */
-    inc(am = 1) {
+    inc() {
         if (typeof am !== "number") throw new Error("amount must be a number");
-        this.int = this.int + am;
+        this.int++
         if (this.int > this.end) {
             const left = this.int - this.end - 1;
             this.int = this.start + left;
@@ -49,9 +58,9 @@ class Cycler {
      * @param {Number} [am=1] 
      * @returns {Number}
      */
-    dec(am = 1) {
+    dec() {
         if (typeof am !== "number") throw new Error("amount must be a number");
-        this.int = this.int - am;
+        this.int--;
         if (this.int < this.start) {
             const left = this.start - this.int - 1;
             this.int = this.end - left;

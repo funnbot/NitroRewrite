@@ -31,7 +31,8 @@ class Database {
             if (isDefault(value, def)) {
                 const data = await r.table(db).get(id);
                 if (!data) return value;
-                await r.table(db).insert(data.without(item), { conflict: "replace" })
+                const wo = await r.table(db).get(id).without(item);
+                await r.table(db).insert(wo, { conflict: "replace" })
             } else await r.table(db).insert({ id, [item]: value }, { conflict: "update" });
         } catch (e) {
             logger.db(e);

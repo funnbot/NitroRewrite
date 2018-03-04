@@ -21,7 +21,7 @@ class CommandLoader {
                 this.groups[group] = this.groups[group] || {};
                 try {
                     var loaded = require(`.${this.path}${group}/${command}`);
-                } catch(e) {
+                } catch (e) {
                     logger.warn(e);
                     continue;
                 }
@@ -32,7 +32,7 @@ class CommandLoader {
         return this.commands;
     }
 
-    initialize(CommandChild) {      
+    initialize(CommandChild) {
         if (!(CommandChild.prototype instanceof Command)) return;
         CommandChild.prototype.constructor = function(...args) {
             this.super(...args);

@@ -146,7 +146,7 @@ let config = {
         MANAGE_NICKNAMES: "Manage Nicknames",
         MANAGE_ROLES: "Manage Roles",
         MANAGE_WEBHOOKS: "Manage Webhooks",
-        MANAGE_EMOJIS: "Manage Emojis"
+        MANAGE_EMOJIS: "Manage Emojis",
     },
     //Colors used in embed.randomColor
     COLORS: [
@@ -182,7 +182,9 @@ config.ITEMS = {
         userData: {},
         tags: {},
         perms: {},
-        requserperm: false
+        requserperm: false,
+        cases: {},
+        modlog: null
     },
     user: {
         trivia: 0
@@ -191,7 +193,7 @@ config.ITEMS = {
 
     },
     system: {
-
+        timers: []
     }
 };
 

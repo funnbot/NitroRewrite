@@ -23,6 +23,12 @@ class Util {
         return name
     }
 
+    static shorten2000(txt) {
+        if (txt.length <= 2000) return txt;
+        txt = txt.slice(0, 1997);
+        return txt + "...";
+    }
+
     /**
      * Create object from specific props from object.
      * @param {Object} obj 

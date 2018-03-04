@@ -10,20 +10,29 @@ class MessageHandler {
         this.alias = new Alias(bot.commands);
         this.cooldown = new Cooldown();
 
-        this.onMessage(this);
+        this.addListeners();
     }
 
-    onMessage({ bot }) {
-        bot.on("message", async message => {
-            await this.onCommand(message, this);
-        });
+    addListeners() {
+        this.bot.on("message", (...m) => this.onMessage.apply(this, m));
+        this.bot.on("messageUpdate", (...m) => this.onMessageEdit.apply(this, m))
     }
 
-    async onCommand(message, { bot, alias, permissions, cooldown }) {
-        // Bots cannot run commands
-        if (message.author.bot) return;
+    async onMessage(message) {
         // Setup the message extensions
         await message.SetupExtension();
+        await this.onCommand(message, this);
+    }
+
+    async onMessageEdit(oldMessage, message) {
+        // Setup the message extensions
+        await message.SetupExtension();
+        if (message.edits.length <= 3) await this.onCommand(message, this);
+    }
+
+    async onCommand(message, { bot, alias, cooldown }) {
+        // Bots cannot run commands
+        if (message.author.bot) return;
         // Continue with prefix or mention
         if (!message.content.toLowerCase().startsWith(message.prefix) &&
             !message._mention(message.content)) return;

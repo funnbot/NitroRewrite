@@ -9,21 +9,24 @@ class Message extends Extension {
         this.content = this.cleanInput(this.content);
         this.prefix = this.guild ? await this.guild.prefix() : PREFIX;
         let mentionRegex = new RegExp(`<@!?${this.client.user.id}>`);
-        this._cutPrefix = this._mention(this.content) ? this.content.replace(mentionRegex, "").trim() : this.content.slice(this.prefix.length)
-        this._contentSplit = this._cutPrefix.split(" ")
-        this._suffixSplit = this._contentSplit.slice(1)
-        this.command = this._contentSplit[0]
-        this.args = this._suffixSplit.filter(t => t != "")
-        this.suffix = this._suffixSplit.join(" ")
+        this._cutPrefix = this._mention(this.content) ? this.content.replace(mentionRegex, "").trim() : this.content.slice(this.prefix.length);
+        this._contentSplit = this._cutPrefix.split(" ");
+        this._suffixSplit = this._contentSplit.slice(1);
+        this.command = this._contentSplit[0];
+        this.args = this._suffixSplit.filter(t => t != "");
+        this.suffix = this._suffixSplit.join(" ");
 
-        this.t = await Locale.setLang(this)
+        this.t = await Locale.setLang(this);
     }
 
     cleanInput(txt) {
-        txt = txt.replace(/[”“’‘]/g, c => {
-            if (c === "”" || c === "“") return '"';
-            if (c === "’" || c === "‘") return "'";
-        });
+        const inplc = {
+            "”": '"',
+            "“": '"',
+            "’": '"',
+            "‘": '"'
+        }
+        txt = txt.replace(/[”“’‘]/g, c => inplc[c]);
         return txt;
     }
 
@@ -36,24 +39,27 @@ class Message extends Extension {
     }
 
     send(...args) {
-        this.channel.send(...args);
+        return this.channel.send(...args);
     }
     succ(...args) {
-        this.send(`✅ | **${args.shift()}** ${args.join(" ")}`);
+        return this.send(`✅ | **${args.shift()}** ${args.join(" ")}`);
     }
     fail(...args) {
-        this.send(`⛔ | **${args.shift()}** ${args.join(" ")}`);
+        return this.send(`⛔ | **${args.shift()}** ${args.join(" ")}`);
     }
     warn(...args) {
-        this.send(`⚠ | **${args.shift()}** ${args.join(" ")}`);
+        return this.send(`⚠ | **${args.shift()}** ${args.join(" ")}`);
     }
     succReact() {
-        this.react('341741537425621002');
+        return this.react('341741537425621002');
     }
     failReact() {
-        this.react('341741537258110978');
+        return this.react('341741537258110978');
     }
 
+    authorPerm(...perms) {
+        return this.author.checkPermission(this.channel, ...perms);
+    }
 
     async fetchImage(returnAvatarOnFail) {
         try {
@@ -85,29 +91,6 @@ class Message extends Extension {
 
     _mention(text) {
         return text.startsWith(`<@${this.client.user.id}>`) || text.startsWith(`<@!${this.client.user.id}>`);
-    }
-
-    async collectMessage(truthy, falsy, filter, time) {
-        return new Promise((resolve, reject) => {
-            if (filter === "author") filter = m => m.author.id === this.author.id
-            else if (filter === "everyone") filter = m => m.user.bot === false
-            else return reject("Filter = author || everyone")
-            if (!time) time = 30000
-            let collector = this.channel.createMessageCollector(filter, {
-                time
-            })
-            collector.on("collect", msg => {
-                if ((typeof truthy === "object" && truthy.includes(msg.content)) || (truthy === msg.content)) return collector.stop("true")
-                if ((typeof falsy === "object" && falsy.includes(msg.content)) || (falsy === msg.content)) return collector.stop("false")
-            })
-            collector.on("end", (c, reason) => {
-                resolve({
-                    time: false,
-                    true: true,
-                    false: false
-                }[reason])
-            })
-        })
     }
 
     async parseUser(u) {

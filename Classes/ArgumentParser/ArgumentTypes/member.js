@@ -53,7 +53,7 @@ function memberFilterInexact(search) {
 
 async function findUserByID(id, msg) {
     let mem = msg.guild.members.get(id);
-    if (mem) return mem;
+    if (mem) return [mem, null];
     await msg.guild.members.fetch();
     mem = msg.guild.members.get(id);
     return [mem, "User with ID `" + id + "` not found"];

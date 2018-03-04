@@ -22,7 +22,7 @@ class LockDownCommand extends Command {
 
         const timer = setTimeout(end, ms.milliseconds());
 
-        const filt = m => m.member.checkPermission(m.channel, "MANAGE_CHANNELS")
+        const filt = m => m.authorPerm("MANAGE_CHANNEL");
         const c = message.channel.createMessageCollector(filt, ms.milliseconds());
 
         c.on("collect", m => {

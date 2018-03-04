@@ -5,21 +5,21 @@
      async run({ message, bot, reply, t }) {
          const pageNum = message.args[0];
          const userData = await message.guild.userData();
-         const users = Object.entries(userData)
-             .map(async u => {
-                 const wins = u[1] ? u[1].trivia : 0;
-                 try { var user = await bot.users.get(u[0]); } catch (e) { var user = null; }
-                 const username = user ? user.username : null;
-                 console.log(username);
-                 return { username, wins };
-             }).filter(u => u.user && u.wins)
-             .sort((a, b) => b.wins = a.wins);
-    
+         const userEntries = Object.entries(userData);
+         let users = [];
+         for (let [id, data] of userEntries) {
+             const wins = data.trivia || 0;
+             try { var user = await bot.users.get(id); } catch (e) { var user = null; }
+             const username = user ? user.username : null;
+             if (username && wins) users.push({ username, wins });
+         }
+         users = users.sort((a, b) => b.wins - a.wins);
+
          const usersPaged = new Paginator(users, 20);
          let txt = [];
          usersPaged.loopPage(pageNum, (item, index) => {
              const username = util.escapeMarkdown(item.username);
-             const wins = item.trivia;
+             const wins = item.wins;
              txt.push(`**${index+1}.** ${username} ${wins}`);
          })
 

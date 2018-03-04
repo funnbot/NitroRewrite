@@ -85,17 +85,37 @@ class Command {
 }
 
 function setupReply(message) {
-    let reply = (...args) => message.channel.send(...args);
-    reply.succ = (...args) =>
-        reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
-    reply.fail = (...args) =>
-        reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
-    reply.warn = (...args) =>
-        reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
-    reply.succReact = () =>
-        message.react('341741537425621002');
-    reply.failReact = () =>
-        message.react('341741537258110978');
+    async function reply(...args) {
+        return this.sentMessage = await message.channel.send(...args);
+    }
+    reply.edit = async function(...args) {
+        return this.sentMessage ? await this.sentMessage.edit() : 0;
+    }
+    reply.succ = async function(...args) {
+        return this.sentMessage = await reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
+    }
+    reply.editSucc = async function(...args) {
+        return await reply.edit(`✅ | **${args.shift()}** ${args.join(" ")}`)
+    }
+    reply.fail = async function(...args) {
+        return this.sentMessage = await reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
+    }
+    reply.editFail = async function(...args) {
+        return await reply.edit(`⛔ | **${args.shift()}** ${args.join(" ")}`)
+    }
+    reply.warn = async function(...args) {
+        return this.sentMessage = await reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
+    }
+    reply.editWarn = async function(...args) {
+        return await reply.edit(`⚠ | **${args.shift()}** ${args.join(" ")}`)
+    }
+    reply.succReact = async function() {
+        return await message.react('341741537425621002');
+    }
+    reply.failReact = async function() {
+        return await message.react('341741537258110978');
+    }
+    reply.sentMessage = null;
     return reply;
 }
 
