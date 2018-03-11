@@ -35,14 +35,14 @@ class Command {
     validateOptions() {
         const opts = this.options();
         this.help = opts.help || "None";
-        this.example = opts.example || "";
 
         this.dm = opts.dm || false
         this.cooldown = opts.cooldown || 1
         this.args = opts.args || []
+        this.arg ? this.args.push(this.arg) : 0;
 
-        this.userPerms = opts.userPerms || []
-        this.botPerms = opts.botPerms || []
+        this.userPerms = (opts.userPerms || []).map(String.toUpperCase)
+        this.botPerms = (opts.botPerms || []).map(String.toUpperCase);
 
         this.alias = opts.alias || []
 
@@ -52,7 +52,7 @@ class Command {
     }
 
     async exec(message) {
-        if (this.wipCheck(message)) return message.channel.send("**This command is a WIP**");
+        if (this.wip && !message.author.isDeveloper) return message.channel.send("**This command is a WIP**");
 
         this.message = message;
         this.bot = message.client;
@@ -69,11 +69,6 @@ class Command {
             await this.error(this, e);
         }
         return;
-    }
-
-    wipCheck(msg) {
-        if (!this.wip) return false;
-        return this.wip && msg.author.isDeveloper;
     }
 
     async run(args) { return; }

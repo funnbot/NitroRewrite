@@ -1,5 +1,7 @@
-let config = {
-    PREFIX: "?",
+const PREFIX = "?"
+
+module.exports = {
+    PREFIX,
 
     DisabledGroups: [],
     DisabledCommands: [],
@@ -11,6 +13,35 @@ let config = {
         "system"
     ],
 
+    ITEMS: {
+        guild: {
+            prefix: PREFIX,
+            alias: {},
+            mlchannel: false,
+            mljoin: false,
+            mlleave: false,
+            mljoindm: false,
+            locale: "en",
+            userData: {},
+            tags: {},
+            perms: {},
+            requserperm: false,
+            modlog: false,
+            serverlog: false,
+            disabledEvents: {},
+            filters: {}
+        },
+        user: {
+            trivia: 0
+        },
+        channel: {
+
+        },
+        system: {
+            timers: []
+        }
+    },
+
     FUNNBOT: "163735744995655680",
 
     CUR: {
@@ -18,6 +49,10 @@ let config = {
         code: ":dollar:",
         sym: "$"
     },
+
+    MODLOG: mirrorObject([
+        "messageEdit"
+    ]),
 
     HELP: {
         config: [
@@ -48,10 +83,10 @@ let config = {
             "Donator",
             "View commands made for supporters."
         ],
-        poll: [
+        /*poll: [
             "Polls",
             "Create custom polls for users to vote on."
-        ],
+        ],*/
         tag: [
             "Tags",
             "Store custom text and make it easy to access."
@@ -64,13 +99,17 @@ let config = {
             "Economy",
             "Manage your money."
         ],
-        trivia: [
+        /*trivia: [
             "Trivia",
             "Play trivia against your friends."
-        ],
+        ],*/
         help: [
             "Tutorials",
             "Learn how to use Nitro."
+        ],
+        filter: [
+            "Content Filter",
+            "Delete messages with swearing or ads."
         ]
     },
     //The "Companies" and their keys used in stock market
@@ -168,33 +207,12 @@ let config = {
     ],
 
     ...require("./auth.js")
-}
-
-config.ITEMS = {
-    guild: {
-        prefix: config.PREFIX,
-        alias: {},
-        mlchannel: null,
-        mljoin: null,
-        mlleave: null,
-        mljoindm: null,
-        locale: "en",
-        userData: {},
-        tags: {},
-        perms: {},
-        requserperm: false,
-        cases: {},
-        modlog: null
-    },
-    user: {
-        trivia: 0
-    },
-    channel: {
-
-    },
-    system: {
-        timers: []
-    }
 };
 
-module.exports = config;
+function mirrorObject(array) {
+    let o = {};
+    for (let item of array) {
+        o[item] = item;
+    }
+    return o;
+}

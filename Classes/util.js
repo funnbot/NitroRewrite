@@ -44,6 +44,41 @@ class Util {
     }
 
     /**
+     * Array to object
+     * @param {Array} array
+     * @returns {Object}
+     */
+    static ATO(array) {
+        let o = {};
+        for (let i = 0; i < array.length; i++) {
+            o[array[i]] = true;
+        }
+        return o;
+    }
+
+    /**
+     * Object to array
+     * @param {Object} object 
+     * @returns {Array}
+     */
+    static OTA(object) {
+        let a = [];
+        for (let key in object) {
+            if (object.hasOwnProperty(key))
+                a.push(key);
+        }
+        return a;
+    }
+
+    static mirrorObject(array) {
+        let o = {};
+        for (let item of array) {
+            o[item] = item;
+        }
+        return o;
+    }
+
+    /**
      * Format currency.
      * @param {Number} [amount=0] 
      * @param {Boolean} noCode 
@@ -118,7 +153,7 @@ class Util {
         return number;
     }
 
-    
+
 
 }
 

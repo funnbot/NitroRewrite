@@ -8,9 +8,9 @@ class MessageEmbed extends Extension {
         return channel.send(this);
     }
 
-    addBetterField(title, content) {
+    addBetterField(title, content, extraSpace = false) {
         this.description = this.description || "";
-        this.description += `\n**${title}:** ${content}`;
+        this.description += `${extraSpace ? "\n" : ""}\n**${title}:** ${content}`;
         return this;
     }
 

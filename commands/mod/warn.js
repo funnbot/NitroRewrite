@@ -8,7 +8,8 @@ class WarnCommand extends Command {
 
     options() { return {
         help: "",
-        usage: ""
+        usage: "",
+        wip: true
     }}
 }
 

@@ -1,21 +1,26 @@
 const { Command } = require("../../Nitro");
 
-class SetLogsCommand extends Command {
+class SetModlogCommand extends Command {
 
     async run({ message, bot, reply, t }) {
-        let [chan] = message.args;
-        const perms = chan.permissionsFor(bot.user);
-        if (!perms.has("SEND_MESSAGES")) return await reply.fail("I need permission to send messages in the modlog channel.");
-        if (!perms.has("EMBED_LINKS")) return await reply.fail("I need permission to send embeds in the modlog channel.");
+        const modlog = await message.guild.modlog();
+        if (modlog) {
+            await message.guild.modlog(false);
+            return await reply.succ("Disabled Modlog");
+        }
 
-        await message.guild.modlog(chan.id);
-        return await reply.succ(`Modlog set to ${chan}`);
+        const [ channel ] = message.args;
+        const perms = channel.permissionsFor(bot.user);
+        if (!perms.has("SEND_MESSAGES") || !perms.has("EMBED_LINKS")) 
+            return await reply.warn("I need permission to send embeds in " + channel);
+        
+        await message.guild.modlog(channel.id);
+        return await reply.succ("Modlog set to " + channel);
     }
 
     options() {
         return {
             help: "Set the moderation log channel",
-            usage: "",
             userPerms: ["MANAGE_GUILD"],
             args: [{
                 type: "channel",
@@ -27,7 +32,7 @@ class SetLogsCommand extends Command {
     }
 }
 
-module.exports = SetLogsCommand;
+module.exports = SetModlogCommand;
 
 /*const Nitro = require("../../../Nitro.js")
 

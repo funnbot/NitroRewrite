@@ -26,8 +26,17 @@ Object.defineProperties(String.prototype, {
             for (let t of texts)
                 if (this.includes(t)) return true;
         }
+    },
+    shorten: {
+        value: function(length = 2000, append = "") {
+            return this.substr(0, length - append.length) + append;
+        }
     }
 })
+
+String.toUpperCase = function(str) {
+    return str.toUpperCase();
+}
 
 Object.defineProperties(Array.prototype, {
     center: {

@@ -1,11 +1,17 @@
 global.Promise = require("bluebird");
 
+// Modules
+const os = require("os");
+const EventEmitter = require("events");
+
+// Framework
 const Discord = require("discord.js");
 const CommandLoader = require("./CommandLoader");
-const Database = require("./Database.js");
+const ConsistenTimer = require("./ConsistentTimer");
+const Database = require("./Database");
 const Enum = require("./Enum");
-const Logger = require("./Logger.js");
-const config = require("../config.js");
+const Logger = require("./Logger");
+const config = require("../config");
 
 // Extensions
 const Message = require("../Extensions/Message.js");
@@ -30,8 +36,10 @@ class NitroClient extends Discord.Client {
         super(...args);
 
         this.Database = new Database();
+        this.modlog = new EventEmitter();
         this.CommandLoader = new CommandLoader();
         this.Embed = Discord.MessageEmbed;
+        this.timers = new ConsistenTimer(this);
 
         this.SimpleStorage = {
             guild: {},
@@ -44,8 +52,24 @@ class NitroClient extends Discord.Client {
         this._unhandledRejection();
         this.on("ready", () => {
             logger.info("Bot online.")
+            this.updateStats();
         })
 
+    }
+
+    updateStats() {
+        this.stats = this.botStats();
+        setInterval(() => this.stats = this.botStats(), 10000);
+    }
+
+    botStats() {
+        return {
+            guildCount: this.guilds.size,
+            channelCount: this.channels.size,
+            userCount: this.users.size,
+            cpuUsage: os.loadavg()[1],
+            memUsage: process.memoryUsage().rss / 1024 / 1024,
+        };
     }
 
     async init() {

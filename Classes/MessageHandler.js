@@ -1,11 +1,14 @@
+const Discord = require("discord.js");
+const EventEmitter = require("events");
 const CommandLoader = require("./CommandLoader");
 const Alias = require("./Alias.js")
 const Cooldown = require("./Cooldown.js")
 const ArgumentParser = require("./ArgumentParser")
 const PermissionHandler = require("./PermissionHandler.js")
 
-class MessageHandler {
+class MessageHandler extends EventEmitter {
     constructor(bot) {
+        super();
         this.bot = bot;
         this.alias = new Alias(bot.commands);
         this.cooldown = new Cooldown();
@@ -14,19 +17,33 @@ class MessageHandler {
     }
 
     addListeners() {
-        this.bot.on("message", (...m) => this.onMessage.apply(this, m));
-        this.bot.on("messageUpdate", (...m) => this.onMessageEdit.apply(this, m))
+        this.bot.on("message", (...d) => this.onMessage.apply(this, d));
+        this.bot.on("messageUpdate", (...d) => this.onMessageEdit.apply(this, d))
+        this.bot.on("raw", (...d) => this.onRaw.apply(this, d));
+    }
+
+    async onRaw(raw) {
+        if (raw.t === "MESSAGE_UPDATE") {
+            const { author, channel_id, content } = raw.d;
+            const channel = this.bot.channels.get(channel_id);
+            if (channel) {
+                const rawEdit = { author, channel, content }
+                this.emit("editRaw", rawEdit);
+            }
+        }
     }
 
     async onMessage(message) {
         // Setup the message extensions
         await message.SetupExtension();
+        this.emit("new", message);
         await this.onCommand(message, this);
     }
 
     async onMessageEdit(oldMessage, message) {
         // Setup the message extensions
         await message.SetupExtension();
+        this.emit("edit", oldMessage, message);
         if (message.edits.length <= 3) await this.onCommand(message, this);
     }
 
@@ -36,38 +53,85 @@ class MessageHandler {
         // Continue with prefix or mention
         if (!message.content.toLowerCase().startsWith(message.prefix) &&
             !message._mention(message.content)) return;
-        if (message.guild) {
-            // Always have current member cached
-            await message.guild.members.fetch(message.author);
-            if (!message.member) return;
-            // Map the custom aliases
-            alias.mapCustom(await message.guild.alias());
-        }
+
+        if (message.channel.type === "text") await this.onGuildCommand(message, this);
+        else if (message.channel.type === "dm") await this.onDMCommand(message, this);
+    }
+
+    async onGuildCommand(message, { bot, alias, cooldown }) {
+        // Always have current member cached
+        await message.guild.members.fetch(message.author);
+        if (!message.member) return;
+        // Map the custom aliases
+        alias.mapCustom(await message.guild.alias());
         // Turn alias to normal command
         message.command = alias.run(message);
         // Get the command
         let command = bot.commands[message.command];
         if (!command) return;
-        if (message.guild) {
-            if (PermissionHandler.run(message, command)) return;
-            // Check if bot has permission in this channel
-            const perms = message.channel.permissionsFor(bot.user);
-            if (perms && !perms.has("SEND_MESSAGES"))
-                return message.author.send("**I lack permission to send messages in this channel.**")
-                    .catch(logger.debug);
-            // Check if dm is allowed
-        } else if (!command.dm) return;
+
+        if (PermissionHandler.run(message, command)) return;
+        // Check if bot has permission in this channel
+        if (!message.channel.permissionsFor(bot.user).has("SEND_MESSAGES")) return;
         // Run command cooldown check
         if (cooldown.run(message, command)) return;
+        // Execute
+        await this.runCommand(message, command);
+    }
+
+    async onDMCommand(message, { bot, alias, cooldown }) {
+        // Turn alias to normal command
+        message.command = alias.run(message);
+        // Get the command
+        const command = bot.commands[message.command];
+        // If real command and is allowed in DM
+        if (!command || !command.dm) return;
+        // If its a developer command
+        if (PermissionHandler.runDM(message, command)) return;
+        // If i can send messages to the user
+        try {
+            await message.author.send("\u200B")
+        } catch (e) {
+            // User has me blocked
+            return;
+        }
+        // Cooldown
+        if (cooldown.run(message, command)) return;
+        // Execute
+        await this.runCommand(message, command);
+    }
+
+    async runCommand(message, command) {
         // Handle arguments
         if (command.args.length > 0) {
-            const args = await ArgumentParser(command, message);
-            if (!args) return;
-            message.args = args;
+            // Assign parsed arguments
+            message.args = await ArgumentParser(command, message);
+            // Arguments were incorrect
+            if (!message.args) return;
         }
         // Execute the command
         await command.exec(message);
     }
 }
 
-module.exports = MessageHandler
+module.exports = MessageHandler;
+
+/**
+ * @typedef {Object} RawAuthor
+ * @param {String} avatar
+ * @param {String} discriminator
+ * @param {String} id
+ * @param {String} username
+ */
+
+/**
+ * @typedef {Object} RawEdit
+ * @param {RawAuthor} author
+ * @param {Discord.GuildChannel} channel
+ * @param {String} content
+ */
+
+/**
+ * @event MessageHandler#edit
+ * @param {RawEdit} rawEdit The raw messageEdit data
+ */

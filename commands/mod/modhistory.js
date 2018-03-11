@@ -8,7 +8,8 @@ class ModHistoryCommand extends Command {
 
     options() { return {
         help: "",
-        usage: ""
+        usage: "",
+        wip: true
     }}
 }
 

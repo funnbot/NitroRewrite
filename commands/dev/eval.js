@@ -35,7 +35,7 @@ class EvalCommand extends Command {
     options() { return {
         help: "Eval some code",
         usage: "1+1",
-        userPerms: 4,
+        userPerms: ["DEV"],
         cooldown: 0,
         dm: true,
         args: [{

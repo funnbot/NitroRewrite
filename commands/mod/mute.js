@@ -7,8 +7,9 @@ class MuteCommand extends Command {
     }
 
     options() { return {
-        help: "",
-        usage: ""
+        help: "Mute a user",
+        usage: "",
+        wip: true
     }}
 }
 

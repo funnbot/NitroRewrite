@@ -3,7 +3,7 @@ const { Command } = require("../../Nitro");
 class TempBanCommand extends Command {
 
     async run({ message, bot, reply, t }) {
-        const [member, reason] = message.args;
+        const [member, duration, reason] = message.args;
         if (!member.bannable) return await reply.fail("I lack permission to tempban this user.");
         if (message.member.roles.highest.position <= member.roles.highest.position) return await reply.fail("You lack permission to tempban this user.");
 
@@ -21,7 +21,12 @@ class TempBanCommand extends Command {
         await message.guild.modAction(message.author.id, "tempban");
         await m.edit("**Tempban complete**");
 
-        
+        bot.timers.add({
+            id: member.user.id,
+            time: duration.milliseconds(),
+            type: "tempban",
+            guild: message.guild.id
+        })
 
         const modlogID = await message.guild.modlog();
         const modlog = bot.channels.get(modlogID);

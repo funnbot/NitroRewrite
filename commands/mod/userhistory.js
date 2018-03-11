@@ -8,7 +8,8 @@ class UserHistoryCommand extends Command {
 
     options() { return {
         help: "",
-        usage: ""
+        usage: "",
+        wip: true
     }}
 }
 
