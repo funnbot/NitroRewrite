@@ -7,7 +7,7 @@ class EditFilterCommand extends Command {
         const filters = await message.guild.filters();
 
         if (!filters[name]) return await reply.warn("Filter does not exist");
-        words = words.filter(s => s != "").map(s => s.replace(/[^a-z]/gi, ''));
+        words = words.split(" ").filter(s => s != "").map(s => s.replace(/[^a-z]/gi, ''));
         if (!words.length) return await reply.fail("No words resolved.");
 
         const filter = filters[name];
@@ -26,9 +26,9 @@ class EditFilterCommand extends Command {
         filters[name] = filter;
 
         await message.guild.filters(filters);
-        return await reply(`Edited filter ${name}: `, words.join(", "));
+        return await reply.succ(`Edited filter ${name}: `, filter.words.join(", "));
     }
-
+    
     options() {
         return {
             help: "Add or a remove a word from a filter.",

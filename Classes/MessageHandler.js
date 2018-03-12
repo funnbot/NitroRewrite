@@ -24,12 +24,16 @@ class MessageHandler extends EventEmitter {
 
     async onRaw(raw) {
         if (raw.t === "MESSAGE_UPDATE") {
-            const { author, channel_id, content } = raw.d;
+            let { author, channel_id, content } = raw.d;
+            if (!content) return;
             const channel = this.bot.channels.get(channel_id);
-            if (channel) {
-                const rawEdit = { author, channel, content }
-                this.emit("editRaw", rawEdit);
-            }
+            if (!channel) return;
+            const guild = channel.guild;
+            if (!guild) return;
+            author = await this.bot.users.fetch(author.id);
+            if (!author) return;
+            const rawEdit = { author, channel, guild, content }
+            return this.emit("editRaw", rawEdit);
         }
     }
 
@@ -37,14 +41,14 @@ class MessageHandler extends EventEmitter {
         // Setup the message extensions
         await message.SetupExtension();
         this.emit("new", message);
-        await this.onCommand(message, this);
+        return await this.onCommand(message, this);
     }
 
     async onMessageEdit(oldMessage, message) {
         // Setup the message extensions
         await message.SetupExtension();
         this.emit("edit", oldMessage, message);
-        if (message.edits.length <= 3) await this.onCommand(message, this);
+        if (message.edits.length <= 3) return await this.onCommand(message, this);
     }
 
     async onCommand(message, { bot, alias, cooldown }) {
@@ -54,8 +58,8 @@ class MessageHandler extends EventEmitter {
         if (!message.content.toLowerCase().startsWith(message.prefix) &&
             !message._mention(message.content)) return;
 
-        if (message.channel.type === "text") await this.onGuildCommand(message, this);
-        else if (message.channel.type === "dm") await this.onDMCommand(message, this);
+        if (message.channel.type === "text") return await this.onGuildCommand(message, this);
+        else if (message.channel.type === "dm") return await this.onDMCommand(message, this);
     }
 
     async onGuildCommand(message, { bot, alias, cooldown }) {
@@ -76,7 +80,7 @@ class MessageHandler extends EventEmitter {
         // Run command cooldown check
         if (cooldown.run(message, command)) return;
         // Execute
-        await this.runCommand(message, command);
+        return await this.runCommand(message, command);
     }
 
     async onDMCommand(message, { bot, alias, cooldown }) {
@@ -98,7 +102,7 @@ class MessageHandler extends EventEmitter {
         // Cooldown
         if (cooldown.run(message, command)) return;
         // Execute
-        await this.runCommand(message, command);
+        return await this.runCommand(message, command);
     }
 
     async runCommand(message, command) {
@@ -110,28 +114,8 @@ class MessageHandler extends EventEmitter {
             if (!message.args) return;
         }
         // Execute the command
-        await command.exec(message);
+        return await command.exec(message);
     }
 }
 
 module.exports = MessageHandler;
-
-/**
- * @typedef {Object} RawAuthor
- * @param {String} avatar
- * @param {String} discriminator
- * @param {String} id
- * @param {String} username
- */
-
-/**
- * @typedef {Object} RawEdit
- * @param {RawAuthor} author
- * @param {Discord.GuildChannel} channel
- * @param {String} content
- */
-
-/**
- * @event MessageHandler#edit
- * @param {RawEdit} rawEdit The raw messageEdit data
- */

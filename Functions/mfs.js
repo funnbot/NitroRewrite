@@ -36,7 +36,7 @@ exports.readFiles = async function(folder, limit) {
             var read = await readFile(folder + "/" + file);
             result.push(read);
         } catch (e) {
-            logger.err(`Error Reading: ${folder}/${file}`, e);
+            logger.err(`Error Reading: ${folder}/${file}`, e.stack);
         }
     }
     return result;
