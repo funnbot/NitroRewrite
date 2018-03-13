@@ -3,12 +3,15 @@ const { Command } = require("../../Nitro");
 class AdblockCommand extends Command {
 
     async run ({message, bot, reply, t}) {
-        send("test")
+        const adblock = await message.guild.adblock();
+
+        await message.guild.adblock(!adblock);
+        return await reply.succ(adblock ? "Disabling" : "Enabling" + " adblock.");
     }
 
     options() { return {
-        help: "",
-        usage: ""
+        help: "Toggle blocking discord embedded invites.",
+        userPerms: ["MANAGE_GUILD"],
     }}
 }
 

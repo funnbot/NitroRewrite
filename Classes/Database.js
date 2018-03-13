@@ -5,6 +5,8 @@ let r = require("rethinkdbdash")();
 
 class Database {
     constructor() {
+        this.r = r;
+
         ExtendDatabaseClass(Discord.Guild, "guild");
         ExtendDatabaseClass(Discord.GuildChannel, "channel");
         ExtendDatabaseClass(Discord.User, "user");

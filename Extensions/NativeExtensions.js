@@ -38,6 +38,10 @@ String.toUpperCase = function(str) {
     return str.toUpperCase();
 }
 
+String.toLowerCase = function(str) {
+    return str.toLowerCase();
+}
+
 Object.defineProperties(Array.prototype, {
     center: {
         value: function() {

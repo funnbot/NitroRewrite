@@ -24,16 +24,18 @@ class MessageHandler extends EventEmitter {
 
     async onRaw(raw) {
         if (raw.t === "MESSAGE_UPDATE") {
-            let { author, channel_id, content } = raw.d;
+            let { id, channel_id, content } = raw.d;
             if (!content) return;
             const channel = this.bot.channels.get(channel_id);
-            if (!channel) return;
-            const guild = channel.guild;
-            if (!guild) return;
-            author = await this.bot.users.fetch(author.id);
-            if (!author) return;
-            const rawEdit = { author, channel, guild, content }
-            return this.emit("editRaw", rawEdit);
+            if (!channel || !channel.guild) return;
+            try {
+                var message = await channel.messages.fetch(id);
+                await message.guild.members.fetch(message.author);
+            } catch(e) {
+                return;
+            }
+
+            return this.emit("editRaw", message);
         }
     }
 

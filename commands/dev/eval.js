@@ -1,4 +1,4 @@
-const { Command, config } = require("../../Nitro.js");
+const { Command, FUNNBOT, TOKEN } = require("../../Nitro.js");
 const util = require("util");
 const snekfetch = require("snekfetch");
 const Discord = require("discord.js");
@@ -8,7 +8,7 @@ const Duration = require("duration-js");
 class EvalCommand extends Command {
 
     async run ({message, bot, reply, t}) {
-        if (message.author.id !== config.FUNNBOT) return
+        if (message.author.id !== FUNNBOT) return
         if (!message.checkSuffix) {
             let txt = evalTxt("Funnbot", "Output", "100000", "An idiot who does not provide code when he evals.")
             return send(txt)
@@ -60,7 +60,7 @@ ${d}\`\`\`
 }
 
 let clean = (t) => {
-    let split = config.TOKEN.split(".");
+    let split = TOKEN.split(".");
     let r = new RegExp(`(${split[1]})|(${split[2]})`, "g");
     t = t.toString().replace(r, "[SECRET]");
     return t

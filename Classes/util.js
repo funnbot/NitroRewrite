@@ -79,6 +79,19 @@ class Util {
     }
 
     /**
+     * If it should be plural
+     * @param {Number|Array|Object} i the count
+     * @param {*} [end="s"] optionally change ending
+     */
+    static s(i, end = "s") {
+        return {
+            number: i != 1 ? end : '',
+            array: i.length != 1 ? end : '',
+            object: Object.keys(i).length != 1 ? end : ''
+        }[typeof2(i)];
+    }
+
+    /**
      * Format currency.
      * @param {Number} [amount=0] 
      * @param {Boolean} noCode 

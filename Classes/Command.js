@@ -39,12 +39,13 @@ class Command {
         this.dm = opts.dm || false
         this.cooldown = opts.cooldown || 1
         this.args = opts.args || []
-        this.arg ? this.args.push(this.arg) : 0;
+        opts.arg ? this.args.push(opts.arg) : 0;
 
         this.userPerms = (opts.userPerms || []).map(String.toUpperCase)
         this.botPerms = (opts.botPerms || []).map(String.toUpperCase);
 
-        this.alias = opts.alias || []
+        this.alias = typeof2(opts.alias) === "array" ? opts.alias : typeof2(opts.alias) === "string" ? [opts.alias] : [];
+
 
         this.wip = opts.wip || false;
 

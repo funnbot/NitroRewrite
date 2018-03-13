@@ -3,6 +3,8 @@ const { Command } = require("../../Nitro");
 class PermissionsCommand extends Command {
 
     async run({ message, bot, send, t }) {
+        return send("change");
+    
         let txt = `**Permissions**
         Nitro uses a simple 4 role permission system.
         The roles do not need any special permissions. It is the **name** of the role that matters.

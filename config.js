@@ -29,7 +29,10 @@ module.exports = {
             modlog: false,
             serverlog: false,
             disabledEvents: {},
-            filters: {}
+            filters: {},
+            adblock: false,
+            zalgo: false,
+            filterexempt: {}
         },
         user: {
             trivia: 0
