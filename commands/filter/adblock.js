@@ -6,7 +6,7 @@ class AdblockCommand extends Command {
         const adblock = await message.guild.adblock();
 
         await message.guild.adblock(!adblock);
-        return await reply.succ(adblock ? "Disabling" : "Enabling" + " adblock.");
+        return await reply.succ((adblock ? "Disabling" : "Enabling") + " adblock.");
     }
 
     options() { return {
