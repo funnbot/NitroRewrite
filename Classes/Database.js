@@ -5,8 +5,6 @@ let r = require("rethinkdbdash")();
 
 class Database {
     constructor() {
-        this.r = r;
-
         ExtendDatabaseClass(Discord.Guild, "guild");
         ExtendDatabaseClass(Discord.GuildChannel, "channel");
         ExtendDatabaseClass(Discord.User, "user");
@@ -51,6 +49,16 @@ class Database {
         }
     }
 
+    async filter(db, predicate) {
+        if (!testInput(db)) return 0;
+        try {
+            var data = await r.table(db).filter(predicate);
+        } catch(e) {
+            logger.db(e);
+        }
+        return data;
+    }
+
     async formatDb() {
         let dbs = await r.dbList();
         if (!dbs.includes(DBNAME)) {
@@ -74,12 +82,12 @@ function ExtendDatabaseClass(target, name) {
     Object.defineProperties(target.prototype, {
         getItem: {
             value: function(item) {
-                return this.client.Database.get(name, this.id, item);
+                return this.client.db.get(name, this.id, item);
             }
         },
         setItem: {
             value: function(item, value) {
-                return this.client.Database.set(name, this.id, item, value);
+                return this.client.db.set(name, this.id, item, value);
             }
         },
         cache: {

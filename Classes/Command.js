@@ -42,10 +42,11 @@ class Command {
         opts.arg ? this.args.push(opts.arg) : 0;
 
         this.userPerms = (opts.userPerms || []).map(String.toUpperCase)
+        opts.userPerm ? this.userPerms.push(opts.userPerm.toUpperCase()) : 0;
         this.botPerms = (opts.botPerms || []).map(String.toUpperCase);
+        opts.botPerm ? this.botPerms.push(opts.botPerm.toUpperCase()) : 0;
 
         this.alias = typeof2(opts.alias) === "array" ? opts.alias : typeof2(opts.alias) === "string" ? [opts.alias] : [];
-
 
         this.wip = opts.wip || false;
 

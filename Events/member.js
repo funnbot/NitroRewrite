@@ -1,7 +1,7 @@
 const sharp = require("sharp");
 const { createCanvas, loadImage } = require("canvas");
 const snekfetch = require("snekfetch");
-const { Image } = require("../Nitro.js");
+const { Image, util: { th } } = require("../Nitro.js");
 const bot = require("../bot.js");
 
 const embedReg = /{embed=?#?([0-9a-f]{0,6})}/gi;
@@ -17,87 +17,67 @@ bot.on("guildMemberRemove", async (member) => {
     guildMember(member, false)
 })
 
-let guildMember = async (member, type) => {
-    const guild = member.guild;
-    if (!guild) return;
-    const user = member.user;
-    if (!user) return;
+let guildMember = async (member, when) => {
+    const { guild, user } = member;
 
-    const mlchannel = await guild.mlchannel();
+    const mlchan = await guild.mlchan();
     const mljoin = await guild.mljoin();
     const mlleave = await guild.mlleave();
-    const mljoindm = await guild.mljoindm();
+    const mldm = await guild.mldm();
 
-    if (mljoindm && type) joinDM(user, mljoindm);
+    if (mldm && when) user.send(`**From ${guild.name}:** ${mldm}`).catch(logger.debug);
 
-    if (!mlchannel) return;
-    let msg = type ? mljoin : mlleave;
-    if (!msg) return;
+    if (!mlchan) return;
+    const { msg, type } = when ? mljoin : mlleave;
 
-    const channel = guild.channels.get(mlchannel);
-    if (!channel ||
-        channel.type !== "text" ||
-        !channel.permissionsFor(bot.user).has("SEND_MESSAGES")) return;
+    const channel = bot.channels.get(mlchan);
+    if (!channel.permissionsFor(bot.user).has("SEND_MESSAGES")) return;
 
-    if (imageReg.text(msg)) handleImage(user, channel, msg, type);
-    msg = replace(msg, user, channel);
-    if (embedReg.test(msg)) return handleEmbed(user, channel, msg, type);
-    return handleText(channel, msg);
+    const text = msg ? replaceValues(msg, user, guild) : null;
+    if (type === "image") return handleImage(user, channel, text, when);
+    if (type === "embed") return handleEmbed(user, channel, text, when);
+    if (type === "text") return channel.send(text).catch(logger.debug);
 }
 
-function replace(str, user, channel) {
+function replaceValues(str, user, guild) {
+    const c = guild.memberCount;
+    const totalth = th(c);
     let rep = {
         "{user}": user.toString(),
         "{name}": user.username,
         "{tag}": user.tag,
-        "{total}": channel.guild.memberCount
+        "{total}": guild.memberCount,
+        "{totalth}": totalth
     };
-    const keys = Object.keys(rep).join("|");
-    const rex = new RegExp(keys, "g");
-    return str.replace(rex, t => rep[t]);
-}
-
-function joinDM(user, joindm) {
-    user.send(joindm)
-        .catch(logger.debug);
-}
-
-function handleText(channel, msg) {
-    msg = msg.replace(imageReg, "");
-    channel.send(msg).catch(console.error);
+    const reg = /{user}|{name}|{tag}|{total}/g;
+    return str.replace(reg, t => rep[t]);
 }
 
 function handleEmbed(user, channel, msg, type) {
-    const embedExec = embedReg.exec(msg);
-    const color = parseInt(embedExec, 16) ||
-        type ? "#33AF1A" : "#D22419";
-
-    msg = msg.replace(embedReg, "");
-    msg = msg.replace(imageReg, "");
-
-    const embed = new bot.Embed()
-        .setColor(color)
-        .setDescription(msg)
-        .setFooter("User " + (type ? "joined" : "left"))
+    if (!channel.permissionsFor(bot.user).has("EMBED_LINKS")) return;
+    const embed = bot.embed
+        .memberlogColor(type);
+        (!msg) || embed.setDescription(msg);
+        embed.setFooter("User " + (type ? "joined" : "left"))
         .setTimestamp(new Date())
         .setAuthor(user.tag, user.displayAvatarURL())
 
-    channel.send({ embed }).catch(console.error)
+    channel.send(embed).catch(logger.debug);
 }
 
 async function handleImage(user, channel, msg, type) {
     if (!channel.permissionsFor(bot.user).has("ATTACH_FILES")) return;
     const avatar = user.displayAvatarURL({ format: "png" });
     const tag = user.tag;
-    const count = channel.guild.members.size;
-
+    const count = channel.guild.memberCount;
     const buffer = await drawImage(tag, avatar, count, type);
     const files = [{ attachment: buffer, filename: `${user.id}.png` }]
-    if (buffer) channel.send({ files }).catch(console.error);
+    if (msg) channel.send(msg).catch(logger.debug);
+    if (buffer) channel.send({ files }).catch(logger.debug);
 }
 
 function drawImage(tag, AVATAR, count, type) {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let avatar = await clipAvatar(AVATAR);
         sharp(welcomeSvg(tag, count, type))
             .overlayWith(avatar, { left: 22, top: 22 })
@@ -106,7 +86,7 @@ function drawImage(tag, AVATAR, count, type) {
 }
 
 function clipAvatar(AVATAR) {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const canvas = createCanvas(256, 256);
         const ctx = canvas.getContext("2d");
 

@@ -8,7 +8,7 @@ bot.modlog.on(MODLOG.messageEdit, async (oldMessage, message) => {
 
     const embed = bot.embed
         .setTitle("Message Edit")
-        .setAuthor(message.author.username, message.author.avatarURL())
+        .setAuthor(message.author.username, message.author.displayAvatarURL())
         .addBetterField("Channel", message.channel)
         .addBetterField("Original", oldMessage.content.substr(0, 900), true)
         .addBetterField("Edited", message.content.substr(0, 900))

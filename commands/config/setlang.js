@@ -16,7 +16,7 @@ class LanguageCommand extends Command {
         return {
             help: "Set the locale.",
             usage: "{}setlang en",
-            userPerm: 4,
+            userPerm: "MANAGE_GUILD",
             alias: ["language", "locale"]
         }
     }

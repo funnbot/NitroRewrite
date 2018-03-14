@@ -17,10 +17,10 @@ module.exports = {
         guild: {
             prefix: PREFIX,
             alias: {},
-            mlchannel: false,
+            mlchan: false,
             mljoin: false,
             mlleave: false,
-            mljoindm: false,
+            mldm: false,
             locale: "en",
             userData: {},
             tags: {},
@@ -38,7 +38,7 @@ module.exports = {
             trivia: 0
         },
         channel: {
-
+            irc: false
         },
         system: {
             timers: []
@@ -191,23 +191,38 @@ module.exports = {
         MANAGE_EMOJIS: "Manage Emojis",
     },
     //Colors used in embed.randomColor
-    COLORS: [
-        "#03A9F4",
-        "#039BE5",
-        "#0288D1",
-        "#0277BD",
-        "#2196F3",
-        "#1E88E5",
-        "#1976D2",
-        "#2962FF",
-        "#448AFF",
-        "#2979FF",
-        "#2196F3",
-        "#1E88E5",
-        "#1976D2",
-        "#1565C0",
-        "#0091EA"
-    ],
+    COLORS: {
+        NITRO: [
+            "#03A9F4",
+            "#039BE5",
+            "#0288D1",
+            "#0277BD",
+            "#2196F3",
+            "#1E88E5",
+            "#1976D2",
+            "#2962FF",
+            "#448AFF",
+            "#2979FF",
+            "#2196F3",
+            "#1E88E5",
+            "#1976D2",
+            "#1565C0",
+            "#0091EA"
+        ],
+        ACTION: {
+            ban: "#B71C1C",
+            tempban: "#D32F2F",
+            softban: "#F44336",
+            kick: "#F57C00",
+            mute: "#FF9800",
+            warn: "#FDD835",
+            unban: "#76FF03"
+        },
+        MEMBERLOG: [
+            "#76FF03",
+            "#D32F2F"
+        ]
+    },
 
     ...require("./auth.js")
 };

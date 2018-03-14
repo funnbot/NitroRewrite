@@ -22,7 +22,7 @@ class PrefixCommand extends Command {
     options() { return {
         help: "Change the prefix for commands.",
         usage: '`{}prefix !!` - The ping command would be called with `!!ping`\n`{}prefix "nitro "` - This prefix has a space so it is wrapped in double quotes `nitro ping`',
-        userPerm: 2,
+        userPerm: "MANAGE_GUILD",
         cooldown: 20,
         alias: ["setprefix"]
     }}

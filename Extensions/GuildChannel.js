@@ -21,7 +21,7 @@ class GuildChannel extends Extension {
     async createCase(caseData) {
         const { action, user, mod, reason, length } = caseData;
         const embed = this.client.embed
-            .setAuthor(`${mod.tag}`, mod.avatarURL())
+            .setAuthor(`${mod.tag}`, mod.displayAvatarURL())
             .addBetterField("Action", action)
             .addBetterField("Member", user)
             .addBetterField("Reason", reason)
@@ -68,7 +68,7 @@ class GuildChannel extends Extension {
      */
     async ask(user, msg) {
         return await this.client.embed
-            .setAuthor(user.username, user.avatarURL())
+            .setAuthor(user.username, user.displayAvatarURL())
             .setDescription(msg)
             .actionColor("ban")
             .setFooter("yes/no")

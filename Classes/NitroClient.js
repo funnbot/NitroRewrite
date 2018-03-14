@@ -35,7 +35,7 @@ class NitroClient extends Discord.Client {
     constructor(...args) {
         super(...args);
 
-        this.Database = new Database();
+        this.db = new Database();
         this.modlog = new EventEmitter();
         this.CommandLoader = new CommandLoader();
         this.Embed = Discord.MessageEmbed;
@@ -73,7 +73,7 @@ class NitroClient extends Discord.Client {
     }
 
     async init() {
-        await this.Database.formatDb();
+        await this.db.formatDb();
         this.commands = this.CommandLoader.load()
         this.login(config.TOKEN);
     }

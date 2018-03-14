@@ -79,6 +79,17 @@ class Util {
     }
 
     /**
+     * Add ordinal indicator
+     * @static
+     * @param {String|Number} c The number
+     * @returns {String}
+     */
+    static th(n) {
+        const t = n.toString();
+        return t + ([ "st", "nd", "rd"][t[t.length - 1] - 1] || "th");
+    }
+
+    /**
      * If it should be plural
      * @param {Number|Array|Object} i the count
      * @param {*} [end="s"] optionally change ending
