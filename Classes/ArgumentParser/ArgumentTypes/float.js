@@ -17,7 +17,7 @@ class FloatArgument {
     }
 
     static default () {
-        return 1;
+        return 0;
     }
 }
 
