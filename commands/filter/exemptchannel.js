@@ -17,19 +17,15 @@ class ExemptChannelCommand extends Command {
         }
     }
 
-    options() {
-        return {
-            help: "Make filters ignore a channel.",
-            userPerms: ["MANAGE_GUILD"],
-            alias: "unexemptchannel",
-            arg: {
-                type: "channel",
-                info: "The channel to be ignored by filters.",
-                example: "#advertisements",
-                default: true
-            }
-        }
-    }
+    help = "Make filters ignore a channel.";
+    userPerms = ["MANAGE_GUILD"];
+    alias = "unexemptchannel";
+    arg = {
+        type: "channel",
+        info: "The channel to be ignored by filters.",
+        example: "#advertisements",
+        default: true
+    };
 }
 
 module.exports = ExemptChannelCommand;

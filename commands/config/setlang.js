@@ -12,14 +12,10 @@ class LanguageCommand extends Command {
         } else return send(t.SETLANG_INVALID(message.suffix));
     }
 
-    options() {
-        return {
-            help: "Set the locale.",
-            usage: "{}setlang en",
-            userPerm: "MANAGE_GUILD",
-            alias: ["language", "locale"]
-        }
-    }
+    help = "Set the locale.";
+    usage = "{}setlang en";
+    userPerm = "MANAGE_GUILD";
+    alias = ["language", "locale"];
 }
 
 module.exports = LanguageCommand;

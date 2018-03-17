@@ -28,28 +28,24 @@ class EditFilterCommand extends Command {
         await message.guild.filters(filters);
         return await reply.succ(`Edited filter ${name}: `, filter.words.join(", "));
     }
-    
-    options() {
-        return {
-            help: "Add or a remove a word from a filter.",
-            userPerms: ["MANAGE_GUILD"],
-            args: [{
-                type: "string",
-                info: "The name of a filter",
-                example: "badwords",
-                max: 100
-            }, {
-                type: "selection",
-                items: ["add", "del"],
-                info: "`add` or `del` a word from a filter",
-                example: "add"
-            }, {
-                type: "string",
-                info: "Words to add or remove",
-                example: "shoot heck"
-            }]
-        }
-    }
+
+    help = "Add or a remove a word from a filter.";
+    userPerms = ["MANAGE_GUILD"];
+    args = [{
+        type: "string",
+        info: "The name of a filter",
+        example: "badwords",
+        max: 100
+    }, {
+        type: "selection",
+        items: ["add", "del"],
+        info: "`add` or `del` a word from a filter",
+        example: "add"
+    }, {
+        type: "string",
+        info: "Words to add or remove",
+        example: "shoot heck"
+    }];
 }
 
 module.exports = EditFilterCommand;

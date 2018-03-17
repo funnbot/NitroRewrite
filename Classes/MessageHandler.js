@@ -31,7 +31,7 @@ class MessageHandler extends EventEmitter {
             try {
                 var message = await channel.messages.fetch(id);
                 await message.guild.members.fetch(message.author);
-            } catch(e) {
+            } catch (e) {
                 return;
             }
 
@@ -53,7 +53,7 @@ class MessageHandler extends EventEmitter {
         if (message.edits.length <= 3) return await this.onCommand(message, this);
     }
 
-    async onCommand(message, { bot, alias, cooldown }) {
+    async onCommand(message, { bot, alias }) {
         // Bots cannot run commands
         if (message.author.bot) return;
         // Continue with prefix or mention
@@ -64,7 +64,10 @@ class MessageHandler extends EventEmitter {
         else if (message.channel.type === "dm") return await this.onDMCommand(message, this);
     }
 
-    async onGuildCommand(message, { bot, alias, cooldown }) {
+    async onGuildCommand(message, { bot, alias }) {
+        const blacklist = await message.guild.blacklist();
+        if (blacklist[message.author.id]) return;
+        if (blacklist[message.channel.id]) return;
         // Always have current member cached
         await message.guild.members.fetch(message.author);
         if (!message.member) return;
@@ -79,13 +82,11 @@ class MessageHandler extends EventEmitter {
         if (PermissionHandler.run(message, command)) return;
         // Check if bot has permission in this channel
         if (!message.channel.permissionsFor(bot.user).has("SEND_MESSAGES")) return;
-        // Run command cooldown check
-        if (cooldown.run(message, command)) return;
         // Execute
         return await this.runCommand(message, command);
     }
 
-    async onDMCommand(message, { bot, alias, cooldown }) {
+    async onDMCommand(message, { bot, alias }) {
         // Turn alias to normal command
         message.command = alias.run(message);
         // Get the command
@@ -101,8 +102,6 @@ class MessageHandler extends EventEmitter {
             // User has me blocked
             return;
         }
-        // Cooldown
-        if (cooldown.run(message, command)) return;
         // Execute
         return await this.runCommand(message, command);
     }
@@ -115,6 +114,8 @@ class MessageHandler extends EventEmitter {
             // Arguments were incorrect
             if (!message.args) return;
         }
+        // Run command cooldown check
+        if (this.cooldown.run(message, command)) return;
         // Execute the command
         return await command.exec(message);
     }

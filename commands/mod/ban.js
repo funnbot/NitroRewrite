@@ -13,7 +13,7 @@ class BanCommand extends Command {
         if (!failsafe) return await m.edit("**Aborted.**", { embed: null });
         else await m.edit(`**Banning...**`, { embed: null });
         try {
-            await message.guild.members.ban(member, {reason, days: 1});
+            await message.guild.members.ban(member, { reason, days: 1 });
         } catch (e) {
             return await m.edit("**Ban failed**");
         }
@@ -31,25 +31,20 @@ class BanCommand extends Command {
         });
     }
 
-    options() {
-        return {
-            help: "Ban a member.",
-            usage: "{}ban @Funnbot Because I said so",
-            alias: ["banne", "b&"],
-            botPerms: ["BAN_MEMBERS"],
-            userPerms: ["BAN_MEMBERS"],
-            args: [{
-                type: "member",
-                info: "The user to ban.",
-                example: "@Badboy"
-            }, {
-                type: "string",
-                info: "The reason for banning.",
-                example: "Because I said so",
-                default: "unspecified"
-            }]
-        }
-    }
+    help = "Ban a member.";
+    alias = ["banne", "b&"];
+    botPerms = ["BAN_MEMBERS"];
+    userPerms = ["BAN_MEMBERS"];
+    args = [{
+        type: "member",
+        info: "The user to ban.",
+        example: "@Badboy"
+    }, {
+        type: "string",
+        info: "The reason for banning.",
+        example: "Because I said so",
+        default: "unspecified"
+    }];
 }
 
 module.exports = BanCommand;

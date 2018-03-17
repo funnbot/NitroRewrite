@@ -3,7 +3,7 @@ const { Command } = require("../../Nitro");
 class IRCChannelCommand extends Command {
 
     async run({ message, bot, reply, t }) {
-        const [ channel ] = message.args;
+        const [channel] = message.args;
         const irc = await channel.irc();
 
         if (irc) {
@@ -15,18 +15,14 @@ class IRCChannelCommand extends Command {
         }
     }
 
-    options() {
-        return {
-            help: "Toggle a channel as open to IRC.",
-            userPerm: "MANAGE_GUILD",
-            arg: {
-                type: "channel",
-                info: "A channel to allow IRC messages.",
-                example: "#irc",
-                default: true
-            }
-        }
-    }
+    help = "Toggle a channel as open to IRC.";
+    userPerm = "MANAGE_GUILD";
+    arg = {
+        type: "channel",
+        info: "A channel to allow IRC messages.",
+        example: "#irc",
+        default: true
+    };
 }
 
 module.exports = IRCChannelCommand;

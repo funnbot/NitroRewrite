@@ -6,10 +6,7 @@ class JoinDMCommand extends Command {
         send("test")
     }
 
-    options() { return {
-        help: "",
-        usage: ""
-    }}
+    help = "";
 }
 
 module.exports = JoinDMCommand;

@@ -15,25 +15,21 @@ class ListFiltersCommand extends Command {
 
         const w = filters[name].words;
         return w.length == 0 ?
-             await reply.warn("Filter `" + name + "` has no words.") :
-             await reply.succ("The filter `" + name + "` has: ", w.join(", "));
+            await reply.warn("Filter `" + name + "` has no words.") :
+            await reply.succ("The filter `" + name + "` has: ", w.join(", "));
 
     }
 
-    options() {
-        return {
-            help: "",
-            usage: "",
-            alias: ["filterlist", "wordlist", "listwords"],
-            userPerms: ["MANAGE_GUILD"],
-            arg: {
-                type: "string",
-                info: "The name of a filter",
-                example: "badwords",
-                default: null,
-            }
-        }
-    }
+    help = "";
+    usage = "";
+    alias = ["filterlist", "wordlist", "listwords"];
+    userPerms = ["MANAGE_GUILD"];
+    arg = {
+        type: "string",
+        info: "The name of a filter",
+        example: "badwords",
+        default: null,
+    };
 }
 
 module.exports = ListFiltersCommand;

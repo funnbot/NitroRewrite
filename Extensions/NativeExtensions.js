@@ -63,49 +63,10 @@ Object.defineProperties(Array.prototype, {
     }
 })
 
-function typeof2(value) {
+global.typeof2 = value => {
     return value instanceof Array ? "array" : typeof value;
 }
 
-function betterFor(iterator, callback) {
-    let type = typeof2(iterator), iterations;
-    if (type === "object") iterations = Object.keys(iterator).length;
-    else if (type === "array" || type === "string") iterations = iterator.length;
-    else if (type === "number") iterations = iterator;
-    else throw new Error("INVALID_ITERATOR_TYPE: " + type);
-
-    let i = 0;
-    while (i < iterations) {
-        
-    }
-}
-
-function forOf(iter, callback) {
-    typeof2(iter) !== "object" || (iter = Object.entries(iter));
-    let iterations = iter.length === undefined ? iter : iter.length
-    let index = 0;
-    console.log(iter)
-    while (index < iterations) {
-        let result = typeof2(iter) === "array" ? [iter[index], index] : [index]
-        callback(...result)
-        index++;
-    }
-}
-
-async function forOfAsync(iter, callback) {
-    typeof2(iter) !== "object" || (iter = Object.entries(iter));
-    let iterations = iter.length || iter
-    let index = 0;
-    while (index < iterations) {
-        console.log(index)
-        const result = [iter[index], index] || [index]
-        await callback(result)
-        index++;
-    }
-}
-
-function timeoutGlobal(time = 1000) {
+global.timeout = (time = 1000) => {
     return new Promise(res => setTimeout(res, time))
 }
-
-Object.defineProperties(global, { forOf: { value: forOf }, forOfA: { value: forOfAsync }, typeof2: { value: typeof2 }, timeout: { value: timeoutGlobal } })

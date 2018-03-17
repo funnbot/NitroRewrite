@@ -4,7 +4,7 @@ const f = "<:fortunecookie:357743549959372807>"
 
 class FortuneCommand extends Command {
 
-    async run ({message, bot, send, t}) {
+    async run({ message, bot, send, t }) {
         const request = await snekfetch.get("http://fortunecookieapi.herokuapp.com/v1/cookie");
         if (!request || !request.body || !request.body[0]) return send("**Bad Cookie**")
         const cookie = request.body[0];
@@ -18,7 +18,7 @@ class FortuneCommand extends Command {
         const ls = `${lesson.chinese} (${lesson.english})`
         const lot = lotto.numbers.join(" ");
 
-        const txt = [`**${fm}**`, "",`${ls}`, `*${lot}*`].center();
+        const txt = [`**${fm}**`, "", `${ls}`, `*${lot}*`].center();
 
         const msg = await send(`${f}`);
         await timeout(500);
@@ -27,11 +27,9 @@ class FortuneCommand extends Command {
         await msg.edit(txt);
     }
 
-    options() { return {
-        help: "Open a fortune cookie",
-        usage: "{}fortune",
-        cooldown: 5
-    }}
+    help = "Open a fortune cookie";
+    usage = "{}fortune";
+    cooldown = 5;
 }
 
 module.exports = FortuneCommand;

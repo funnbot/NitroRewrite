@@ -1,6 +1,7 @@
 const argumentTypes = {
     string: require("./ArgumentTypes/string"),
     int: require("./ArgumentTypes/int"),
+    id: require("./ArgumentTypes/id"),
     float: require("./ArgumentTypes/float"),
     duration: require("./ArgumentTypes/duration"),
     selection: require("./ArgumentTypes/selection"),

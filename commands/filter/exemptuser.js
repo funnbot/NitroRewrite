@@ -17,19 +17,15 @@ class ExemptUserCommand extends Command {
         }
     }
 
-    options() {
-        return {
-            help: "Make filters ignore a user.",
-            userPerms: ["MANAGE_GUILD"],
-            alias: "unexemptuser",
-            arg: {
+            help = "Make filters ignore a user.";
+            userPerms = ["MANAGE_GUILD"];
+            alias = "unexemptuser";
+            arg = {
                 type: "user",
                 info: "The user to be ignored by filters.",
                 example: "@MrKing",
                 default: true
             }
-        }
-    }
 }
 
 module.exports = ExemptUserCommand;

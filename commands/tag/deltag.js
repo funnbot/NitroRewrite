@@ -14,18 +14,14 @@ class DelTagCommand extends Command {
         await reply.succ("Tag deleted.");
     }
 
-    options() {
-        return {
-            help: "Delete a tag.",
-            usage: "{}deltag info",
-            alias: ["del-tag", "deletetag", "removetag", "tagdel"],
-            args: [{
-                type: "string",
-                info: "The name of a tag.",
-                example: "info"
-            }]
-        }
-    }
+    help = "Delete a tag.";
+    usage = "{}deltag info";
+    alias = ["del-tag", "deletetag", "removetag", "tagdel"];
+    args = [{
+        type: "string",
+        info: "The name of a tag.",
+        example: "info"
+    }];
 }
 
 module.exports = DelTagCommand;

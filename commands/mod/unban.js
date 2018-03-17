@@ -6,13 +6,8 @@ class UnbanCommand extends Command {
 
     }
 
-    options() {
-        return {
-            help: "",
-            usage: "",
-            wip: true
-        }
-    }
+    help = "";
+    wip = true;
 }
 
 module.exports = UnbanCommand;

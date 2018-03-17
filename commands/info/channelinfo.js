@@ -6,10 +6,7 @@ class ChannelInfoCommand extends Command {
         send("test")
     }
 
-    options() { return {
-        help: "",
-        usage: ""
-    }}
+    help = ""
 }
 
 module.exports = ChannelInfoCommand;

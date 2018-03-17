@@ -2,7 +2,7 @@ const { Command } = require("../../Nitro");
 
 class AddServerTagCommand extends Command {
 
-    async run ({message, bot, reply, t}) {
+    async run({ message, bot, reply, t }) {
         const tags = await message.guild.tags();
         const tagName = message.args[0];
         const tagContent = message.args[1];
@@ -20,20 +20,18 @@ class AddServerTagCommand extends Command {
         return await reply.succ("Added tag");
     }
 
-    options() { return {
-        help: "Add a server tag.",
-        usage: "{}addservertag steve Hello fellow kids!",
-        userPerms: ["MANAGE_GUILD"],
-        args: [{
-            type: "string",
-            info: "The tag name",
-            example: "steve"
-        }, {
-            type: "string",
-            info: "The tag content",
-            example: "Hello fellow kids!"
-        }]
-    }}
+    help = "Add a server tag.";
+    usage = "{}addservertag steve Hello fellow kids!";
+    userPerms = ["MANAGE_GUILD"];
+    args = [{
+        type: "string",
+        info: "The tag name",
+        example: "steve"
+    }, {
+        type: "string",
+        info: "The tag content",
+        example: "Hello fellow kids!"
+    }];
 }
 
 module.exports = AddServerTagCommand;

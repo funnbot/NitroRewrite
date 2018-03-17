@@ -32,7 +32,9 @@ module.exports = {
             filters: {},
             adblock: false,
             zalgo: false,
-            filterexempt: {}
+            filterexempt: {},
+            ar: false,
+            blacklist: {}
         },
         user: {
             trivia: 0

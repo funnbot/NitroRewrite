@@ -13,9 +13,9 @@ class BanCommand extends Command {
         if (!failsafe) return await m.edit("**Aborted.**", { embed: null });
         else await m.edit(`**Softbanning...**`, { embed: null });
         try {
-            await member.ban({reason, days: 7});
+            await member.ban({ reason, days: 7 });
             await m.edit("**Unbanning**")
-            await member.unban({reason: "Softban"});
+            await member.unban({ reason: "Softban" });
         } catch (e) {
             return await m.edit("**Softban failed**");
         }
@@ -33,25 +33,20 @@ class BanCommand extends Command {
         });
     }
 
-    options() {
-        return {
-            help: "Ban and unban a member to delete their messages.",
-            usage: "{}softban @Funnbot Spamming in chat.",
-            alias: ["softbanne", "softb&"],
-            botPerms: ["BAN_MEMBERS"],
-            userPerms: ["BAN_MEMBERS"],
-            args: [{
-                type: "member",
-                info: "The user to softban.",
-                example: "@Badboy"
-            }, {
-                type: "string",
-                info: "The reason for softbanning.",
-                example: "Spamming in chat.",
-                default: "unspecified"
-            }]
-        }
-    }
+    help = "Ban and unban a member to delete their messages.";
+    alias = ["softbanne", "softb&"];
+    botPerms = ["BAN_MEMBERS"];
+    userPerms = ["BAN_MEMBERS"];
+    args = [{
+        type: "member",
+        info: "The user to softban.",
+        example: "@Badboy"
+    }, {
+        type: "string",
+        info: "The reason for softbanning.",
+        example: "Spamming in chat.",
+        default: "unspecified"
+    }];
 }
 
 module.exports = BanCommand;

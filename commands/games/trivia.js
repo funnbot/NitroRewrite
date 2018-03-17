@@ -59,12 +59,10 @@ class TriviaCommand extends Command {
         })
     }
 
-    options() {
-        return {
-            help: "Play trivia",
-            usage: "{}trivia <difficulty> <category> eg. {}trivia medium geography",
-            alias: ["quiz"],
-            args: [{
+            help = "Play trivia";
+            usage = "{}trivia <difficulty> <category> eg. {}trivia medium geography";
+            alias = ["quiz"];
+            args = [{
                 type: "selection",
                 info: "What difficulty?",
                 example: "medium",
@@ -76,9 +74,7 @@ class TriviaCommand extends Command {
                 example: "geography",
                 items: [...Object.keys(categories), "random"],
                 default: "random"
-            }],
-        }
-    }
+            }];
 }
 
 module.exports = TriviaCommand;

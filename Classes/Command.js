@@ -28,29 +28,23 @@
  */
 
 class Command {
-    constructor() {
-        this.validateOptions();
-    }
-
     validateOptions() {
-        const opts = this.options();
-        this.help = opts.help || "None";
+        this.help = this.help || "None";
 
-        this.dm = opts.dm || false
-        this.cooldown = opts.cooldown || 1
-        this.args = opts.args || []
-        opts.arg ? this.args.push(opts.arg) : 0;
+        this.dm = this.dm || false
+        this.cooldown = this.cooldown || 1
+        this.args = this.args || []
+        this.arg ? this.args.push(this.arg) : 0;
 
-        this.userPerms = (opts.userPerms || []).map(String.toUpperCase)
-        opts.userPerm ? this.userPerms.push(opts.userPerm.toUpperCase()) : 0;
-        this.botPerms = (opts.botPerms || []).map(String.toUpperCase);
-        opts.botPerm ? this.botPerms.push(opts.botPerm.toUpperCase()) : 0;
+        this.userPerms = (this.userPerms || []).map(String.toUpperCase)
+        this.userPerm ? this.userPerms.push(this.userPerm.toUpperCase()) : 0;
+        this.botPerms = (this.botPerms || []).map(String.toUpperCase);
+        this.botPerm ? this.botPerms.push(this.botPerm.toUpperCase()) : 0;
 
-        this.alias = typeof2(opts.alias) === "array" ? opts.alias : typeof2(opts.alias) === "string" ? [opts.alias] : [];
+        this.alias = this.alias || [];
+        typeof this.alias === "string" ? (this.alias = [this.alias]) : 0;
 
-        this.wip = opts.wip || false;
-
-        delete this.options;
+        this.wip = this.wip || false;
     }
 
     async exec(message) {
@@ -83,25 +77,25 @@ class Command {
 
 function setupReply(message) {
     async function reply(...args) {
-        return this.sentMessage = await message.channel.send(...args);
+        return this.sent = await message.channel.send(...args);
     }
     reply.edit = async function(...args) {
-        return this.sentMessage ? await this.sentMessage.edit() : 0;
+        return this.sent ? await this.sent.edit() : 0;
     }
     reply.succ = async function(...args) {
-        return this.sentMessage = await reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
+        return this.sent = await reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
     }
     reply.editSucc = async function(...args) {
         return await reply.edit(`✅ | **${args.shift()}** ${args.join(" ")}`)
     }
     reply.fail = async function(...args) {
-        return this.sentMessage = await reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
+        return this.sent = await reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
     }
     reply.editFail = async function(...args) {
         return await reply.edit(`⛔ | **${args.shift()}** ${args.join(" ")}`)
     }
     reply.warn = async function(...args) {
-        return this.sentMessage = await reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
+        return this.sent = await reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
     }
     reply.editWarn = async function(...args) {
         return await reply.edit(`⚠ | **${args.shift()}** ${args.join(" ")}`)

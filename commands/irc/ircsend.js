@@ -19,21 +19,17 @@ class IRCSendCommand extends Command {
         channel.send(`**${message.channel.id}** - \`${message.author.username}\`: ${text}`);
     }
 
-    options() {
-        return {
-            help: "Send a message to an IRC channel.",
-            args: [{
-                type: "id",
-                info: "The id of an IRC channel.",
-                example: "222461169317707778",
-            }, {
-                type: "string",
-                info: "The message to send.",
-                example: "Hello people in another server.",
-                max: 1000
-            }]
-        }
-    }
+    help = "Send a message to an IRC channel.";
+    args = [{
+        type: "id",
+        info: "The id of an IRC channel.",
+        example: "222461169317707778",
+    }, {
+        type: "string",
+        info: "The message to send.",
+        example: "Hello people in another server.",
+        max: 1000
+    }];
 }
 
 module.exports = IRCSendCommand;

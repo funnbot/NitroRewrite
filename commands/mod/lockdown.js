@@ -26,33 +26,28 @@ class LockDownCommand extends Command {
         const c = message.channel.createMessageCollector(filt, ms.milliseconds());
 
         c.on("collect", m => {
-            if (m.content.toLowerCase() === "unlock") { 
+            if (m.content.toLowerCase() === "unlock") {
                 clearTimeout(timer);
                 end();
             }
         });
     }
 
-    options() {
-        return {
-            help: "Lockdown the channel.",
-            usage: "{}lockdown 30s",
-            userPerms: ["MANAGE_CHANNELS"],
-            botPerms: ["MANAGE_CHANNELS"],
-            args: [{
-                type: "duration",
-                info: "The amount of time to lockdown for.",
-                example: "2m30s",
-                min: 1000,
-                max: 36e6
-            }, {
-                type: "role",
-                info: "Optional role to lockdown, instead of everyone",
-                example: "@Users",
-                default: null
-            }]
-        }
-    }
+    help = "Lockdown the channel.";
+    userPerms = ["MANAGE_CHANNELS"];
+    botPerms = ["MANAGE_CHANNELS"];
+    args = [{
+        type: "duration",
+        info: "The amount of time to lockdown for.",
+        example: "2m30s",
+        min: 1000,
+        max: 36e6
+    }, {
+        type: "role",
+        info: "Optional role to lockdown, instead of everyone",
+        example: "@Users",
+        default: null
+    }];
 }
 
 module.exports = LockDownCommand;

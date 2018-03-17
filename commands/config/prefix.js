@@ -2,7 +2,7 @@ const { Command } = require("../../Nitro");
 
 class PrefixCommand extends Command {
 
-    async run ({message, bot, send, t}) {
+    async run({ message, bot, send, t }) {
         if (!message.checkSuffix) return send("**Use the prefix command to change the character you put before commands when calling them\nIf you want to include a space in the prefix, wrap it in double quotes.**");
         if (message.suffix.replace(/[^\"]/g, "").length === 2) {
             let split = message.suffix.split("\"")
@@ -19,13 +19,12 @@ class PrefixCommand extends Command {
         }
     }
 
-    options() { return {
-        help: "Change the prefix for commands.",
-        usage: '`{}prefix !!` - The ping command would be called with `!!ping`\n`{}prefix "nitro "` - This prefix has a space so it is wrapped in double quotes `nitro ping`',
-        userPerm: "MANAGE_GUILD",
-        cooldown: 20,
-        alias: ["setprefix"]
-    }}
+    help = "Change the prefix for commands.";
+    usage = '`{}prefix !!` - The ping command would be called with `!!ping`\n`{}prefix "nitro "` - This prefix has a space so it is wrapped in double quotes `nitro ping`';
+    userPerm = "MANAGE_GUILD";
+    cooldown = 20;
+    alias = ["setprefix"];
+
 }
 
 module.exports = PrefixCommand;

@@ -19,22 +19,18 @@ class TagInfoCommand extends Command {
             .addField("Server Tag", tag.server ? "yes" : "no")
             .addField("Created", created)
             .nitroColor();
-            (!tag.edited) || embed.addField("Edited", edited);
-            
+        (!tag.edited) || embed.addField("Edited", edited);
+
         return await reply(embed);
     }
 
-    options() {
-        return {
-            help: "Info for a tag.",
-            usage: "{}taginfo steve",
-            args: [{
-                type: "string",
-                info: "The name of a tag",
-                example: "steve"
-            }]
-        }
-    }
+    help = "Info for a tag.";
+    usage = "{}taginfo steve";
+    args = [{
+        type: "string",
+        info: "The name of a tag",
+        example: "steve"
+    }];
 }
 
 module.exports = TagInfoCommand;

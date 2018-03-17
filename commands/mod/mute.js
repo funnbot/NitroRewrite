@@ -6,11 +6,8 @@ class MuteCommand extends Command {
         send("test")
     }
 
-    options() { return {
-        help: "Mute a user",
-        usage: "",
-        wip: true
-    }}
+    help = "";
+    wip = true;
 }
 
 module.exports = MuteCommand;

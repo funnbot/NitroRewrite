@@ -48,7 +48,7 @@ class HelpCommand extends Command {
                 argInfo.push(`**${arg.typeText || arg.type}** - ${arg.info}`);
                 example += ` ${arg.example}`
             }
-            
+
             embed.addField("Usage", usage)
                 .addField("Arguments", argInfo.join("\n"))
                 .addField("Example", '`' + example + '`');
@@ -58,14 +58,10 @@ class HelpCommand extends Command {
         return await reply(embed);
     }
 
-    options() {
-        return {
-            help: "List all commands",
-            usage: "{}help or {}help <command>",
-            dm: true,
-            alias: ["commands", "cmds"]
-        }
-    }
+    help = "List all commands";
+    usage = "{}help or {}help <command>";
+    dm = true;
+    alias = ["commands", "cmds"];
 }
 
 module.exports = HelpCommand;

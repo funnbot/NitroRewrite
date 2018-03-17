@@ -51,13 +51,8 @@ class StatsCommand extends Command {
         else return reply(embed.asMessage());
     }
 
-    options() {
-        return {
-            help: "Stats",
-            usage: "",
-            alias: ["botinfo", "statistics"]
-        }
-    }
+    help = "Stats";
+    alias = ["botinfo", "statistics"];
 }
 
 module.exports = StatsCommand;
@@ -78,11 +73,11 @@ async function fetchStuff(bot) {
     s.PING = util.round100(bot.ping) + "MS";
 
     try {
-        s.TOTAL_GUILDS = await bot.shard.clientValuesReduced("stats.guildCount");
-        s.TOTAL_CHANNELS = await bot.shard.clientValuesReduced("stats.channelCount");
-        s.TOTAL_USERS = await bot.shard.clientValuesReduced("stats.userCount");
-        s.TOTAL_MEM = await bot.shard.clientValuesReduced("stats.memUsage");
-        s.TOTAL_CPU = await bot.shard.clientValuesReduced("stats.cpuUsage");
+        s.TOTAL_GUILDS = await bot.shard.clientValuesReduced("stats.guildCount").timeout(5000);
+        s.TOTAL_CHANNELS = await bot.shard.clientValuesReduced("stats.channelCount").timeout(5000);
+        s.TOTAL_USERS = await bot.shard.clientValuesReduced("stats.userCount").timeout(5000);
+        s.TOTAL_MEM = await bot.shard.clientValuesReduced("stats.memUsage").timeout(5000);
+        s.TOTAL_CPU = await bot.shard.clientValuesReduced("stats.cpuUsage").timeout(5000);
         s.TOTAL_MEM = util.round(s.TOTAL_MEM, 3);
         s.TOTAL_CPU = Math.round(s.TOTLE_CPU);
     } catch (e) {

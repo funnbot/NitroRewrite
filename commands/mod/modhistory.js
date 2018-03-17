@@ -6,11 +6,8 @@ class ModHistoryCommand extends Command {
         send("test")
     }
 
-    options() { return {
-        help: "",
-        usage: "",
-        wip: true
-    }}
+    help = "";
+    wip = true;
 }
 
 module.exports = ModHistoryCommand;

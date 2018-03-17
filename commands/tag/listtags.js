@@ -19,13 +19,8 @@ class ListTagsCommand extends Command {
         return await reply(embed);
     }
 
-    options() {
-        return {
-            help: "List the tags on this server.",
-            usage: "{}tags",
-            alias: ["tags"]
-        }
-    }
+    help = "List the tags on this server.";
+    alias = "tags";
 }
 
 module.exports = ListTagsCommand;

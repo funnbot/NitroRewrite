@@ -9,27 +9,23 @@ class SetModlogCommand extends Command {
             return await reply.succ("Disabled Modlog");
         }
 
-        const [ channel ] = message.args;
+        const [channel] = message.args;
         const perms = channel.permissionsFor(bot.user);
-        if (!perms.has("SEND_MESSAGES") || !perms.has("EMBED_LINKS")) 
+        if (!perms.has("SEND_MESSAGES") || !perms.has("EMBED_LINKS"))
             return await reply.warn("I need permission to send embeds in " + channel);
-        
+
         await message.guild.modlog(channel.id);
         return await reply.succ("Modlog set to " + channel);
     }
 
-    options() {
-        return {
-            help: "Set the moderation log channel",
-            userPerms: ["MANAGE_GUILD"],
-            args: [{
-                type: "channel",
-                info: "The channel to send logs.",
-                example: "#modlogs",
-                default: true
-            }]
-        }
-    }
+    help = "Set the moderation log channel";
+    userPerms = ["MANAGE_GUILD"];
+    args = [{
+        type: "channel",
+        info: "The channel to send logs.",
+        example: "#modlogs",
+        default: true
+    }];
 }
 
 module.exports = SetModlogCommand;

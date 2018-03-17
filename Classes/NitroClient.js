@@ -32,6 +32,7 @@ Guild.extend(Discord.Guild);
 User.extend(Discord.User);
 
 class NitroClient extends Discord.Client {
+    
     constructor(...args) {
         super(...args);
 

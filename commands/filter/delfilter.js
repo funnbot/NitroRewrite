@@ -14,19 +14,15 @@ class DelFilterCommand extends Command {
         return await reply.succ("Filter deleted.");
     }
 
-    options() {
-        return {
-            help: "Delete a filter.",
-            alias: ["deletefilter", "del-filter"],
-            userPerms: ["MANAGE_GUILD"],
-            arg: {
-                type: "string",
-                info: "The name of this filter",
-                max: "100",
-                example: "badwords"
-            }
-        }
-    }
+    help = "Delete a filter.";
+    alias = ["deletefilter", "del-filter"];
+    userPerms = ["MANAGE_GUILD"];
+    arg = {
+        type: "string",
+        info: "The name of this filter",
+        max: "100",
+        example: "badwords"
+    };
 }
 
 module.exports = DelFilterCommand;

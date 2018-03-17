@@ -2,7 +2,7 @@ const { Command } = require("../../Nitro");
 
 class HackBanCommand extends Command {
 
-    async run ({message, bot, reply, t}) {
+    async run({ message, bot, reply, t }) {
         const [id, reason] = message.args;
 
         let txt = `Are you sure you want to ban the id ${id}`;
@@ -11,7 +11,7 @@ class HackBanCommand extends Command {
         if (!failsafe) return await m.edit("**Aborted.**", { embed: null });
         else await m.edit(`**Banning...**`, { embed: null });
         try {
-            await message.guild.members.ban(id, {reason, days: 1});
+            await message.guild.members.ban(id, { reason, days: 1 });
         } catch (e) {
             return await m.edit("**Ban failed**");
         }
@@ -29,22 +29,19 @@ class HackBanCommand extends Command {
         });
     }
 
-    options() { return {
-        help: "Ban a user by their ID if they are not on the server.",
-        usage: "",
-        botPerms: ["BAN_MEMBERS"],
-        userPerms: ["BAN_MEMBERS"],
-        args: [{
-            type: "string",
-            info: "The id of a user",
-            example: "2640877062357701856",
-        }, {
-            type: "string",
-            info: "The reason for banning",
-            example: "They are a scammer",
-            default: "unspecified"
-        }]
-    }}
+    help = "Ban a user by their ID if they are not on the server.";
+    botPerms = ["BAN_MEMBERS"];
+    userPerms = ["BAN_MEMBERS"];
+    args = [{
+        type: "string",
+        info: "The id of a user",
+        example: "2640877062357701856",
+    }, {
+        type: "string",
+        info: "The reason for banning",
+        example: "They are a scammer",
+        default: "unspecified"
+    }];
 }
 
 module.exports = HackBanCommand;
@@ -66,4 +63,4 @@ module.exports = new Nitro.Command({
         // TODO: Finish hackban
         return send("**This command is WIP**")
     }
-})*/ 
+})*/

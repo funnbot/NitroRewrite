@@ -19,22 +19,18 @@ class AddTagCommand extends Command {
         return await reply.succ("Added tag");
     }
 
-    options() {
-        return {
-            help: "Add a tag",
-            usage: "{}addtag info Here is some info for you",
-            alias: ["add-tag", "newtag", "tagadd"],
-            args: [{
-                type: "string",
-                info: "The tag name",
-                example: "steve"
-            }, {
-                type: "string",
-                info: "The tag content",
-                example: "Hello fellow kids!"
-            }]
-        }
-    }
+    help = "Add a tag";
+    usage = "{}addtag info Here is some info for you";
+    alias = ["add-tag", "newtag", "tagadd"];
+    args = [{
+        type: "string",
+        info: "The tag name",
+        example: "steve"
+    }, {
+        type: "string",
+        info: "The tag content",
+        example: "Hello fellow kids!"
+    }];
 }
 
 module.exports = AddTagCommand;

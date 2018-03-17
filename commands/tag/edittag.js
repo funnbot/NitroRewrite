@@ -14,22 +14,18 @@ class EditTagCommand extends Command {
         return await reply.succ("Edited tag.");
     }
 
-    options() {
-        return {
-            help: "Add a tag",
-            usage: "{}addtag steve Hello fellow kids!",
-            alias: ["edit-tag", "tagedit"],
-            args: [{
-                type: "string",
-                info: "The tag name.",
-                example: "steve"
-            }, {
-                type: "string",
-                info: "The tag content.",
-                example: "Hello fellow kids!"
-            }]
-        }
-    }
+    help = "Add a tag";
+    usage = "{}addtag steve Hello fellow kids!";
+    alias = ["edit-tag", "tagedit"];
+    args = [{
+        type: "string",
+        info: "The tag name.",
+        example: "steve"
+    }, {
+        type: "string",
+        info: "The tag content.",
+        example: "Hello fellow kids!"
+    }];
 }
 
 module.exports = EditTagCommand;

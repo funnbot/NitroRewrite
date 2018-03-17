@@ -2,7 +2,7 @@ const { Command } = require("../../Nitro");
 
 class KickCommand extends Command {
 
-    async run ({message, bot, reply, t}) {
+    async run({ message, bot, reply, t }) {
         const [member, reason] = message.args;
         if (!member.kickable) return await reply.fail("I lack permission to kick this user.");
         if (message.member.roles.highest.position <= member.roles.highest.position) return await reply.fail("You lack permission to kick this user.");
@@ -13,7 +13,7 @@ class KickCommand extends Command {
         if (!failsafe) return await m.edit("**Aborted.**", { embed: null });
         else await m.edit(`**Kicking...**`, { embed: null });
         try {
-            await member.kick({reason});
+            await member.kick({ reason });
         } catch (e) {
             return await m.edit("**Kick failed**");
         }
@@ -31,22 +31,19 @@ class KickCommand extends Command {
         })
     }
 
-    options() { return {
-        help: "Kick a member.",
-        usage: "{}kick @Funnbot Because I said so",
-        botPerms: ["KICK_MEMBERS"],
-        userPerms: ["KICK_MEMBERS"],
-        args: [{
-            type: "member",
-            info: "The user to kick.",
-            example: "@Badboy"
-        }, {
-            type: "string",
-            info: "The reason for kicking.",
-            example: "Because I said so",
-            default: "unspecified"
-        }]
-    }}
+    help = "Kick a member.";
+    botPerms = ["KICK_MEMBERS"];
+    userPerms = ["KICK_MEMBERS"];
+    args = [{
+        type: "member",
+        info: "The user to kick.",
+        example: "@Badboy"
+    }, {
+        type: "string",
+        info: "The reason for kicking.",
+        example: "Because I said so",
+        default: "unspecified"
+    }];
 }
 
 module.exports = KickCommand;

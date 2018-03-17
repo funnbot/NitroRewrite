@@ -24,6 +24,9 @@ let guildMember = async (member, when) => {
     const mljoin = await guild.mljoin();
     const mlleave = await guild.mlleave();
     const mldm = await guild.mldm();
+    const ar = await guild.ar();
+
+    if (ar) assignAutorole(ar, member);
 
     if (mldm && when) user.send(`**From ${guild.name}:** ${mldm}`).catch(logger.debug);
 
@@ -37,6 +40,11 @@ let guildMember = async (member, when) => {
     if (type === "image") return handleImage(user, channel, text, when);
     if (type === "embed") return handleEmbed(user, channel, text, when);
     if (type === "text") return channel.send(text).catch(logger.debug);
+}
+
+function assignAutorole(id, member) {
+    const role = member.guild.roles.get(id);
+    member.roles.add(role, "autorole");
 }
 
 function replaceValues(str, user, guild) {
@@ -57,8 +65,8 @@ function handleEmbed(user, channel, msg, type) {
     if (!channel.permissionsFor(bot.user).has("EMBED_LINKS")) return;
     const embed = bot.embed
         .memberlogColor(type);
-        (!msg) || embed.setDescription(msg);
-        embed.setFooter("User " + (type ? "joined" : "left"))
+    (!msg) || embed.setDescription(msg);
+    embed.setFooter("User " + (type ? "joined" : "left"))
         .setTimestamp(new Date())
         .setAuthor(user.tag, user.displayAvatarURL())
 

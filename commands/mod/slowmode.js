@@ -25,27 +25,23 @@ class SlowModeCommand extends Command {
         return await reply(`**Slowmode enabled for ${time.toString()}.\nYou can only send a message every ${wait} seconds.\nModerators can type \`speedup\` to end early.**`);
     }
 
-    options() {
-        return {
-            help: "Slowdown chat.",
-            userPerm: "MANAGE_GUILD",
-            botPerm: "MANAGE_ROLES",
-            args: [{
-                type: "duration",
-                info: "The duration of the slowdown",
-                example: "10m", 
-                min: 10 * TIME.second,
-                max: 10 * TIME.day
-            }, {
-                type: "number",
-                info: "The number of seconds between each message.",
-                example: "12",
-                min: 5,
-                max: 20,
-                default: 10
-            }]
-        }
-    }
+    help = "Slowdown chat.";
+    userPerm = "MANAGE_GUILD";
+    botPerm = "MANAGE_ROLES";
+    args = [{
+        type: "duration",
+        info: "The duration of the slowdown",
+        example: "10m",
+        min: 10 * TIME.second,
+        max: 10 * TIME.day
+    }, {
+        type: "number",
+        info: "The number of seconds between each message.",
+        example: "12",
+        min: 5,
+        max: 20,
+        default: 10
+    }];
 }
 
 function endSlowmode(chan, col, unlock, role, endTimer) {

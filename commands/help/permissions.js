@@ -4,7 +4,7 @@ class PermissionsCommand extends Command {
 
     async run({ message, bot, send, t }) {
         return send("change");
-    
+
         let txt = `**Permissions**
         Nitro uses a simple 4 role permission system.
         The roles do not need any special permissions. It is the **name** of the role that matters.
@@ -19,13 +19,8 @@ class PermissionsCommand extends Command {
         send(txt)
     }
 
-    options() {
-        return {
-            help: "Tutorial on Nitro's permission system.",
-            usage: "{}permissions",
-            cooldown: 5
-        }
-    }
+    help = "Tutorial on Nitro's permission system.";
+    cooldown = 5
 }
 
 module.exports = PermissionsCommand;

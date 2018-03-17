@@ -2,14 +2,12 @@ const { Command } = require("../../Nitro");
 
 class DisableLogEventCommand extends Command {
 
-    async run ({message, bot, reply, t}) {
+    async run({ message, bot, reply, t }) {
         send("test")
     }
 
-    options() { return {
-        help: "",
-        usage: ""
-    }}
+    help = "";
+    usage = "";
 }
 
 module.exports = DisableLogEventCommand;

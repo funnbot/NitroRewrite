@@ -32,19 +32,15 @@
          reply({ embed });
      }
 
-     options() {
-         return {
-             help: "The trivia leaderboard",
-             usage: "{}triviatop 2",
-             alias: ["trivialeaderboard"],
-             args: [{
-                 type: "int",
-                 info: "The trivia leaderboard page.",
-                 default: 1,
-                 min: 1
-             }]
-         }
-     }
+     help = "The trivia leaderboard";
+     usage = "{}triviatop 2";
+     alias = ["trivialeaderboard"];
+     args = [{
+         type: "int",
+         info: "The trivia leaderboard page.",
+         default: 1,
+         min: 1
+     }]
  }
 
  module.exports = TriviaTopCommand;

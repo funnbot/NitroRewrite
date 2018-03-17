@@ -32,18 +32,16 @@ class EvalCommand extends Command {
         }
     }
 
-    options() { return {
-        help: "Eval some code",
-        usage: "1+1",
-        userPerms: ["DEV"],
-        cooldown: 0,
-        dm: true,
-        args: [{
+        help = "Eval some code";
+        usage = "1+1";
+        userPerms = ["DEV"];
+        cooldown = 0;
+        dm = true;
+        args = [{
             type: "string",
             info: "code",
             example: "1+1"
-        }]
-    }}
+        }];
 }
 
 module.exports = EvalCommand;

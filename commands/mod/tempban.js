@@ -38,30 +38,26 @@ class TempBanCommand extends Command {
         });
     }
 
-    options() {
-        return {
-            help: "Temporarily ban a user.",
-            usage: "{}tempban @Funnbot 2h30m Being bad",
-            userPerms: ["BAN_MEMBERS"],
-            botPerms: ["BAN_MEMBERS"],
-            args: [{
-                type: "member",
-                info: "The member to tempban.",
-                example: "@Bodboi"
-            }, {
-                type: "duration",
-                info: "The length of the tempban.",
-                example: "2h30m",
-                min: 600000,
-                max: 2592e5
-            }, {
-                type: "string",
-                info: "The reason for tempbanning.",
-                example: "Being a bad boy",
-                default: "unspecified"
-            }]
-        }
-    }
+
+    help = "Temporarily ban a user.";
+    userPerms = ["BAN_MEMBERS"];
+    botPerms = ["BAN_MEMBERS"];
+    args = [{
+        type: "member",
+        info: "The member to tempban.",
+        example: "@Bodboi"
+    }, {
+        type: "duration",
+        info: "The length of the tempban.",
+        example: "2h30m",
+        min: 600000,
+        max: 2592e5
+    }, {
+        type: "string",
+        info: "The reason for tempbanning.",
+        example: "Being a bad boy",
+        default: "unspecified"
+    }];
 }
 
 module.exports = TempBanCommand;

@@ -38,6 +38,7 @@ class CommandLoader {
             this.super(...args);
         }
         const command = new CommandChild();
+        command.validateOptions();
         return command;
     }
 

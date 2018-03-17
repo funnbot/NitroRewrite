@@ -6,10 +6,7 @@ class UserInfoCommand extends Command {
         send("test")
     }
 
-    options() { return {
-        help: "",
-        usage: ""
-    }}
+    help = "";
 }
 
 module.exports = UserInfoCommand;

@@ -21,19 +21,21 @@ class CreateFilterCommand extends Command {
     }
 
     options() { return {
-        help: "Create a new content filter.",
-        userPerms: ["MANAGE_GUILD"],
-        args: [{
-            type: "string",
-            info: "The name of this filter",
-            max: "100",
-            example: "badwords"
-        }, {
-            type: "string",
-            info: "The words in the filter. Only letters allowed.",
-            example: "heck frick meme dang shoot"
-        }]
+
     }}
+
+    help = "Create a new content filter.";
+    userPerms = ["MANAGE_GUILD"];
+    args = [{
+        type: "string",
+        info: "The name of this filter",
+        max: "100",
+        example: "badwords"
+    }, {
+        type: "string",
+        info: "The words in the filter. Only letters allowed.",
+        example: "heck frick meme dang shoot"
+    }];
 }
 
 module.exports = CreateFilterCommand;

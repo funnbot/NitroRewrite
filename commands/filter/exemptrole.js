@@ -17,18 +17,14 @@ class ExemptRoleCommand extends Command {
         }
     }
 
-    options() {
-        return {
-            help: "Make filters ignore a role",
-            userPerms: ["MANAGE_GUILD"],
-            alias: "unexemptrole",
-            arg: {
-                type: "role",
-                info: "The role to be ignored by filters.",
-                example: "@MrKing",
-            }
-        }
-    }
+    help = "Make filters ignore a role";
+    userPerms = ["MANAGE_GUILD"];
+    alias = "unexemptrole";
+    arg = {
+        type: "role",
+        info: "The role to be ignored by filters.",
+        example: "@MrKing",
+    };
 }
 
 module.exports = ExemptRoleCommand;
