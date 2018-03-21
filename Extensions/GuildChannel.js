@@ -34,8 +34,8 @@ class GuildChannel extends Extension {
     /**
      * Collect a yes or no response.
      * @param {User} user
-     * @param {Array<Boolean>} [truthy]
-     * @param {Array<Boolean>} [falsy]
+     * @param {Array<String>} [truthy]
+     * @param {Array<String>} [falsy]
      * @param {String|Function} [filter="author"]
      * @param {Number} [time=30000]
      * @returns {Promise<Boolean>}

@@ -1,4 +1,4 @@
-const idRegex = /^[0-9]{17,19}$/g
+const idRegex = /^[0-9]{17,19}$/;
 
 class IDArgument {
     static parse(val) {

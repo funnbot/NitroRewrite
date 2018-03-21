@@ -78,14 +78,14 @@ module.exports = {
             "Moderation",
             "Manage users who are acting up."
         ],
-        /*games: [
+        games: [
             "Games",
             "Play games with Nitro."
         ],
         fun: [
             "Fun",
             "Silly and random commands."
-        ],*/
+        ],
         image: [
             "Image",
             "Memes and image processing."
@@ -125,7 +125,16 @@ module.exports = {
         filter: [
             "Content Filter",
             "Delete messages with swearing or ads."
+        ],
+        info: [
+            "Information",
+            "Get statistics of your server."
+        ],
+        crypto: [
+            "Crypto",
+            "Encrypt and decrypt things."
         ]
+
     },
     //The "Companies" and their keys used in stock market
     STOCKS: {

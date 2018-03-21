@@ -1,25 +1,14 @@
-const argumentTypes = {
-    string: require("./ArgumentTypes/string"),
-    int: require("./ArgumentTypes/int"),
-    id: require("./ArgumentTypes/id"),
-    float: require("./ArgumentTypes/float"),
-    duration: require("./ArgumentTypes/duration"),
-    selection: require("./ArgumentTypes/selection"),
-    user: require("./ArgumentTypes/user"),
-    member: require("./ArgumentTypes/member"),
-    channel: require("./ArgumentTypes/channel"),
-    role: require("./ArgumentTypes/role"),
-    custom: require("./ArgumentTypes/custom")
-}
+const argumentTypes = require("./ArgumentTypes");
 
 module.exports = async function(command, message) {
     for (let i = 0; i < command.args.length; i++) {
         let arg = command.args[i];
-        const m = i === command.args.length - 1 ? message.suffixOf(i) : message.args[i];
+        const m = getText(message, command, arg, i);
+
         const type = argumentTypes[arg.type] || argumentTypes.string;
         const getDefault = getFunc("default", arg, type);
         const parse = getFunc("parse", arg, type);
-        
+
         if (type.args) arg = type.args(arg);
 
         let check = m ? await parse(m, message, arg) : missing();
@@ -59,6 +48,13 @@ function invalidArg(message, command, argIndex = -1, invalidText = false) {
     const dings = `< > - required arg, [] - optional arg`
     const m = `${invalidText ? `**${invalidText}**\n` : ``}${txt}\n${argInfo.join("\n")}\n\n${ex}\n${dings}`;
     message.channel.send(m);
+}
+
+function getText(message, command, arg, i) {
+    const isLast = i === command.args.length - 1;
+    const rest = message.suffixOf(i);
+
+    return isLast && !arg.endWithoutRest ? rest : message.args[i];
 }
 
 function getFunc(name, arg, type) {

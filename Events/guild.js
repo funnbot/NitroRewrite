@@ -3,7 +3,7 @@ const Long = require("long");
 const bot = require("../bot.js");
 const { carbonitex, discordbots } = require("../config.js");
 
-const embed = new bot.Embed();
+const embed = bot.embed
 embed.setTitle("So, you invited Nitro...")
     .setDescription("")
     .addField("Getting Started", "Get the commands with `n!help`")

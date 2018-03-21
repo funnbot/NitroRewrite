@@ -67,6 +67,6 @@ global.typeof2 = value => {
     return value instanceof Array ? "array" : typeof value;
 }
 
-global.timeout = (time = 1000) => {
+global.promiseTimeout = (time = 1000) => {
     return new Promise(res => setTimeout(res, time))
 }

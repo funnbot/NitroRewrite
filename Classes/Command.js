@@ -1,3 +1,6 @@
+const ArgumentParser = require("./ArgumentParser");
+const PermissionHandler = require("./PermissionHandler");
+
 /**
  * Argument options
  * @typedef {Object} ArgumentOptions
@@ -45,6 +48,48 @@ class Command {
         typeof this.alias === "string" ? (this.alias = [this.alias]) : 0;
 
         this.wip = this.wip || false;
+
+        this.onEnable();
+    }
+
+    async runSubCommand(name) {
+        const cmd = this.sub[name];
+        if (cmd.args.length > 0) {
+            // Assign parsed arguments
+            this.message.args = await ArgumentParser(cmd, this.message);
+            // Arguments were incorrect
+            if (!this.message.args) return;
+        }
+        if (this.message.channel.type === "text")
+            if (PermissionHandler.run(this.message, cmd)) return;
+            else if (PermissionHandler.runDM(this.message, cmd)) return;
+        cmd.run(this);
+    }
+
+    registerSubCommands(cmds) {
+        // Redefine info for all the subcommands
+        this.args[0].info = "";
+        this.args[0].items = [];
+
+        this.sub = {};
+        for (let [name, CommandSubChild] of Object.entries(cmds)) {
+            if (!(CommandSubChild.prototype instanceof Command)) return;
+            CommandSubChild.prototype.constructor = function(...args) {
+                this.super(...args);
+            }
+            const command = new CommandSubChild();
+            command.validateOptions();
+            command.args.unshift({
+                type: "string",
+                typeText: "sub",
+                info: command.help,
+                example: name
+            })
+            this.sub[name] = command;
+
+            this.args[0].info += `\n  ${name} - ${command.help}`;
+            this.args[0].items.push(name);
+        }
     }
 
     async exec(message) {
@@ -67,6 +112,7 @@ class Command {
         return;
     }
 
+    async onEnable() { return; }
     async run(args) { return; }
     async error(args, error) {
         logger.err(error);
@@ -77,25 +123,25 @@ class Command {
 
 function setupReply(message) {
     async function reply(...args) {
-        return this.sent = await message.channel.send(...args);
+        return reply.sent = await message.channel.send(...args);
     }
     reply.edit = async function(...args) {
-        return this.sent ? await this.sent.edit() : 0;
+        return reply.sent ? await reply.sent.edit(...args) : 0;
     }
     reply.succ = async function(...args) {
-        return this.sent = await reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
+        return reply.sent = await reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
     }
     reply.editSucc = async function(...args) {
         return await reply.edit(`✅ | **${args.shift()}** ${args.join(" ")}`)
     }
     reply.fail = async function(...args) {
-        return this.sent = await reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
+        return reply.sent = await reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
     }
     reply.editFail = async function(...args) {
         return await reply.edit(`⛔ | **${args.shift()}** ${args.join(" ")}`)
     }
     reply.warn = async function(...args) {
-        return this.sent = await reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
+        return reply.sent = await reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
     }
     reply.editWarn = async function(...args) {
         return await reply.edit(`⚠ | **${args.shift()}** ${args.join(" ")}`)
@@ -106,7 +152,6 @@ function setupReply(message) {
     reply.failReact = async function() {
         return await message.react('341741537258110978');
     }
-    reply.sentMessage = null;
     return reply;
 }
 

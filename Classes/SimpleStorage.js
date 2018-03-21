@@ -20,8 +20,7 @@ class SimpleStorage {
      */
     set(key, value = true) {
         if (!this.sc[key]) this.sc[key] = {}
-        this.sc[key][this.id] = value;  
-        return this.sc[key][this.id];
+        return this.sc[key][this.id] = value;
     }
 
     /**
@@ -42,7 +41,7 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     exists(key) {
-        return this.sc[key] ? !!this.sc[key][this.id] : !1;
+        return this.sc[key] ? this.sc[key][this.id] !== undefined : !1;
     }
 
     /**
@@ -54,7 +53,7 @@ class SimpleStorage {
      */
     delete(key) {
         let bool = this.sc[key] && this.sc[key][this.id];
-        this.sc[key] && delete this.sc[key][this.id];
+        this.sc[key] && (this.sc[key][this.id] = undefined);
         return bool;
     }
 

@@ -5,6 +5,7 @@ const Alias = require("./Alias.js")
 const Cooldown = require("./Cooldown.js")
 const ArgumentParser = require("./ArgumentParser")
 const PermissionHandler = require("./PermissionHandler.js")
+const { FUNNBOT } = require("../config");
 
 class MessageHandler extends EventEmitter {
     constructor(bot) {

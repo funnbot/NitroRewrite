@@ -11,10 +11,9 @@ class Message extends Extension {
         let mentionRegex = new RegExp(`<@!?${this.client.user.id}>`);
         this._cutPrefix = this._mention(this.content) ? this.content.replace(mentionRegex, "").trim() : this.content.slice(this.prefix.length);
         this._contentSplit = this._cutPrefix.split(" ");
-        this._suffixSplit = this._contentSplit.slice(1);
-        this.command = this._contentSplit[0];
-        this.args = this._suffixSplit.filter(t => t != "");
-        this.suffix = this._suffixSplit.join(" ");
+        this.command = this._contentSplit.shift();
+        this.suffix = this._contentSplit.join(" ").trim();
+        [this.args, this.argsTrim] = this.parseArgs(this.suffix);
 
         this.t = await Locale.setLang(this);
     }
@@ -24,10 +23,54 @@ class Message extends Extension {
             "”": '"',
             "“": '"',
             "’": '"',
-            "‘": '"'
+            "‘": '"',
+            "'": '"'
         }
-        txt = txt.replace(/[”“’‘]/g, c => inplc[c]);
+        txt = txt.replace(/[”“’‘']/g, c => inplc[c]);
         return txt;
+    }
+
+    parseArgs(text) {
+        // Args before filtering
+        let argsRaw = [];
+        // if currently reading into a quote
+        let inQuote = false;
+        // The current index in args
+        let current = 0;
+        // Loop each character in the text
+        let length = text.length;
+        for (let i = 0; i < length; i++) {
+            // char
+            const c = text[i];
+            // the next char
+            const n = text[i + 1];
+            argsRaw[current] = argsRaw[current] || ""
+            if (c === '"') { // a quote
+                // Set as entering or leaving quote
+                inQuote = !inQuote;
+                // At a quote bump to next arg, dont add char
+                current++;
+            } else if (c === " ") { // a space
+                // If in a quote, add the space
+                if (inQuote) argsRaw[current] += c;
+                // If the last space in a line, bump to next arg, extra spaces will be shown at end of args 
+                else if (n !== " ") current++;
+                else argsRaw[current] += c;
+            } else argsRaw[current] += c // Add any other char to current arg
+        }
+        let args = [];
+        let argsTrim = [];
+        // Loop over args and remove empty, add to trimmed
+        const len = argsRaw.length;
+        for (let i = 0; i < len; i++) {
+            const trimmed = argsRaw[i].trim();
+            // If empty, or was just space
+            if (trimmed.length) {
+                args.push(argsRaw[i]);
+                argsTrim.push(trimmed);
+            }
+        }
+        return [args, argsTrim];
     }
 
     get checkSuffix() {
@@ -35,7 +78,7 @@ class Message extends Extension {
     }
 
     suffixOf(index) {
-        return this._suffixSplit.slice(index).join(" ").trim()
+        return this.argsTrim.slice(index).join(" ");
     }
 
     send(...args) {
