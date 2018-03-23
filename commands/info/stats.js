@@ -18,7 +18,7 @@ class StatsCommand extends Command {
         ].join("\n") + "```**";
 
         const mods = "**```http\n" + [
-            `Memory GB :: ${s.TOTAL_MEMORY + "MB"}`,
+            `Memory GB :: ${s.TOTAL_MEM + "MB"}`,
             `CPU       :: ${s.TOTAL_CPU + "%"}`,
             `Ping MS   :: ${s.PING + "MS"}`,
             `Uptime    :: ${s.UPTIME}`
@@ -70,7 +70,7 @@ async function fetchStuff(bot) {
     s.LIBRARY = "discord.js";
     s.CREATOR = "Funnbot#1337";
     s.OS = process.platform;
-    s.PING = util.round100(bot.ping) + "MS";
+    s.PING = util.round100(bot.ping);
 
     try {
         s.TOTAL_GUILDS = await bot.shard.clientValuesReduced("stats.guildCount");
@@ -79,7 +79,7 @@ async function fetchStuff(bot) {
         s.TOTAL_MEM = await bot.shard.clientValuesReduced("stats.memUsage");
         s.TOTAL_CPU = await bot.shard.clientValuesReduced("stats.cpuUsage");
         s.TOTAL_MEM = util.round(s.TOTAL_MEM, 3);
-        s.TOTAL_CPU = Math.round(s.TOTLE_CPU);
+        s.TOTAL_CPU = util.round(s.TOTAL_CPU, 0);
     } catch (e) {
         console.log(e);
         return null;

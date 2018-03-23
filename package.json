@@ -4,9 +4,8 @@
   "description": "A Discord Bot",
   "main": "start.js",
   "scripts": {
-    "start": "forever bot.js --experimental-modules",
-    "shard": "forever shard.js --experimental-modules ",
-    "test": "node start.js"
+    "start": "node -harmony start.js",
+    "shard": "forever shard.js --experimental-modules "
   },
   "keywords": [
     "discord",
@@ -20,6 +19,7 @@
     "canvas": "github:Automattic/node-canvas",
     "chalk": "^2.3.2",
     "discord.js": "github:hydrabolt/discord.js",
+    "discord.js-lavalink": "github:MrJacz/discord.js-lavalink",
     "duration-js": "^4.0.0",
     "erlpack": "github:discordapp/erlpack",
     "format-currency": "^1.0.0",

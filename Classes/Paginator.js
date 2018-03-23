@@ -19,7 +19,7 @@ class Paginator {
         return this.pages[page - 1] || this.pages[0] || [];
     }
 
-    loopPage(p = 0, action = () => {}) {
+    loopPage(p = 0, action = (item, index) => {}) {
         const page = this.getPage(p);
         for (let i = 0; i < page.length; i++) {
             const index = page[i][0];

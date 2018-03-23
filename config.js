@@ -1,3 +1,4 @@
+const AUTH = require("./auth");
 const PREFIX = "?"
 
 module.exports = {
@@ -46,6 +47,10 @@ module.exports = {
             timers: []
         }
     },
+
+    LAVALINK_NODES: [
+        { host: "localhost", port: 2333, region: "us", password: AUTH.LAVALINK }
+    ],
 
     FUNNBOT: "163735744995655680",
 
@@ -245,7 +250,7 @@ module.exports = {
         ]
     },
 
-    ...require("./auth.js")
+    ...AUTH
 };
 
 function mirrorObject(array) {

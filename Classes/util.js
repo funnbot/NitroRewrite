@@ -44,6 +44,25 @@ class Util {
     }
 
     /**
+     * Shuffle an array
+     * 
+     * @param {Array} array array to shuffle
+     * @returns {Array}
+     */
+    static shuffleArray(array) {
+        let counter = array.length,
+            temp, rn;
+        while (counter > 0) {
+            rn = Math.floor(Math.random() * count + 1);
+            counter--
+            temp = array[counter];
+            array[counter] = array[rn];
+            array[rn] = temp;
+        }
+        return array;
+    }
+
+    /**
      * Array to object
      * @param {Array} array
      * @returns {Object}
@@ -86,7 +105,7 @@ class Util {
      */
     static th(n) {
         const t = n.toString();
-        return t + ([ "st", "nd", "rd"][t[t.length - 1] - 1] || "th");
+        return t + (["st", "nd", "rd"][t[t.length - 1] - 1] || "th");
     }
 
     /**
@@ -176,9 +195,6 @@ class Util {
         number <= maximum || (number = base);
         return number;
     }
-
-
-
 }
 
 module.exports = Util

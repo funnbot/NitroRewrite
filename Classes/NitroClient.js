@@ -9,6 +9,7 @@ const Discord = require("discord.js");
 const CommandLoader = require("./CommandLoader");
 const ConsistenTimer = require("./ConsistentTimer");
 const Database = require("./Database");
+const MusicPlayer = require("./MusicPlayer");
 const Enum = require("./Enum");
 const Logger = require("./Logger");
 const config = require("../config");
@@ -32,7 +33,7 @@ Guild.extend(Discord.Guild);
 User.extend(Discord.User);
 
 class NitroClient extends Discord.Client {
-    
+
     constructor(...args) {
         super(...args);
 
@@ -51,7 +52,8 @@ class NitroClient extends Discord.Client {
 
         this.initTime = Date.now();
         this._unhandledRejection();
-        this.on("ready", () => {
+        this.once("ready", () => {
+            this.player = new MusicPlayer(this);
             logger.info("Bot online.")
             this.updateStats();
         })
