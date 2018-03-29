@@ -6,14 +6,15 @@ class ShaCommand extends Command {
     async run ({message, bot, reply, t}) {
         const [ text ] = message.args;
         const s = createHash("sha256").update(text).digest("hex");
-        reply(s);
+        reply("text - " + s);
     }
 
     help = "Get the shasum of a string.";
     arg = {
         type: "string",
         info: "Text to hash.",
-        example: "foobarbaz"
+        example: "foobarbaz",
+        max: 1000
     }
 }
 

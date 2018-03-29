@@ -4,7 +4,7 @@ class MuteCommand extends Command {
 
     async run ({message, bot, reply, t}) {
         const [ user, reason ] = message.args;
-        const mutedRole = message.guild.roles.find(r => r.name.toLowerCase() === "muted");
+        const mutedRole = message.guild.roles.find(r => r.name.toLowerCase() === "muted")
     }
 
     help = "Mute a user";
