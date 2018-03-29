@@ -13,6 +13,7 @@ class PurgeCommand extends Command {
             small: PurgeSmallSubCommand,
             large: PurgeLargeSubCommand,
             newusers: PurgeNewUsersSubCommand
+            // role: PurgeRoleSubCommand
         })
     }
 

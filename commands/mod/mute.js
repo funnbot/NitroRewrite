@@ -1,12 +1,29 @@
-const { Command } = require("../../Nitro");
+const { Command, TIME } = require("../../Nitro");
 
 class MuteCommand extends Command {
 
     async run ({message, bot, reply, t}) {
-        send("test")
+        const [ user, reason ] = message.args;
+
     }
 
-    help = "";
+    help = "Mute a user";
+    args = [{
+        type: "member",
+        info: "The user to mute.",
+        example: "@badboi"
+    }, {
+        type: "duration",
+        info: "The length of the mute.",
+        example: "2h30m",
+        min: TIME.hour,
+        max: TIME.day * 7
+    }, {
+        type: "string",
+        info: "The reason for muting",
+        example: "Being a bad boi.",
+        default: "unspecified"
+    }]
     wip = true;
 }
 
