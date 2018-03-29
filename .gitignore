@@ -3,3 +3,4 @@ auth.js
 .jsbeautifyrc
 node_modules/
 Lavalink/
+.idea/
