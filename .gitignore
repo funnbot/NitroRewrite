@@ -1,5 +1,6 @@
 rethinkdb_data/
 auth.js
+auth-here.js
 .jsbeautifyrc
 node_modules/
 Lavalink/
