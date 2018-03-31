@@ -1,7 +1,7 @@
 # Rewrite
 A rewrite of nitro.
 
-# Contributing Information
+# Contributing
 
 Original commands.
 https://github.com/funnbot/Nitro/tree/master/commands
