@@ -5,3 +5,4 @@ auth-here.js
 node_modules/
 Lavalink/
 .idea/
+.vscode/
