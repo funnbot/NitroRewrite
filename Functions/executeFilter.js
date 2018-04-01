@@ -3,6 +3,7 @@ module.exports = async function(message) {
     let { content, guild, author, channel } = message;
     if (author.bot) return;
     if (!content) return;
+    if (!guild) return;
 
     const filters = await guild.filters();
     const adblock = await guild.adblock();
