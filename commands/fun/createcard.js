@@ -7,8 +7,6 @@ class CreateCardCommand extends Command {
         let text = message.suffix.split("|");
         if (!text[1]) return reply.fail("Please include text for the second card, and the delimeter `|`");
 
-        message.channel.startTyping(10);
-
         let createImage = function() {
             return new Promise((resolve, reject) => {
                 jimp.read('./assets/cah.png', (err, image) => {
@@ -41,7 +39,7 @@ class CreateCardCommand extends Command {
     }
 
     help = "Create a Custom Cards Against Humanity Question and Anwser Card.";
-    botPerms = ['ATTACH_FILES'];
+    botPerm = "ATTACH_FILES";
     cooldown = 5;
 }
 

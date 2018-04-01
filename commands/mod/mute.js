@@ -4,7 +4,8 @@ class MuteCommand extends Command {
 
     async run ({message, bot, reply, t}) {
         const [ user, reason ] = message.args;
-        const mutedRole = message.guild.roles.find(r => r.name.toLowerCase() === "muted")
+        let mutedRole = message.guild.roles.find(r => r.name.toLowerCase() === "muted")
+        if (!mutedRole) mutedRole = await createMutedRole(message.guild);
     }
 
     help = "Mute a user";
@@ -25,6 +26,10 @@ class MuteCommand extends Command {
         default: "unspecified"
     }]
     wip = true;
+}
+
+async function createMutedRole(guild) {
+
 }
 
 module.exports = MuteCommand;
