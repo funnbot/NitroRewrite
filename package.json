@@ -15,15 +15,16 @@
   "author": "Funnbot",
   "license": "MIT",
   "dependencies": {
-    "benchmark": "^2.1.4",
     "canvas": "github:Automattic/node-canvas",
     "chalk": "^2.3.2",
+    "cows": "^1.1.0",
     "discord.js": "github:hydrabolt/discord.js",
     "discord.js-lavalink": "github:MrJacz/discord.js-lavalink",
     "duration-js": "^4.0.0",
     "erlpack": "github:discordapp/erlpack",
     "gm": "^1.23.1",
     "html2plaintext": "^2.0.1",
+    "jimp": "^0.2.28",
     "moment": "^2.21.0",
     "node-opus": "^0.2.7",
     "request": "^2.85.0",
@@ -31,6 +32,7 @@
     "sharp": "^0.18.4",
     "snekfetch": "^3.6.4",
     "string-similarity": "^1.2.0",
-    "uws": "^8.14.1"
+    "uws": "^8.14.1",
+    "zlib-sync": "^0.1.4"
   }
 }
