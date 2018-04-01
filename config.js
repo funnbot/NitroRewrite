@@ -4,6 +4,9 @@ const PREFIX = "?"
 module.exports = {
     PREFIX,
 
+    TOKEN: AUTH.TOKEN,
+    SHARDS: AUTH.SHARDS,
+
     DisabledGroups: [],
     DisabledCommands: [],
 
