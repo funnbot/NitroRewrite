@@ -29,7 +29,9 @@ Object.defineProperties(String.prototype, {
     },
     shorten: {
         value: function(length = 2000, append = "") {
-            return this.substr(0, length - append.length) + append;
+            const sh = this.substr(0, length - append.length);
+            if (sh.length === this.length) return this;
+            else return this + append;
         }
     }
 })
