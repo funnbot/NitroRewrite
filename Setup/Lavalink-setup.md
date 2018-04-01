@@ -28,7 +28,7 @@ lavalink:
     youtubePlaylistLoadLimit: 600
 ```
 
-###Take the LAVALINK field from auth.js and put in the password
+Take the LAVALINK field from auth.js and put in the password
 
 Start with
 ```shell
