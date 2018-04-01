@@ -3,55 +3,73 @@ const { Command } = require("../../Nitro");
 class UnbanCommand extends Command {
 
     async run({ message, bot, reply, t }) {
+        const [search, reason] = message.args;
 
+        const bans = await message.guild.fetchBans();
+        const [user, err] = findMember(search, bans);
+        if (err) return reply.fail(err);
+
+        let txt = `Are you sure you want to unban the user ${user.tag}`;
+        const m = await message.channel.ask(message.author, txt);
+        const failsafe = await message.channel.collectMessage(message.author);
+        if (!failsafe) return await m.edit("**Aborted.**", { embed: null });
+        else await m.edit(`**Unbanning...**`, { embed: null });
+        try {
+            await message.guild.members.unban(user, reason);
+        } catch (e) {
+            return await m.edit("**Unban failed**");
+        }
+        await message.guild.userAction(user.id, "unban", reason);
+        await message.guild.modAction(message.author.id, "unban");
+        await m.edit(`**User unbanned (ID: ${user.id})**`);
+
+        const modlogID = await message.guild.modlog();
+        const modlog = bot.channels.get(modlogID);
+        if (modlog) modlog.createCase({
+            action: "unban",
+            user: `${user.tag} (${user.id})`,
+            mod: message.author,
+            reason
+        });
     }
 
-    help = "";
-    wip = true;
+    help = "Unban a user.";
+    userPerm = "BAN_MEMBERS";
+    args = [{
+        type: "string",
+        info: "A user or id to unban.",
+        example: "goodboinow"
+    }, {
+        type: "string",
+        info: "The reason for unbanning.",
+        example: "He is good now.",
+        default: "unspecified"
+    }]
+}
+
+function findMember(search, bans) {
+    let exactMems = bans.filter(memberFilterExact(search));
+    if (exactMems.size > 1) return [false, `${exactMems.size} bans found, please specify.`];
+    if (exactMems.size === 1) return [exactMems.first().user, null];
+
+    let mems = bans.filter(memberFilterInexact(search));
+    if (mems.size > 1) return [false, `${mems.size} bans found, please specify.`];
+    if (mems.size === 1) return [mems.first().user, null];
+
+    return [null, "No bans found with the name `" + search + "`"];
+}
+
+function memberFilterExact(search) {
+    const s = search.toLowerCase();
+    return m => s === m.user.id ||
+        s === m.user.username.toLowerCase() ||
+        s === m.user.tag.toLowerCase();
+}
+
+function memberFilterInexact(search) {
+    const s = search.toLowerCase();
+    return m => m.user.tag.toLowerCase().includes(s) ||
+        (m.nickname && m.nickname.toLowerCase().includes(s))
 }
 
 module.exports = UnbanCommand;
-
-/* const Nitro = require("../../../Nitro.js")
-
-module.exports = new Nitro.Command({
-  help: "Unban a user.",
-  example: "${p}unban @Funnbot appealed",
-  argExample: "<user> <reason>",
-  dm: false,
-  coolDown: 1,
-  botPerms: ["BAN_MEMBERS"],
-  userPerms: 1,
-  args: [],
-
-  run: async (message, bot, send) => {
-    if (!message.checkSuffix) return send("**Example: " + module.exports.example.replace("${p}", message.prefix) + "**")
-    let user = message.args[0]
-    if (!/^\d{17,19}$/.test(user)) return send("**Users can only be unbanned by ID.**")
-    let reason = message.suffixOf(1).length > 0 ? message.suffixOf(1) : false
-    let caseman = message.guild.check("caseman")
-    if (!caseman) throw new Error("CaseManager Not Initialized")
-    let cases = caseman.cases
-    cases = cases.filter(c => c.user.id === user)
-    if (!cases[0]) user = {username: "", discriminator: "", id: user, avatar: bot.user.avatar}
-    else user = {
-      username: cases[0].user.username,
-      discriminator: cases[0].user.discriminator,
-      id: cases[0].user.id,
-      avatar: cases[0].user.avatar
-    }
-    send("**Unbanning user...**").then(async msg => {
-      try {
-        await message.guild.unban(user.id)
-        let caseman = message.guild.check("caseman")
-        if (!caseman) throw new Error("CaseManager was not initialized.")
-        caseman.newCase(message.author, user, "unban", {reason: reason})
-        msg.edit("**Unban complete**")
-      } catch (err) {
-        console.log(err)
-        send("**I was unable to unban the user:** " + user.id)
-      }
-    })
-  }
-})
-*/
