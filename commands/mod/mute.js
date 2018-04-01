@@ -1,11 +1,45 @@
+const { Guild, GuildMember } = require("discord.js");
 const { Command, TIME } = require("../../Nitro");
 
 class MuteCommand extends Command {
 
-    async run ({message, bot, reply, t}) {
-        const [ user, reason ] = message.args;
-        let mutedRole = message.guild.roles.find(r => r.name.toLowerCase() === "muted")
+    async run({ message, bot, reply, t }) {
+        /** @type {Guild} */
+        const guild = message.guild
+        /** @type {GuildMember} */
+        const member = message.args[0];
+        /** @type {String} */
+        const reason = message.args[1];
+
+
+        let mutedRole = guild.roles.find(r => r.name.toLowerCase() === "muted")
         if (!mutedRole) mutedRole = await createMutedRole(message.guild);
+
+        try {
+            await member.roles.add(mutedRole, "nitro mute");
+        } catch {
+            return reply.fail("Failed to mute user.");
+        }
+        await guild.userAction(member.user.id, "mute", reason);
+        await guild.modAction(message.author.id, "mute");
+        await reply.edit("Muted the user:", member.user.tag);
+
+        bot.timers.add({
+            id: member.user.id,
+            time: duration.milliseconds(),
+            type: "mute",
+            guild: message.guild.id
+        })
+
+        const modlogID = await guild.modlog();
+        const modlog = guild.channels.get(modlogID);
+        if (modlog) modlog.createCase({
+            action: "mute",
+            user: `${member.user.tag} (${member.user.id})`,
+            mod: message.author,
+            reason,
+            length: duration.toString()
+        })
     }
 
     help = "Mute a user";
@@ -28,8 +62,15 @@ class MuteCommand extends Command {
     wip = true;
 }
 
+/**
+ * @param {Guild} guild 
+ */
 async function createMutedRole(guild) {
-
+    const role = await guild.roles.create({ name: "Muted", permissions: { SEND_MESSAGES: false } }, "nitro muted role");
+    for (let channel in guild.channels.values()) {
+        await channel.updateOverwrite(role, { SEND_MESSAGES: false }, "nitro muted role");
+    }
+    return role;2
 }
 
 module.exports = MuteCommand;

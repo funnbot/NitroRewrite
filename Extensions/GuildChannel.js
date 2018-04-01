@@ -15,7 +15,6 @@ class GuildChannel extends Extension {
     /**
      * Create a case
      * @param {caseData} caseData 
-     * @param {GuildChannel} modlog 
      * @returns {Promise<Message>}
      */
     async createCase(caseData) {
