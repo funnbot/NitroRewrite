@@ -6,3 +6,4 @@ node_modules/
 Lavalink/
 .idea/
 config.js
+.vscode/

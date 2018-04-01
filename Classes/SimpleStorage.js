@@ -5,9 +5,9 @@
  */
 class SimpleStorage {
     constructor(client, id, type) {
-        this.client = client;
         this.id = id
-        this.type = type
+
+        this.items = client.SimpleStorage[type];
     }
 
     /**
@@ -19,8 +19,8 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     set(key, value = true) {
-        if (!this.sc[key]) this.sc[key] = {}
-        return this.sc[key][this.id] = value;
+        if (!this.items[key]) this.items[key] = {}
+        return this.items[key][this.id] = value;
     }
 
     /**
@@ -31,7 +31,7 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     get(key) {
-        return this.sc[key] ? this.sc[key][this.id] : undefined;
+        return this.items[key] ? this.items[key][this.id] : undefined;
     }
 
     /**
@@ -41,7 +41,7 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     exists(key) {
-        return this.sc[key] ? this.sc[key][this.id] !== undefined : !1;
+        return this.items[key] ? this.items[key][this.id] !== undefined : !1;
     }
 
     /**
@@ -52,8 +52,8 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     delete(key) {
-        let bool = this.sc[key] && this.sc[key][this.id];
-        this.sc[key] && (this.sc[key][this.id] = undefined);
+        let bool = this.items[key] && this.items[key][this.id];
+        this.items[key] && (this.items[key][this.id] = undefined);
         return bool;
     }
 
@@ -65,17 +65,9 @@ class SimpleStorage {
      * @memberof SimpleStorage
      */
     deleteAll(key) {
-        let bool = !!this.sc[key];
-        delete this.sc[key];
+        let bool = !!this.items[key];
+        delete this.items[key];
         return bool;
-    }
-
-    /**
-     * Shortcut 
-     * @private
-     */
-    get sc() {
-        return this.client.SimpleStorage[this.type];
     }
 }
 
