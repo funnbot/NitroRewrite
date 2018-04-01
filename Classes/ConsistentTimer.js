@@ -26,7 +26,7 @@ class ConsistentTimer {
      * @property {String} id
      * @property {Number} time
      * @property {String} type
-     * @property {String} [guild]
+     * @property {String} guild
      * @property {String} [mute]
      * @property {String} [msg]
      */
@@ -45,7 +45,7 @@ class ConsistentTimer {
     }
 
     tempban(timer) {
-        const g = this.bot.guilds.get(timer.time);
+        const g = this.bot.guilds.get(timer.guild);
         if (!g) return;
         g.members.unban(timer.id, "tempban");
     }
@@ -61,6 +61,13 @@ class ConsistentTimer {
     async remind(timer) {
         const mem = await this.bot.users.fetch(timer.id)
         mem.send("Here's your reminder: " + timer.msg).catch(logger.debug);
+    }
+
+    // TODO: make member join check this list to add muted.
+    getMuted(guildID) {
+        let timers = this.timerData[guildID];
+        if (!timers) return [];
+        return timers.filter(t => t.type === "mute");
     }
 }
 

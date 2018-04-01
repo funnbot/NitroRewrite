@@ -21,7 +21,7 @@ class TempBanCommand extends Command {
         await message.guild.modAction(message.author.id, "tempban");
         await m.edit("**Tempban complete**");
 
-        bot.timers.add({
+        bot.conTimers.add({
             id: member.user.id,
             time: duration.milliseconds(),
             type: "tempban",

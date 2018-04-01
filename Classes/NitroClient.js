@@ -7,7 +7,7 @@ const EventEmitter = require("events");
 // Framework
 const Discord = require("discord.js");
 const CommandLoader = require("./CommandLoader");
-const ConsistenTimer = require("./ConsistentTimer");
+const ConsistentTimer = require("./ConsistentTimer");
 const Database = require("./Database");
 const MusicPlayer = require("./MusicPlayer");
 const Enum = require("./Enum");
@@ -41,7 +41,7 @@ class NitroClient extends Discord.Client {
         this.modlog = new EventEmitter();
         this.CommandLoader = new CommandLoader();
         this.Embed = Discord.MessageEmbed;
-        this.timers = new ConsistenTimer(this);
+        this.conTimers = new ConsistentTimer(this);
 
         this.SimpleStorage = {
             guild: {},
@@ -77,6 +77,7 @@ class NitroClient extends Discord.Client {
 
     async init() {
         await this.db.formatDb();
+        await this.conTimers.restartTimers();
         this.commands = this.CommandLoader.load()
         this.login(config.TOKEN);
     }

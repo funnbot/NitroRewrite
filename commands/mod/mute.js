@@ -1,16 +1,19 @@
 const { Guild, GuildMember } = require("discord.js");
+const Duration = require("duration-js");
 const { Command, TIME } = require("../../Nitro");
 
 class MuteCommand extends Command {
+
 
     async run({ message, bot, reply, t }) {
         /** @type {Guild} */
         const guild = message.guild
         /** @type {GuildMember} */
         const member = message.args[0];
+        /** @type {Duration} */
+        const duration = message.args[1];
         /** @type {String} */
-        const reason = message.args[1];
-
+        const reason = message.args[2];
 
         let mutedRole = guild.roles.find(r => r.name.toLowerCase() === "muted")
         if (!mutedRole) mutedRole = await createMutedRole(message.guild);
@@ -22,13 +25,14 @@ class MuteCommand extends Command {
         }
         await guild.userAction(member.user.id, "mute", reason);
         await guild.modAction(message.author.id, "mute");
-        await reply.edit("Muted the user:", member.user.tag);
+        await reply.succ("Muted the user: ", member.user.tag);
 
-        bot.timers.add({
+        bot.conTimers.add({
             id: member.user.id,
             time: duration.milliseconds(),
             type: "mute",
-            guild: message.guild.id
+            guild: message.guild.id,
+            mute: mutedRole.id
         })
 
         const modlogID = await guild.modlog();
@@ -51,7 +55,7 @@ class MuteCommand extends Command {
         type: "duration",
         info: "The length of the mute.",
         example: "2h30m",
-        min: TIME.hour,
+        min: TIME.min,
         max: TIME.day * 7
     }, {
         type: "string",

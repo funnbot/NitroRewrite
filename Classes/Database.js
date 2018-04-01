@@ -13,7 +13,9 @@ class Database {
 
     async get(db, id, item) {
         let def = ITEMS[db][item];
-        if (typeof def === "object") def = Object.assign({}, def);
+        if (typeof2(def) === "object") def = Object.assign({}, def);
+        else if (typeof2(def) === "array") def = Object.assign([], def);
+        
         if (!testInput(db, id, item)) return def;
         let data = {}
         try {
@@ -53,7 +55,7 @@ class Database {
         if (!testInput(db)) return 0;
         try {
             var data = await r.table(db).filter(predicate);
-        } catch(e) {
+        } catch (e) {
             logger.db(e);
         }
         return data;
@@ -82,17 +84,20 @@ function ExtendDatabaseClass(target, name) {
     Object.defineProperties(target.prototype, {
         getItem: {
             value: function(item) {
-                return this.client.db.get(name, this.id, item);
+                const [client, id] = [this.client || this, this.id || "1"];
+                return client.db.get(name, id, item);
             }
         },
         setItem: {
             value: function(item, value) {
-                return this.client.db.set(name, this.id, item, value);
+                const [client, id] = [this.client || this, this.id || "1"];
+                return client.db.set(name, id, item, value);
             }
         },
         cache: {
             get: function() {
-                if (!this._Storage) this._Storage = new Storage(this.client, this.id, name);
+                const [client, id] = [this.client || this, this.id || "1"];
+                if (!this._Storage) this._Storage = new Storage(client, id, name);
                 return this._Storage;
             }
         },
