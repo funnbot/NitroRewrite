@@ -24,6 +24,9 @@ const Guild = require("../Extensions/Guild");
 const User = require("../Extensions/User");
 require("../Extensions/NativeExtensions.js");
 
+ShardClientUtil.extend(Discord.ShardClientUtil);
+MessageEmbed.extend(Discord.MessageEmbed);
+
 class NitroClient extends Discord.Client {
 
     constructor(...args) {
