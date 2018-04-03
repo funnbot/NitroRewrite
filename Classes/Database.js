@@ -11,52 +11,52 @@ class Database {
         ExtendDatabaseClass(Discord.Client, "system");
     }
 
-    async get(db, id, item) {
-        let def = ITEMS[db][item];
+    async get(table, id, item) {
+        let def = ITEMS[table][item];
         if (typeof2(def) === "object") def = Object.assign({}, def);
         else if (typeof2(def) === "array") def = Object.assign([], def);
-        
-        if (!testInput(db, id, item)) return def;
+
+        if (!testInput(table, id, item)) return def;
         let data = {}
         try {
-            data = (await r.table(db).get(id)) || {};
+            data = (await r.table(table).get(id)) || {};
         } catch (e) {
             logger.db(e);
         }
         return data[item] || def;
     }
 
-    async set(db, id, item, value) {
-        if (!testInput(db, id, item, value)) return 0;
-        const def = ITEMS[db][item];
+    async set(table, id, item, value) {
+        if (!testInput(table, id, item, value)) return 0;
+        const def = ITEMS[table][item];
         try {
             if (isDefault(value, def)) {
-                const data = await r.table(db).get(id);
+                const data = await r.table(table).get(id);
                 if (!data) return value;
-                const wo = await r.table(db).get(id).without(item);
-                await r.table(db).insert(wo, { conflict: "replace" })
-            } else await r.table(db).insert({ id, [item]: value }, { conflict: "update" });
+                const wo = await r.table(table).get(id).without(item);
+                await r.table(table).insert(wo, { conflict: "replace" })
+            } else await r.table(table).insert({ id, [item]: value }, { conflict: "update" });
         } catch (e) {
             logger.db(e);
         }
         return value;
     }
 
-    async deleteId(db, id) {
-        if (!testInput(db, id)) return 0;
+    async deleteId(table, id) {
+        if (!testInput(table, id)) return 0;
         try {
-            await r.table(db).get(id).delete();
+            await r.table(table).get(id).delete();
         } catch (e) {
             logger.db(e);
         }
     }
 
-    async filter(db, predicate) {
-        if (!testInput(db)) return 0;
+    async filter(table, predicate) {
+        if (!testInput(table)) return 0;
         try {
-            var data = await r.table(db).filter(predicate);
+            var data = await r.table(table).filter(predicate);
         } catch (e) {
-            logger.db(e);
+            logger.table(e);
         }
         return data;
     }
