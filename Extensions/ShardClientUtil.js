@@ -12,3 +12,4 @@ class ShardClientUtil extends Discord.ShardClientUtil {
     }
 }
 
+// extend(ShardClientUtil);

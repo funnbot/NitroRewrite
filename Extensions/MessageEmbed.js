@@ -64,4 +64,4 @@ ${fields}
 
 }
 
-extend(MessageEmbed);
+// extend(MessageEmbed);
