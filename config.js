@@ -14,6 +14,7 @@ module.exports = {
         "guild",
         "user",
         "channel",
+        "bank",
         "system"
     ],
 
