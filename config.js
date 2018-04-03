@@ -14,7 +14,6 @@ module.exports = {
         "guild",
         "user",
         "channel",
-        "bank",
         "system"
     ],
 
@@ -46,10 +45,6 @@ module.exports = {
         },
         channel: {
             irc: false
-        },
-        bank: {
-            balance: 0,
-            transactions: []
         },
         system: {
             timers: []
