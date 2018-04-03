@@ -47,6 +47,10 @@ module.exports = {
         channel: {
             irc: false
         },
+        bank: {
+            balance: 0,
+            transactions: []
+        },
         system: {
             timers: []
         }

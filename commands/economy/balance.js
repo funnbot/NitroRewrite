@@ -5,15 +5,12 @@ class BalanceCommand extends Command {
         const commands = bot.commands;
         const groups = bot.CommandLoader.groups;
         const requesterID = message.author.id;
-        var balance = 0;
+        var balance = await bot.db.get("bank",requesterID,"balance")
         const embed = bot.embed
             .setTitle(":atm: "+message.member.nickname+" :atm:")
             .nitroColor()
+
         embed.addField("Balance: "+balance.toFixed(2)+" :dollar:", "Account #: "+requesterID);
-        embed.addField(bot.db.get("bank",requesterID,"balance"))
-        //embed.addField(bot.db.get("Nitro",requesterID,"bank"))
-        //embed.addField(bot.db.r.dbList())
-        //embed.addField(JSON.stringify(bot.db))
         return await reply(embed);
     }
 
