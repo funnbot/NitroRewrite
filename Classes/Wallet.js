@@ -37,21 +37,6 @@ class Wallet {
         const bal = await this.user.balance();
         return bal >= amount;
     }
-
-    /**
-     * Get the balance.
-     */
-    get() {
-        return this.user.balance();
-    }
-
-    /**
-     * Set the balance.
-     * @param {Number} amount 
-     */
-    set(amount = 0) {
-        return this.user.balance(amount);
-    }
 }
 
 module.exports = Wallet;
