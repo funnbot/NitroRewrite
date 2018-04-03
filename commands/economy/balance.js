@@ -12,7 +12,7 @@ class BalanceCommand extends Command {
             .setTitle(":atm: "+message.member.nickname+" :atm:")
             .nitroColor()
 
-        embed.addField("Balance: "+balance.toFixed(2)+" :dollar:", "Account #: "+requesterID);
+        embed.addField("Balance: "+balance.toFixed(2)+" "+CUR.code, "Account #: "+requesterID);
         return await reply(embed);
     }
 
