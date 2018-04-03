@@ -1,11 +1,13 @@
 const { Command } = require("../../Nitro");
+const Bank = require("../../Extensions/Bank");
 
 class BalanceCommand extends Command {
     async run({ message, bot, reply, t }) {
         const commands = bot.commands;
         const groups = bot.CommandLoader.groups;
         const requesterID = message.author.id;
-        var balance = await bot.db.get("bank",requesterID,"balance")
+        const bank = new Bank(message.author);
+        var balance = await bank.balance();
         const embed = bot.embed
             .setTitle(":atm: "+message.member.nickname+" :atm:")
             .nitroColor()

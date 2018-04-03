@@ -41,7 +41,9 @@ module.exports = {
             blacklist: {}
         },
         user: {
-            trivia: 0
+            trivia: 0,
+            balance: 0,
+            transactions: []
         },
         channel: {
             irc: false

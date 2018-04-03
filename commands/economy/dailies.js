@@ -1,4 +1,5 @@
 const { Command } = require("../../Nitro");
+const Bank = require("../../Extensions/Bank");
 
 class DailiesCommand extends Command {
     async run({ message, bot, reply, t }) {
@@ -6,16 +7,18 @@ class DailiesCommand extends Command {
         const groups = bot.CommandLoader.groups;
         const requesterID = message.author.id;
         const doleAmount = 100;
-        var balance = await bot.db.get("bank",requesterID,"balance");
-        var transactions = await bot.db.get("bank",requesterID,"transactions")
-        balance = balance + doleAmount;
+        const bank = new Bank(message.author);
+        //var transactions = await message.author.transactions();
+        //balance = balance + doleAmount;
         const embed = bot.embed
             .setTitle(":atm: "+message.member.nickname+" :atm:")
             .nitroColor()
-        transactions.push({"amount":doleAmount,"reason":"Dailies","transactAccount":0,"timestamp":Date.now()})
-        embed.addField("Here's a free 100.00 :dollar:", "New Balance: "+balance.toFixed(2)+" :dollar:");
-        bot.db.set("bank",requesterID,"balance",balance);
-        bot.db.set("bank",requesterID,"transactions",transactions);
+        //transactions.push({"amount":doleAmount,"reason":"Dailies","transactAccount":0,"timestamp":Date.now()})
+        await bank.credit(doleAmount);
+        var balance = await bank.balance();
+        embed.addField("Here's a free "+doleAmount.toFixed(2)+" :dollar:", "New Balance: "+balance.toFixed(2)+" :dollar:");
+        //await message.author.balance(balance);
+        //await message.author.transactions(transactions);
         return await reply(embed);
     }
 
