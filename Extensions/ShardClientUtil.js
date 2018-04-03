@@ -1,6 +1,7 @@
-const Extension = require("./Extension.js");
+const extend = require("./extend.js");
+const Discord = require("discord.js");
 
-class ShardClientUtil extends Extension {
+class ShardClientUtil extends Discord.ShardClientUtil {
     async clientValuesReduced(prop) {
         try {
             const values = await this.fetchClientValues(prop);
@@ -11,4 +12,3 @@ class ShardClientUtil extends Extension {
     }
 }
 
-module.exports = ShardClientUtil;

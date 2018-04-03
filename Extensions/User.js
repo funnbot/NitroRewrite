@@ -1,7 +1,15 @@
 const config = require("../config");
-const Extension = require("./Extension");
+const extend = require("./extend");
+const Discord = require("discord.js");
 
-class User extends Extension {
+class User extends Discord.User{
+
+    constructor(...args) {
+        super(...args);
+        this.cool = 1;
+        
+    }
+
     checkPermission(channel, ...perms) {
         for (let i = 0; i < perms.length; i++) {
             if (!this._checkPerm(channel, perms[i])) return false;
@@ -18,4 +26,4 @@ class User extends Extension {
     }
 }
 
-module.exports = User;
+extend(User);

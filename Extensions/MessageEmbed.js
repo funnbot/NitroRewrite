@@ -1,8 +1,9 @@
-const Extension = require("./Extension.js")
+const extend = require("./extend.js");
+const Discord = require("Discord.js");
 const { COLORS: { NITRO, ACTION, MEMBERLOG } } = require("../config.js")
 const moment = require("moment");
 
-class MessageEmbed extends Extension {
+class MessageEmbed extends Discord.MessageEmbed {
 
     sendTo(channel) {
         return channel.send(this);
@@ -63,4 +64,4 @@ ${fields}
 
 }
 
-module.exports = MessageEmbed;
+extend(MessageEmbed);

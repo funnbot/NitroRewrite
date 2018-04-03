@@ -24,14 +24,6 @@ const Guild = require("../Extensions/Guild");
 const User = require("../Extensions/User");
 require("../Extensions/NativeExtensions.js");
 
-Message.extend(Discord.Message);
-MessageEmbed.extend(Discord.MessageEmbed);
-ShardClientUtil.extend(Discord.ShardClientUtil);
-GuildMember.extend(Discord.GuildMember);
-GuildChannel.extend(Discord.GuildChannel);
-Guild.extend(Discord.Guild);
-User.extend(Discord.User);
-
 class NitroClient extends Discord.Client {
 
     constructor(...args) {

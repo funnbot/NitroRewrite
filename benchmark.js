@@ -1,16 +1,60 @@
 const Benchmark = require("benchmark");
 const suite = new Benchmark.Suite();
 
-const testArray = new Array(1000).fill(0).map((_, i) => i);
+const a = false,
+    b = false,
+    c = false,
+    d = false,
+    e = false,
+    f = false,
+    g = false;
 
-Array.prototype.loop = function(callback) {
-        let l = this.length,
-            array = this,
-            i = 0;
-        for (; i < l; i++) {
-            callback(array[i]);
-        }
-}
+
+suite.add("old all false", function() {
+        if (!a && !b && !c && !d && !e && !f && !g) return;
+        else return;
+    })
+    .add("new all false", function() {
+        if (!a * !b * !c * !d * !e * !f * !g) return;
+        else return;
+    })
+    .add("old one false", function() {
+        if (!a || !b || !c || !d || !e || !f || !g) return;
+        else return;
+    })
+    .add("new one false", function() {
+        if (!a + !b + !c + !d + !e + !f + !g) return;
+        else return;
+    })
+    .add("old all true", function() {
+        if (a && b && c && d && e && f && g) return;
+        else return;
+    })
+    .add("new all true", function() {
+        if (!!a * !!b * !!c * !!d * !!e * !!f * !!g) return;
+        else return;
+    })
+    .add("old one true", function() {
+        if (a || b || c || d || e || f || g) return;
+        else return;
+    })
+    .add("new one true", function() {
+        if (!!a + !!b + !!c + !!d + !!e + !!f + !!g) return;
+        else return;
+    })
+
+    .on("cycle", function(event) {
+        console.log(String(event.target));
+    })
+
+    .on("complete", function() {
+        console.log("Fastest is: " + this.filter("fastest").map("name"));
+    })
+
+    .run();
+
+/*
+const testArray = new Array(1000).fill(0).map((_, i) => i);
 
 suite.add("forEach", function() {
         let sum = 0;
@@ -62,14 +106,4 @@ suite.add("forEach", function() {
             sum = sum + elem;
             i++;
         }
-    })
-
-    .on("cycle", function(event) {
-        console.log(String(event.target));
-    })
-
-    .on("complete", function() {
-        console.log("Fastest is: " + this.filter("fastest").map("name"));
-    })
-
-    .run();
+    })*/

@@ -11,4 +11,5 @@ module.exports = bot;
     require("./Events/member.js");
     require("./Events/message.js")
     require("./Events/serverlog.js");
+    require("./Events/dbotsVoting.js");
 })()

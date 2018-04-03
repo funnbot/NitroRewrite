@@ -1,8 +1,8 @@
-const Extension = require("./Extension.js");
+const extend = require("./extend.js");
 const Discord = require("discord.js");
 const moment = require("moment");
 
-class Guild extends Extension {
+class Guild extends Discord.Guild {
     /**
      * Get or change a user's balance
      * @param {String} id a user's id 
@@ -55,4 +55,4 @@ class Guild extends Extension {
     }
 }
 
-module.exports = Guild;
+extend(Guild);

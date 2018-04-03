@@ -1,9 +1,10 @@
-const Extension = require("./Extension")
+const extend = require("./extend.js");
+const Discord = require("discord.js");
 const { PREFIX } = require("../config.js");
 
 const Locale = new(require("../Classes/Locale/index.js"));
 
-class Message extends Extension {
+class Message extends Discord.Message {
 
     async SetupExtension() {
         this.content = this.cleanInput(this.content);
@@ -201,4 +202,4 @@ class Message extends Extension {
 
 }
 
-module.exports = Message;
+extend(Message);
