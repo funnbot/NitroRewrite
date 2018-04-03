@@ -16,7 +16,7 @@ class DailiesCommand extends Command {
         //transactions.push({"amount":doleAmount,"reason":"Dailies","transactAccount":0,"timestamp":Date.now()})
         await bank.credit(doleAmount);
         var balance = await bank.balance();
-        embed.addField("Here's a free "+doleAmount.toFixed(2)+" :dollar:", "New Balance: "+balance.toFixed(2)+" :dollar:");
+        embed.addField("Here's a free "+doleAmount.toFixed(2)+" "+CUR.code, "New Balance: "+balance.toFixed(2)+" :dollar:");
         //await message.author.balance(balance);
         //await message.author.transactions(transactions);
         return await reply(embed);
