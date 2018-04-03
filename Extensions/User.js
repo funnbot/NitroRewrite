@@ -1,13 +1,13 @@
 const config = require("../config");
 const extend = require("./extend");
 const Discord = require("discord.js");
+const Wallet = require("../Classes/Wallet.js");
 
 class User extends Discord.User{
 
     constructor(...args) {
         super(...args);
-        this.cool = 1;
-        
+        this.wallet = new Wallet(this);
     }
 
     checkPermission(channel, ...perms) {

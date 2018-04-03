@@ -4,7 +4,7 @@
   "description": "A Discord Bot",
   "main": "start.js",
   "scripts": {
-    "start": "node -harmony start.js",
+    "start": "node --harmony start.js",
     "shard": "forever shard.js --experimental-modules "
   },
   "keywords": [

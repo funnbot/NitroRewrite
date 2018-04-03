@@ -1,9 +1,8 @@
 const { Command } = require("../../Nitro");
-const Bank = require("../../Extensions/Bank");
 
 class DailiesCommand extends Command {
     async run({ message, bot, reply, t }) {
-        const commands = bot.commands;
+        /*const commands = bot.commands;
         const groups = bot.CommandLoader.groups;
         const requesterID = message.author.id;
         const doleAmount = 100;
@@ -19,7 +18,9 @@ class DailiesCommand extends Command {
         embed.addField("Here's a free "+doleAmount.toFixed(2)+" "+CUR.code, "New Balance: "+balance.toFixed(2)+" :dollar:");
         //await message.author.balance(balance);
         //await message.author.transactions(transactions);
-        return await reply(embed);
+        return await reply(embed);*/
+
+        return reply("You can vote at blah every 24 hours to recieve daily rewards.");
     }
 
     help = "Free Money";

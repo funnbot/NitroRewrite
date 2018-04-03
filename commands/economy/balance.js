@@ -1,5 +1,4 @@
 const { Command } = require("../../Nitro");
-const Bank = require("../../Extensions/Bank");
 
 class BalanceCommand extends Command {
     async run({ message, bot, reply, t }) {
@@ -17,9 +16,11 @@ class BalanceCommand extends Command {
     }
 
     help = "Shows your current balance";
-    usage = "{}balance or {}balance <command>";
-    dm = false;
-    alias = ["money"];
+    // usage = "{}balance or {}balance <command>"; Usage is deprecated
+    alias = ["money", "bal"];
+    arg = {
+        type: ""
+    }
 }
 
 module.exports = BalanceCommand;
