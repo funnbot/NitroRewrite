@@ -4,7 +4,8 @@ class BalanceCommand extends Command {
     async run({ message, bot, reply, t }) {
         const [user] = message.args;
         const bal = await user.balance();
-        return reply(`You have ${message.guild.formatBal(bal)}`);
+        //console.log(bal)
+        return reply("You have "+message.guild.formatBal(bal));
     }
 
     help = "Shows your current balance";
