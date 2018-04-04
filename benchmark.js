@@ -1,13 +1,39 @@
 const Benchmark = require("benchmark");
 const suite = new Benchmark.Suite();
 
-const a = false,
-    b = false,
-    c = false,
-    d = false,
-    e = false,
-    f = false,
-    g = false;
+const final = {};
+
+suite.add("destructure", function() {
+        let testObj = { a: 1, b: 2, c: 3, d: 4, e: 5, c: 6, t: 6, o: 9, aa: 1, ba: 2, ca: 3, ad: 4, ea: 5, ac: 6, at: 6, oas: 9, asa: 1, bad: 2, csa: 3, add: 4, eas: 5, adc: 6, ata: 6, oad: 9 };
+        let { d: omit, ...res } = testObj;
+        return res;
+    })
+
+    .add("delete", function() {
+        let testObj = { a: 1, b: 2, c: 3, d: 4, e: 5, c: 6, t: 6, o: 9, aa: 1, ba: 2, ca: 3, ad: 4, ea: 5, ac: 6, at: 6, oas: 9, asa: 1, bad: 2, csa: 3, add: 4, eas: 5, adc: 6, ata: 6, oad: 9 };
+        delete testObj.d;
+        return testObj;
+    })
+
+    .add("new without", function() {
+        let testObj = { a: 1, b: 2, c: 3, d: 4, e: 5, c: 6, t: 6, o: 9, aa: 1, ba: 2, ca: 3, ad: 4, ea: 5, ac: 6, at: 6, oas: 9, asa: 1, bad: 2, csa: 3, add: 4, eas: 5, adc: 6, ata: 6, oad: 9 };
+        let res = {};
+        for (let key in testObj) {
+            if (key !== "d") res[key] = testObj[key];
+        }
+        return res;
+    })
+
+    .on("cycle", function(event) {
+        console.log(String(event.target));
+    })
+
+    .on("complete", function() {
+        console.log("Fastest is: " + this.filter("fastest").map("name"));
+    })
+
+    .run();
+/* 
 
 suite.add("string smol", function() {
     const t1 = "294875209348572093847520938475209345720934570298475";
@@ -53,7 +79,7 @@ suite.add("string smol", function() {
     console.log("Fastest is: " + this.filter("fastest").map("name"));
 })
 
-.run();
+.run();*/
 
 /*suite.add("old all false", function() {
         if (!a && !b && !c && !d && !e && !f && !g) return;
