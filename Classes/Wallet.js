@@ -39,10 +39,7 @@ class Wallet {
     }
 
     async balance() {
-         var promise = this.user.balance().then(function(bal) {
-             return(bal);
-         });
-         return await promise;
+         return this.user.balance();
     }
 }
 
