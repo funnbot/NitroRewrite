@@ -14,6 +14,10 @@ class Guild extends Discord.Guild {
         return this.userData(data);
     }
 
+    async formatBal(amount) {
+        return `$${amount}:money:`;
+    }
+
     async triviaWin(id) {
         let userData = this.getUserData(id);
         if (!user.trivia) user.trivia = 0;

@@ -32,13 +32,13 @@ module.exports = {
             requserperm: false,
             modlog: false,
             serverlog: false,
-            disabledEvents: {},
-            filters: {},
-            adblock: false,
-            zalgo: false,
-            filterexempt: {},
-            ar: false,
-            blacklist: {}
+            disabledEvents: {}, // Disabled modlog events
+            filters: {}, // The filters for messages
+            adblock: false, // Block advert messages
+            zalgo: false, // Block zalgo messages
+            filterexempt: {}, // Ids exempt from the filter
+            ar: false, // The auto role 
+            blacklist: {} // Ids that are blocked from the bot
         },
         user: {
             trivia: 0,
