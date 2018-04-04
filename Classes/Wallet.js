@@ -5,7 +5,7 @@ const { User } = require("discord.js")
  */
 class Wallet {
     /**
-     * @param {User} user 
+     * @param {User} user
      */
     constructor(user) {
         /** @type {User} */
@@ -14,7 +14,7 @@ class Wallet {
 
     /**
      * Add to the wallet.
-     * @param {Number} amount 
+     * @param {Number} amount
      */
     async add(amount = 0) {
         const bal = await this.user.balance();
@@ -23,19 +23,23 @@ class Wallet {
 
     /**
      * Subtract from the wallet.
-     * @param {Number} amount   
+     * @param {Number} amount
      */
     sub(amount = 0) {
         return this.add(-amount);
     }
 
     /**
-     * @param {number} [amount=0] 
+     * @param {number} [amount=0]
      * @returns {Boolean}
      */
     async hasEnough(amount = 0) {
         const bal = await this.user.balance();
         return bal >= amount;
+    }
+
+    async balance() {
+         return this.user.balance();
     }
 }
 
