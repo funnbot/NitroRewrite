@@ -39,7 +39,7 @@ class Wallet {
     }
 
     async balance() {
-         return this.user.balance();
+        return await this.user.balance();
     }
 }
 
