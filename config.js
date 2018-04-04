@@ -37,19 +37,20 @@ module.exports = {
             adblock: false, // Block advert messages
             zalgo: false, // Block zalgo messages
             filterexempt: {}, // Ids exempt from the filter
-            ar: false, // The auto role 
+            ar: false, // The auto role
             blacklist: {} // Ids that are blocked from the bot
         },
         user: {
             trivia: 0,
             balance: 0,
+            stock: {}
         },
         channel: {
             irc: false
         },
         system: {
             timers: []
-        }
+        },
     },
 
     LAVALINK_NODES: [

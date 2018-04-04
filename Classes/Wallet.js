@@ -37,7 +37,6 @@ class Wallet {
         const bal = await this.user.balance();
         return bal >= amount;
     }
-        
     // No default for getter.
     balance(amount) {
          return this.user.balance(amount);
