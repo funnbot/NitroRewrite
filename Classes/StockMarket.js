@@ -1,6 +1,7 @@
-const bot = require("./bot.js")
-const { STOCKS } = require("../../config.js")
-const Nitro = require("../../Nitro.js")
+const bot = require("../bot.js")
+const { STOCKS } = require("../config.js")
+const Nitro = require("../Nitro.js")
+const Wallet = require("./Wallet")
 
 module.exports = class StockMarket {
     constructor() {
@@ -13,92 +14,77 @@ module.exports = class StockMarket {
 
     /**
      * Sell a stock
-     * 
-     * @param {Object} guild 
+     *
+     * @param {Object} guild
      * @param {Object} member
-     * @param {String} type 
-     * @param {Number} am 
+     * @param {String} type
+     * @param {Number} am
      * @returns {String|Void}
      */
-    sell(guild, member, type, am) {
+    async sell(member, type, am) {
+        const wallet = new Wallet(member);
+        let key = STOCKS[type].key;
         let s = this.ms[type] || "Alfred"
-        let price = this.stocks[s].price * am
-        let stock = this._getOwned(guild, member)
-        if (!stock[type] || am > stock[type]) return "You do not own these stocks."
+        let individualPrice = this.stocks[s].price;
+        let price = individualPrice * am;
+        let stock = await this._getOwned(member)
+        if (!stock[type] || am > stock[type]) return false;
         stock[type] = stock[type] - am
         if (stock[type] === 0) delete stock[type]
-        member.addBalance(price)
-        this._setOwned(guild, member, stock)
+        wallet.add(price)
+        this._setOwned(member, stock)
+        return {"key":key,"val":individualPrice,"cost":price,"qty":am};
     }
 
     /**
      * Buy a stock
-     * 
-     * @param {Object} guild 
+     *
+     * @param {Object} guild
      * @param {Object} member
-     * @param {String} type 
-     * @param {Number} am 
+     * @param {String} type
+     * @param {Number} am
      * @returns {String|Void}
      */
-    buy(guild, member, type, am) {
-        let bal = member.balance
+    async buy(member, type, am) {
+        const wallet = new Wallet(member);
+        let key = STOCKS[type].key;
+        let bal = await wallet.balance()
         let s = this.ms[type] || "Alfred"
-        let price = this.stocks[s].price * am
-        let stock = this._getOwned(guild, member)
-        if (price > bal) return "You lack the required funds."
+        let individualPrice = this.stocks[s].price;
+        let price = individualPrice * am;
+        let stock = await this._getOwned(member)
+        if (price > bal) return false
         if (!stock[type]) stock[type] = am
         else stock[type] = stock[type] + am
-        member.removeBalance(price)
-        this._setOwned(guild, member, stock)
+        wallet.sub(price)
+        this._setOwned(member, stock)
+        return {"key":key,"val":individualPrice,"cost":price,"qty":am};
     }
 
     /**
      * Get a list of stock prices
-     * 
+     *
      * @param {Object} member
-     * @param {Object} user 
+     * @param {Object} user
      * @returns {Array<String>}
      */
-    createList(guild, member) {
-        let owned = this._getOwned(guild, member)
-        let text = ["  Company  (Key): Price   - Shift [Owned] ", "=".repeat(40)]
-        this._for((name, value) => {
-            let company = this._sfill(name, this._litem(Object.keys(this.stocks)))
-            let key = value.key
-            let price = this._sfill(Nitro.util.formatBal(value.price, true), 7)
-            let diff = value.previous ? Nitro.util.formatBal(value.price - value.first, true, true) : 0
-            let diffCol = diff > 0 ? "+" : diff < 0 ? "-" : "="
-            let own = owned[value.key] || 0
-            diff <= 0 || (diff = "+" + diff)
-            text.push(`${diffCol} ${company} (${key}): ${price} - ${diff} [${own}]`)
-        })
-        return text
+    async createList(member) {
+        return await this._getOwned(member);
     }
 
-    _getOwned(guild, member) {
-        let users = guild.get("Economy", "users")
-        let id = Nitro.util.parseID(member.user)
-        let u = users[id]
-        if (!u) u = {}
-        if (!u.stock) u.stock = {}
-        return u.stock
+    async _getOwned(member) {
+        return member.stock()
     }
 
-    _setOwned(guild, member, stock) {
-        let users = guild.get("Economy", "users")
-        let id = Nitro.util.parseID(member.user)
-        let u = users[id]
-        if (!u) u = {}
-        u.stock = stock
-        users[id] = u
-        guild.set("Economy", "users", users)
+    async _setOwned(member, stock) {
+        member.stock(stock)
     }
 
     _adjustWorth() {
         this._map((name, value) => {
-            let am = Nitro.util.round100(Math.random() * 2) + -1
+            let am = (((Math.random() * 2) -1) * 0.00001) * 1000
             value.previous = value.price
-            value.price = value.price - am > 0 ? value.price - am : 0
+            value.price = value.price + am > 0 ? value.price + am : 0
             return value
         })
     }
@@ -114,7 +100,8 @@ module.exports = class StockMarket {
 
     _loop() {
         this._adjustWorth()
-        setTimeout(() => this._loop(), 36e5) // 1 hour
+        //setTimeout(() => this._loop(), 36e5) // 1 hour
+        setTimeout(() => this._loop(), 1000) // 1 second
     }
 
     _genMappedStocks() {

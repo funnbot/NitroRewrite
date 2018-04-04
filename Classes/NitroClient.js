@@ -10,6 +10,7 @@ const CommandLoader = require("./CommandLoader");
 const ConsistentTimer = require("./ConsistentTimer");
 const Database = require("./Database");
 const MusicPlayer = require("./MusicPlayer");
+const StockMarket = require("./StockMarket.js");
 const Enum = require("./Enum");
 const Logger = require("./Logger");
 const config = require("../config");
@@ -49,6 +50,7 @@ class NitroClient extends Discord.Client {
         this._unhandledRejection();
         this.once("ready", () => {
             this.player = new MusicPlayer(this);
+            this.stockMarket = new StockMarket();
             logger.info("Bot online.")
             this.updateStats();
         })
