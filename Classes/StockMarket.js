@@ -40,7 +40,7 @@ module.exports = class StockMarket {
      */
     async buy(user, type, am) {
         const price = this.stocks[type].price;
-        const 
+        
         
         const wallet = new Wallet(member);
         let key = STOCKS[type].key;
