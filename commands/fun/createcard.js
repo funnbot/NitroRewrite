@@ -2,7 +2,7 @@ const { Command } = require("../../Nitro");
 const jimp = require('jimp');
 
 class CreateCardCommand extends Command {
-    async run ({message, bot, reply, t}) {
+    async run({ message, bot, reply, t }) {
         if (!message.args[0]) return reply.warn("To create a card: " + prefix + "createcard This text is on the question card | this text is on the anwser card");
         let text = message.suffix.split("|");
         if (!text[1]) return reply.fail("Please include text for the second card, and the delimeter `|`");
@@ -31,7 +31,7 @@ class CreateCardCommand extends Command {
             })
         };
 
-        createImage().then(buf => message.channel.send({files:[{attachment: buf, name: 'cah.jpg'}]})).catch(e => {
+        createImage().then(buf => message.channel.send({ files: [{ attachment: buf, name: 'cah.jpg' }] })).catch(e => {
             console.error(e);
             reply.fail('Something went wrong. Please try again later.')
         })
