@@ -40,7 +40,6 @@ module.exports = {
         user: {
             trivia: 0,
             balance: 0,
-            stocks: {}
         },
         channel: {
             irc: false
