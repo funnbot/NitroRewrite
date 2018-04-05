@@ -72,6 +72,7 @@ class StocksCommand extends Command {
 
     help = "Gets the current stock prices";
     alias = ["stock"];
+    wip = true;
     arg = {
         type: "string",
         info: "Buy, sell and view stocks",

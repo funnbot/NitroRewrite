@@ -4,9 +4,6 @@ const PREFIX = "?"
 module.exports = {
     PREFIX,
 
-    TOKEN: AUTH.TOKEN,
-    SHARDS: AUTH.SHARDS,
-
     DisabledGroups: [],
     DisabledCommands: [],
 
@@ -43,7 +40,7 @@ module.exports = {
         user: {
             trivia: 0,
             balance: 0,
-            stock: {}
+            stocks: {}
         },
         channel: {
             irc: false
@@ -148,32 +145,32 @@ module.exports = {
     },
     //The "Companies" and their keys used in stock market
     STOCKS: {
-        FunnCorp: {
-            key: "FNN",
+        FNN: {
+            name: "FunnCorp",
             base: 1.00
         },
-        Nitro: {
-            key: "NTO",
+        NTO: {
+            name: "Nitro",
             base: 0.70
         },
-        MopBot: {
-            key: "MPB",
+        MPB: {
+            name: "MopBot",
             base: 0.68
         },
-        Discord: {
-            key: "DSC",
+        DSC: {
+            name: "Discord",
             base: 0.64
         },
-        Pancake: {
-            key: "PAN",
+        PAN: {
+            name: "Pancake",
             base: 0.60
         },
-        Martin: {
-            key: "MTN",
+        MTN: {
+            name: "Martin",
             base: 0.57
         },
-        Alfred: {
-            key: "ALF",
+        ALF: {
+            name: "Alfred",
             base: 0.35
         }
     },

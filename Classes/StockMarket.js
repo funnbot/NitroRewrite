@@ -1,15 +1,11 @@
-const bot = require("../bot.js")
+const { User } = require("discord.js");
 const { STOCKS } = require("../config.js")
-const Nitro = require("../Nitro.js")
-const Wallet = require("./Wallet")
 
 module.exports = class StockMarket {
     constructor() {
-        this.stocks = STOCKS
-        this.ms = this._genMappedStocks()
-        this._genWorth()
-
-        this._loop()
+        this.stocks = STOCKS;
+        this.ms = this._genMappedStocks();
+        this._genWorth();
     }
 
     /**
@@ -21,19 +17,16 @@ module.exports = class StockMarket {
      * @param {Number} am
      * @returns {String|Void}
      */
-    async sell(member, type, am) {
-        const wallet = new Wallet(member);
-        let key = STOCKS[type].key;
-        let s = this.ms[type] || "Alfred"
-        let individualPrice = this.stocks[s].price;
-        let price = individualPrice * am;
-        let stock = await this._getOwned(member)
-        if (!stock[type] || am > stock[type]) return false;
-        stock[type] = stock[type] - am
-        if (stock[type] === 0) delete stock[type]
-        wallet.add(price)
-        this._setOwned(member, stock)
-        return {"key":key,"val":individualPrice,"cost":price,"qty":am};
+    async sell(user, type, am) {
+        const price = this.stocks[type].price;
+        const cost = price * am;
+        const owned = await user.stocks();
+        if (!owned[type] || owned[type] > am) return false;
+        owned[type] -= am;
+        if (owned[type] === 0) delete owned[type];
+        user.wallet.add(price);
+        await user.stocks(owned)
+        return { key, val: price, cost, qty: am };
     }
 
     /**
@@ -45,7 +38,10 @@ module.exports = class StockMarket {
      * @param {Number} am
      * @returns {String|Void}
      */
-    async buy(member, type, am) {
+    async buy(user, type, am) {
+        const price = this.stocks[type].price;
+        const 
+        
         const wallet = new Wallet(member);
         let key = STOCKS[type].key;
         let bal = await wallet.balance()
@@ -58,7 +54,7 @@ module.exports = class StockMarket {
         else stock[type] = stock[type] + am
         wallet.sub(price)
         this._setOwned(member, stock)
-        return {"key":key,"val":individualPrice,"cost":price,"qty":am};
+        return { "key": key, "val": individualPrice, "cost": price, "qty": am };
     }
 
     /**
@@ -72,69 +68,52 @@ module.exports = class StockMarket {
         return await this._getOwned(member);
     }
 
-    async _getOwned(member) {
+    async getOwned(member) {
         return member.stock()
     }
 
-    async _setOwned(member, stock) {
+    async setOwned(member, stock) {
         member.stock(stock)
     }
 
-    _adjustWorth() {
+    adjustPrices() {
+        for (let [key, stock] of Object.entries(this.stocks)) {
+            const am = (Math.random() * 2) - 1
+        }
         this._map((name, value) => {
-            let am = (((Math.random() * 2) -1) * 0.00001) * 1000
+            let am = (((Math.random() * 2) - 1) * 0.00001) * 1000
             value.previous = value.price
             value.price = value.price + am > 0 ? value.price + am : 0
             return value
         })
     }
 
-    _genWorth() {
-        this._map((name, stock) => {
-            stock.price = stock.base
-            stock.first = stock.base
-            stock.previous = 0
-            return stock
-        })
+    initStocks() {
+        for (let [key, stock] of Object.entries(this.stocks)) {
+            stock.price = stock.base;
+            stock.first = stock.base;
+            stock.previous = 0;
+            this.stocks[key] = stock;
+        }
     }
 
-    _loop() {
-        this._adjustWorth()
+    loop() {
+        this.adjustWorth()
         //setTimeout(() => this._loop(), 36e5) // 1 hour
-        setTimeout(() => this._loop(), 1000) // 1 second
+        setTimeout(() => this.loop(), 1000) // 1 second
     }
 
-    _genMappedStocks() {
-        let key = {}
-        this._for((k, v) => {
-            key[v.key] = k
-        })
-        return key
-    }
-
-    _map(stock) {
-        for (let [key, value] of Object.entries(this.stocks)) {
-            this.stocks[key] = stock(key, value)
-        }
-    }
-
-    _for(stock) {
-        for (let [key, value] of Object.entries(this.stocks)) {
-            stock(key, value)
-        }
-    }
     // Fill empty space with space to length
-    _sfill(text = "", s = 0, prepend = false) {
+    sfill(text = "", s = 0, prepend = false) {
         let a = s - text.length > 0 ? s - text.length : 0;
         return prepend ? " ".repeat(a) + text : text + " ".repeat(a);
     }
-
-    _litem(a = []) {
-        let i = 0
-        for (let v of a) {
-            typeof v !== "string" ||
-                v.length < i ||
-                (i = v.length)
+    // Longest string
+    litem(a = []) {
+        let longest = 0
+        for (let i = 0; i < a.length; i++) {
+            if (typeof v === "string")
+                v.length < longest || (longest = v.length);
         }
         return i
     }
