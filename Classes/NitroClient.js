@@ -14,18 +14,10 @@ const Enum = require("./Enum");
 const Logger = require("./Logger");
 const config = require("../config");
 
-// Extensions
-const Message = require("../Extensions/Message.js");
-const ShardClientUtil = require("../Extensions/ShardClientUtil.js");
-const MessageEmbed = require("../Extensions/MessageEmbed.js");
-const GuildMember = require("../Extensions/GuildMember");
-const GuildChannel = require("../Extensions/GuildChannel");
-const Guild = require("../Extensions/Guild");
-const User = require("../Extensions/User");
-require("../Extensions/NativeExtensions.js");
-
-ShardClientUtil.extend(Discord.ShardClientUtil);
-MessageEmbed.extend(Discord.MessageEmbed);
+// Load all extensions
+const extensions = require("../Extensions");
+extensions.ShardClientUtil.extend(Discord.ShardClientUtil);
+extensions.MessageEmbed.extend(Discord.MessageEmbed);
 
 class NitroClient extends Discord.Client {
 
