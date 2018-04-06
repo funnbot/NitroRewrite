@@ -25,7 +25,7 @@ async function handleRequest(req) {
 async function addDailies(id) {
     const user = await bot.users.fetch(id);
     if (!user) return;
-    
+    user.wallet.add(100);
 }
 
 function parseData(data) {
