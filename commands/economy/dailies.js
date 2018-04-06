@@ -20,13 +20,14 @@ class DailiesCommand extends Command {
         //await message.author.transactions(transactions);
         return await reply(embed);*/
 
-        return reply("You can vote at blah every 24 hours to recieve daily rewards.");
+        return reply(`**__To recieve your daily rewards.__**
+Go to <https://discordbots.org/bot/264087705124601856/vote>, 
+and click vote, you might need to login with your discord account.
+The reward is ${message.guild.formatBal(100)}.`);
+        }
+
+        help = "Recieve daily rewards.";
+        alias = ["dole"];
     }
 
-    help = "Free Money";
-    usage = "{}dailies";
-    dm = false;
-    alias = ["dole"];
-}
-
-module.exports = DailiesCommand;
+    module.exports = DailiesCommand;
