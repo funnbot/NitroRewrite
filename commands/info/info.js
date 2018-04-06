@@ -1,7 +1,6 @@
 const { Command } = require("../../Nitro");
 
 class InfoCommand extends Command {
-
     onEnable() {
         this.registerSubCommands({
 
@@ -13,9 +12,26 @@ class InfoCommand extends Command {
         return await this.runSubCommand(sub);
     }
 
-    help = "";
+    help = "Information about discord things.";
     arg = {
+        type: "selection",
+        typeText: "subcommand",
+        example: "user",
+        endWithoutRest: true
+    }
+}
+
+class UserInfoCommand extends Command {
+    async run ({message, bot, reply, t}) {
         
+    }
+
+    help = "Information about a user.";
+    arg = {
+        type: "user",
+        info: "The user to get info about.",
+        example: "@person",
+        default: true
     }
 }
 
