@@ -15,7 +15,7 @@ class Guild extends Discord.Guild {
     }
 
     formatBal(amount) {
-        return "$"+amount.toFixed(2)+" "+":dollar:";
+        return "$"+ amount +" "+":dollar:";
     }
 
     async triviaWin(id) {
