@@ -1,44 +1,36 @@
-const { Command } = require("../../Nitro");
-const { YTAPITOKEN } = require("../../auth");
-const NitroFetch = require("../../Classes/NitroFetch");
+const { Command, YTAPITOKEN } = require("../../Nitro");
+const snekfetch = require("snekfetch");
 
 class YTSearchCommand extends Command {
     async run({ message, bot, reply, t }) {
         const [input] = message.args;
-        //console.log(YTAPITOKEN)
-        //return reply(YTAPITOKEN);
-        const gAPIurl = 'https://www.googleapis.com/youtube/v3/search?maxResults=1&type=video&q=' + input + "&key=" + YTAPITOKEN + "&part=snippet";
-        //console.log(gAPIurl)
-        var fetcher = new NitroFetch();
-        var response = await fetcher.grab(gAPIurl)
-        //console.log(response)
-        var body = JSON.parse(response)
-        //var tags = body.items.filter(function(item, pos, self) {
-            //return self.indexOf(item) == pos;
-        //})
-        if (body.items.length > 0) {
-            const embed = bot.embed
-                .setTitle(body.items[0].snippet.title)
-                .setURL("https://www.youtube.com/watch?v="+body.items[0].id.videoId)
-                .setDescription(body.items[0].snippet.description)
-                .addField("By "+body.items[0].snippet.channelTitle,"Published "+body.items[0].snippet.publishedAt.split("T")[0])
-                .setThumbnail(body.items[0].snippet.thumbnails.default.url)
-                .setColor([255,0,0])
-                .setFooter("Powered by YouTube")
-            reply(embed);
-        } else {
-            //.addField("Tags",tags.join(", "))
-            reply("I couldn't find that on Urban Dictionary :anguished:")
-        }
 
+        try { var url = await search(input); } catch { return reply.warn("Search returned 0 results.") }
+
+        return reply(url);
     }
 
-    help = "Search urban dictionary";
+    help = "Search youtube.";
     arg = {
         type: "string",
         info: "Search string",
-        example: "Yeet",
+        example: "the cinnamon challenge",
     }
+}
+
+async function search(query) {
+    term = query.split(" ").join("+");
+    const uri = `https://www.googleapis.com/youtube/v3/search?maxResults=1&q=${term}&key=${YTAPITOKEN}&part=snippet`
+    const { body } = await snekfetch.get(uri);
+    const { id } = body.items[0];
+
+    if (id.kind === "youtube#channel") {
+        var type = `channel/${id.channelId}`;
+    } else if (id.kind === "youtube#playlist") {
+        var type = `playlist?list=${id.playlistId}`;
+    } else var type = `watch?v=${id.videoId}`;
+
+    return `https://www.youtube.com/${type}`;
 }
 
 module.exports = YTSearchCommand;
