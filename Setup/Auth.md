@@ -14,6 +14,7 @@ module.exports = {
         carbonitex: "invalidtoken",
         novo: "invalidtoken"
     },
-    BETA: true // This dosnt get used but maybe it should be
+    BETA: true, // This dosnt get used but maybe it should be
+    YTAPITOKEN: "" // For youtube searching
 }
 ```
