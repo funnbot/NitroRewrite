@@ -28,7 +28,7 @@ class NutCommand extends Command {
     arg = {
         type: "string",
         info: "Text to put in the meme",
-        example: "When he hitting it from behind and resolves your promise"
+        example: "When papi hitting it from behind and resolves your promise"
     }
 }
 
