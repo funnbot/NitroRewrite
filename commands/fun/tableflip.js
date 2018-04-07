@@ -2,15 +2,11 @@ const { Command } = require("../../Nitro");
 
 class TableFlipCommand extends Command {
     async run({ message, bot, reply, t }) {
-        var replym = reply("(°-°)\\ ┬─┬").then(m => {
-            setTimeout(() => {
-                m.edit("(╯°□°)╯    ]").then(ms => {
-                    setTimeout(() => {
-                        ms.edit("(╯°□°)╯  ︵  ┻━┻")
-                    }, 500)
-                })
-            }, 500);
-        });
+        await reply("(°-°)\\ ┬─┬");
+        await promiseTimeout(500);
+        await reply.edit("(╯°□°)╯    ]");
+        await promiseTimeout(500);
+        await reply.edit("(╯°□°)╯  ︵  ┻━┻");
     }
 
     help = "Flips the table";
