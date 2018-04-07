@@ -2,15 +2,11 @@ const { Command } = require("../../Nitro");
 
 class ShrugCommand extends Command {
     async run({ message, bot, reply, t }) {
-        var replym = reply("¯\\_(ツ)_/¯").then(m => {
-            setTimeout(() => {
-                m.edit("¯\\-(ツ)-/¯").then(ms => {
-                    setTimeout(() => {
-                        ms.edit("¯\\_(ツ)_/¯")
-                    }, 500)
-                })
-            }, 500);
-        });
+        await reply("¯\\_(ツ)_/¯");
+        await promiseTimeout(500);
+        await reply.edit("¯\\\\-(ツ)-/¯");
+        await promiseTimeout(500);
+        await reply.edit("¯\\_(ツ)_/¯")
     }
 
     help = "Shrug";
