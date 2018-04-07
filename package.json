@@ -28,7 +28,6 @@
     "long": "^4.0.0",
     "moment": "^2.21.0",
     "node-opus": "^0.2.7",
-    "request": "^2.85.0",
     "rethinkdbdash": "^2.3.31",
     "sharp": "^0.18.4",
     "snekfetch": "^3.6.4",

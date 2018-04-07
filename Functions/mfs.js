@@ -10,7 +10,7 @@ const readdir = dir =>
 
 const readFile = file =>
     new Promise((resolve, reject) => {
-        fs.readdir(file, (err, data) => {
+        fs.readFile(file, (err, data) => {
             if (err) return reject(err);
             resolve(data);
         })
@@ -38,6 +38,17 @@ exports.readFiles = async function(folder, limit) {
         } catch (e) {
             logger.err(`Error Reading: ${folder}/${file}`, e.stack);
         }
+    }
+    return result;
+}
+
+exports.readDir = async function(folder) {
+    const files = await readdir(folder);
+    let result = {};
+    for (file of files) {
+        let split = file.split(".");
+        let name = split[0];
+        result[name] = await readFile(`${folder}/${file}`);
     }
     return result;
 }
