@@ -1,5 +1,6 @@
 const { Command } = require("../../Nitro");
 const jimp = require('jimp');
+const { Image: { Image } } = require("../../Nitro");
 
 class CreateCardCommand extends Command {
     async run({ message, bot, reply, t }) {
@@ -7,38 +8,22 @@ class CreateCardCommand extends Command {
         let text = message.suffix.split("|");
         if (!text[1]) return reply.fail("Please include text for the second card, and the delimeter `|`");
 
-        let createImage = function() {
-            return new Promise((resolve, reject) => {
-                jimp.read('./assets/cah.png', (err, image) => {
-                    if (err) {
-                        console.error(err);
-                        return reject();
-                    }
-                    jimp.loadFont(jimp.FONT_SANS_64_WHITE).then(font => {
-                        image.print(font, 70, 70, text[0], 500);
-                        jimp.loadFont(jimp.FONT_SANS_64_BLACK).then(font2 => {
-                            image.print(font2, 680, 70, text[1], 500);
-                            image.getBuffer(jimp.AUTO, (err, buf) => {
-                                if (err) {
-                                    console.error(err);
-                                    return reject();
-                                }
-                                return resolve(buf);
-                            })
-                        })
-                    })
-                })
+        const buf = await Image.loadFile("cah");
+        jimp.read(buf, async (err, img) => {
+            if (err) return logger.err(err);
+            const white = await jimp.loadFont(jimp.FONT_SANS_64_WHITE);
+            const black = await jimp.loadFont(jimp.FONT_SANS_64_BLACK);
+
+            img.print(white, 70, 70, text[0], 500);
+            img.print(black, 680, 70, text[1], 500);
+
+            img.getBuffer(jimp.AUTO, (err, file) => {
+                reply({files: [file]});
             })
-        };
-
-        createImage().then(buf => message.channel.send({ files: [{ attachment: buf, name: 'cah.jpg' }] })).catch(e => {
-            console.error(e);
-            reply.fail('Something went wrong. Please try again later.')
         })
-
     }
 
-    help = "Create a Custom Cards Against Humanity Question and Anwser Card.";
+    help = "Design your own cards against humanity card..";
     botPerm = "ATTACH_FILES";
     cooldown = 5;
 }
