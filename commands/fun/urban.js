@@ -1,42 +1,36 @@
 const { Command } = require("../../Nitro");
-const http = require("http");
+const snekfetch = require("snekfetch");
 
 class UrbanCommand extends Command {
     async run({ message, bot, reply, t }) {
         const [input] = message.args;
-        http.get("http://api.urbandictionary.com/v0/define?term="+input, res => {
-            res.setEncoding("utf8");
-            let body = "";
-            res.on("data", data => {
-                body += data;
-            });
-            res.on("end", () => {
-                body = JSON.parse(body);
-                var tags = body.tags.filter(function(item, pos, self) {
-                    return self.indexOf(item) == pos;
-                })
-                if (body.list.length > 0) {
-                    const embed = bot.embed
-                        .setTitle(":book: "+input)
-                        .setURL(body.list[0].permalink)
-                        .addField("Definition",body.list[0].definition)
-                        .addField("Example Usage",body.list[0].example)
-                        .addField("Tags",tags.join(", "))
-                        .nitroColor()
-                        .setFooter("Powered by Urban Dictionary")
-                    reply(embed);
-                } else {
-                    reply("I couldn't find that on Urban Dictionary :anguished:")
-                }
-            });
-        });
+
+        try {
+            const res = await snekfetch.get(`http://api.urbandictionary.com/v0/define?term=${input}`);
+            var { tags, list: [ info ]} = res.body;
+            if (!tags || !info) throw 0;
+        } catch { return reply.warn("No results found") }
+
+        const embed = bot.embed
+            .setTitle(`:book: ${info.word}`)
+            .setURL(info.permalink)
+            .addField("Definition", info.definition)
+            .addField("Example Usage", info.example)
+            .addField("Tags", tags.join(", "))
+            .addField("Votes", `:thumbsup: ${info.thumbs_up} :thumbsdown: ${info.thumbs_down}`)
+            .addField("Author", info.author)
+            .setFooter("Powered by Urban Dictionary")
+            .setTimestamp(new Date(info.written_on))
+            .nitroColor();
+
+        reply(embed);
     }
 
     help = "Search urban dictionary";
     arg = {
         type: "string",
         info: "Search string",
-        example: "Yeet",
+        example: "dab",
     }
 }
 
