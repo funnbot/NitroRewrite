@@ -1,7 +1,7 @@
 const { Command } = require("../../Nitro");
 
 //   >n< NO TOUCHY >n<   //
-const Sharp = require("sharp"); /// ### IT MAY LOOK LIKE AN UNUSED DEPENDANCY BUT IT BREAKS IF IT'S NOT HERE SO DO NOT TOUCh
+ /// ### IT MAY LOOK LIKE AN UNUSED DEPENDANCY BUT IT BREAKS IF IT'S NOT HERE SO DO NOT TOUCh
 const { createCanvas, loadImage, Image } = require("canvas");
 //   >n< NO TOUCHY >n<   //
 

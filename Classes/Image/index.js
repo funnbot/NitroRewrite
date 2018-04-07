@@ -1,5 +1,5 @@
 const gm = require("gm").subClass({ imageMagick: true });
-const Sharp = require("sharp"); // >n< NO TOUCHY >n< //
+//const Sharp = require("sharp"); // >n< NO TOUCHY >n< //
 const nodecanvas = require("canvas");
 const mfs = require("../../Functions/mfs.js");
 const snekfetch = require("snekfetch");
