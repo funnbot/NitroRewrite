@@ -37,6 +37,12 @@ class Image {
         if (!imageFiles) imageFiles = await mfs.readDir(path);
         return imageFiles[filename];
     }
+
+    static canvasImage(buf) {
+        const img = new nodecanvas.Image();
+        img.src = buf;
+        return img;
+    }
 }
 
 
@@ -88,6 +94,12 @@ class Canvas {
     async drawImage(file, px, py, w, h) {
         const img = new nodecanvas.Image();
         img.src = await Image.loadFile(file);
+        this.ctx.drawImage(img, px, py, w, h);
+    }
+
+    async drawURL(url, px, py, w, h) {
+        const img = new nodecanvas.Image();
+        img.src = await Image.readUrl(url);
         this.ctx.drawImage(img, px, py, w, h);
     }
 
