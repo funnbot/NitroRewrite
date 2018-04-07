@@ -40,7 +40,7 @@ class NitroClient extends Discord.Client {
         this.initTime = Date.now();
         this._unhandledRejection();
         this.once("ready", () => {
-            // MUSIC IS DISABLED
+            // MUSIC IS DISABLED FOR NOW (lavalink not needed as such)
             // this.player = new MusicPlayer(this);
             logger.info("Bot online.")
             this.updateStats();
