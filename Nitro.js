@@ -1,3 +1,5 @@
+const Sharp = require("sharp");
+
 const Database = require("./Classes/Database.js");
 const NitroClient = require("./Classes/NitroClient.js");
 const MessageHandler = require("./Classes/MessageHandler.js");

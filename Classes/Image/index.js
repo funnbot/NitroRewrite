@@ -1,4 +1,5 @@
 const gm = require("gm").subClass({ imageMagick: true });
+//const Sharp = require("sharp"); // >n< NO TOUCHY >n< //
 const nodecanvas = require("canvas");
 const mfs = require("../../Functions/mfs.js");
 const snekfetch = require("snekfetch");
@@ -55,8 +56,8 @@ class Magick {
 
     /**
      * Conver to buffer and send
-     * 
-     * @param {Function} send 
+     *
+     * @param {Function} send
      * @param {String} [format="PNG"]
      * @memberof Image
      */
