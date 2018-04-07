@@ -1,5 +1,6 @@
 const { Command, Image: { Canvas, Image } } = require("../../Nitro");
 
+
 class PunchCommand extends Command {
     async run({ message, bot, reply, t }) {
         const [user] = message.args;
