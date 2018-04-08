@@ -6,7 +6,6 @@ class YTSearchCommand extends Command {
         const [input] = message.args;
 
         try { var url = await search(input); } catch { return reply.warn("Search returned 0 results.") }
-
         return reply(url);
     }
 

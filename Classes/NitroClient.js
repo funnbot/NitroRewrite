@@ -10,6 +10,7 @@ const CommandLoader = require("./CommandLoader");
 const ConsistentTimer = require("./ConsistentTimer");
 const Database = require("./Database");
 const MusicPlayer = require("./MusicPlayer");
+const Image = require("./Image");
 const Enum = require("./Enum");
 const Logger = require("./Logger");
 const config = require("../config");
@@ -66,6 +67,7 @@ class NitroClient extends Discord.Client {
     async init() {
         await this.db.formatDb();
         await this.conTimers.restartTimers();
+        await Image.loadFiles();
         this.commands = this.CommandLoader.load()
         this.login(config.TOKEN);
     }

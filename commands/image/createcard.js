@@ -1,6 +1,6 @@
 const { Command } = require("../../Nitro");
 const jimp = require('jimp');
-const { Image: { Image } } = require("../../Nitro");
+const { Image } = require("../../Nitro");
 
 class CreateCardCommand extends Command {
     async run({ message, bot, reply, t }) {
@@ -8,7 +8,7 @@ class CreateCardCommand extends Command {
         let text = message.suffix.split("|");
         if (!text[1]) return reply.fail("Please include text for the second card, and the delimeter `|`");
 
-        const buf = await Image.loadFile("cah");
+        const buf = Image.getStaticFile("cah");
         jimp.read(buf, async (err, img) => {
             if (err) return logger.err(err);
             const white = await jimp.loadFont(jimp.FONT_SANS_64_WHITE);
@@ -18,7 +18,7 @@ class CreateCardCommand extends Command {
             img.print(black, 680, 70, text[1], 500);
 
             img.getBuffer(jimp.AUTO, (err, file) => {
-                reply({files: [file]});
+                reply(Image.send(file));
             })
         })
     }

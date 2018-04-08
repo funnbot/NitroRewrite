@@ -9,17 +9,16 @@ const imageReg = /{image}/gi;
 
 //Member Join
 bot.on("guildMemberAdd", (member) => {
-    guildMember(member, true)
+    guildMember(member, true);
 })
 
 //Member Leave
 bot.on("guildMemberRemove", async (member) => {
-    guildMember(member, false)
+    guildMember(member, false);
 })
 
 let guildMember = async (member, when) => {
     const { guild, user } = member;
-
     const mlchan = await guild.mlchan();
     const mljoin = await guild.mljoin();
     const mlleave = await guild.mlleave();
@@ -98,7 +97,7 @@ function clipAvatar(AVATAR) {
         const canvas = createCanvas(256, 256);
         const ctx = canvas.getContext("2d");
 
-        loadImage(await Image.readUrl(AVATAR + "?size=2048")).then(avatar => {
+        loadImage(await Image.readUrl (AVATAR + "?size=2048")).then(avatar => {
             ctx.drawImage(avatar, 0, 0, 256, 256);
             ctx.globalCompositeOperation = "destination-in";
             ctx.beginPath();
