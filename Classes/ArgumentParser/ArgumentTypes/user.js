@@ -26,7 +26,7 @@ async function findUserByString(val, msg) {
     return filterMembers(val, msg);
 }
 
-async function filterMembers(val, msg) {
+function filterMembers(val, msg) {
     let exactMems = msg.guild.members.filter(memberFilterExact(val));
     if (exactMems.size > 1) return [false, `${exactMems.size} users found, please specify.`];
     if (exactMems.size === 1) return [exactMems.first().user, null];

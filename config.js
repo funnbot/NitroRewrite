@@ -173,19 +173,29 @@ module.exports = {
             base: 0.35
         }
     },
-    //Numbers
-    NUMBERS: [
-        ":zero:",
-        ":one:",
-        ":two:",
-        ":three:",
-        ":four:",
-        ":five:",
-        ":six:",
-        ":seven:",
-        ":eight:",
-        ":nine:",
-    ],
+    // the best emojis
+    EMOTES: {
+        NUMBERS: [
+            ":zero:",
+            ":one:",
+            ":two:",
+            ":three:",
+            ":four:",
+            ":five:",
+            ":six:",
+            ":seven:",
+            ":eight:",
+            ":nine:",
+        ],
+
+        STATUS: {
+            online: "<:online:432677635282305027>",
+            offline: "<:offline:432677635580231690>",
+            away: "<:away:432677635412328458>",
+            dnd: "<:dnd:432677636381212672>"
+        }
+    },
+
     //Map permission names to a easier to read format
     PERMISSIONS: {
         ADMINISTRATOR: "Administrator",

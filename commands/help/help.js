@@ -13,7 +13,8 @@ class HelpCommand extends Command {
                 const value = Object.keys(groups[key]).map(c => `  **[${c}](http://nitro.ws)** - ${commands[c].help}`).join("\n");
                 fields.push({
                     name: `${name} - ${desc}`,
-                    value
+                    value,
+                    inline: true
                 });
             }
 
