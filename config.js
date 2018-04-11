@@ -33,7 +33,6 @@ module.exports = {
             filters: {}, // The filters for messages
             adblock: false, // Block advert messages
             zalgo: false, // Block zalgo messages
-            filterexempt: {}, // Ids exempt from the filter
             ar: false, // The auto role
             blacklist: {} // Ids that are blocked from the bot
         },
@@ -191,7 +190,7 @@ module.exports = {
         STATUS: {
             online: "<:online:432677635282305027>",
             offline: "<:offline:432677635580231690>",
-            away: "<:away:432677635412328458>",
+            idle: "<:away:432677635412328458>",
             dnd: "<:dnd:432677636381212672>"
         }
     },

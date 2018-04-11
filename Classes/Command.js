@@ -1,5 +1,6 @@
 const ArgumentParser = require("./ArgumentParser");
 const PermissionHandler = require("./PermissionHandler");
+const { Message, Client } = require("discord.js");
 
 /**
  * Argument options
@@ -113,6 +114,18 @@ class Command {
     }
 
     async onEnable() { return; }
+    /**
+     * @typedef {Object} RunArguments
+     * @prop {Message} message discord message
+     * @prop {Client} bot discord client
+     * @prop {Object} reply reply handler
+     * @prop {Object} t translator
+     */
+    /**
+     * Execute a command
+     * @param {RunArguments} args
+     * 
+     */
     async run(args) { return; }
     async error(args, error) {
         logger.err(error);
@@ -122,33 +135,63 @@ class Command {
 }
 
 function setupReply(message) {
+    /**
+     * Send a plain message
+     */
     async function reply(...args) {
         return reply.sent = await message.channel.send(...args);
     }
+    /**
+     * Edit a previously replied message
+     */
     reply.edit = async function(...args) {
         return reply.sent ? await reply.sent.edit(...args) : 0;
     }
+    /**
+     * Format the message as a success
+     */
     reply.succ = async function(...args) {
         return reply.sent = await reply(`✅ | **${args.shift()}** ${args.join(" ")}`);
     }
+    /**
+     * Edit a message as a success
+     */
     reply.editSucc = async function(...args) {
         return await reply.edit(`✅ | **${args.shift()}** ${args.join(" ")}`)
     }
+    /**
+     * Format a message as failuer
+     */
     reply.fail = async function(...args) {
         return reply.sent = await reply(`⛔ | **${args.shift()}** ${args.join(" ")}`);
     }
+    /**
+     * Edit a message as a failure
+     */
     reply.editFail = async function(...args) {
         return await reply.edit(`⛔ | **${args.shift()}** ${args.join(" ")}`)
     }
+    /**
+     * Format a message as a warning
+     */
     reply.warn = async function(...args) {
         return reply.sent = await reply(`⚠ | **${args.shift()}** ${args.join(" ")}`);
     }
+    /**
+     * Edit a message as a warning
+     */
     reply.editWarn = async function(...args) {
         return await reply.edit(`⚠ | **${args.shift()}** ${args.join(" ")}`)
     }
+    /**
+     * React with a success
+     */
     reply.succReact = async function() {
         return await message.react('341741537425621002');
     }
+    /**
+     * React with a failure
+     */
     reply.failReact = async function() {
         return await message.react('341741537258110978');
     }

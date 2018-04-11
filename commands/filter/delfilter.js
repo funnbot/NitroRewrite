@@ -8,10 +8,10 @@ class DelFilterCommand extends Command {
         name = name.toLowerCase();
         if (!filters[name]) return await reply.fail("Filter dosn't exist.");
 
-        filters[name] = null;
+        delete filters[name];
 
         await message.guild.filters(filters);
-        return await reply.succ("Filter deleted.");
+        return reply.succ("Filter deleted.");
     }
 
     help = "Delete a filter.";
