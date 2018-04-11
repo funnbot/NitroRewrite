@@ -8,6 +8,7 @@ class DisableLogEventCommand extends Command {
 
     help = "";
     usage = "";
+    wip = true;
 }
 
 module.exports = DisableLogEventCommand;

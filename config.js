@@ -31,8 +31,6 @@ module.exports = {
             serverlog: false,
             disabledEvents: {}, // Disabled modlog events
             filters: {}, // The filters for messages
-            adblock: false, // Block advert messages
-            zalgo: false, // Block zalgo messages
             ar: false, // The auto role
             blacklist: {} // Ids that are blocked from the bot
         },

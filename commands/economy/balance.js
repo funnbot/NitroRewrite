@@ -3,14 +3,12 @@ const Wallet = require("../../Classes/Wallet")
 
 class BalanceCommand extends Command {
     async run({ message, bot, reply, t }) {
-        const wallet = new Wallet(message.author);
-        const bal = await wallet.balance();
-        //return reply("You have "+message.guild.formatBal(bal));
+        const bal = await message.author.wallet.balance();
+
         const embed = bot.embed
-            .setTitle(":atm: "+message.member.nickname+" :atm:")
+            .setTitle(":atm: " + message.member.nickname + " :atm:")
             .nitroColor()
-        var balance = await wallet.balance();
-        embed.setDescription("You have **"+message.guild.formatBal(balance)+"**");
+        embed.setDescription("You have **" + message.guild.formatBal(bal) + "**");
         return await reply(embed);
     }
 
