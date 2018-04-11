@@ -16,9 +16,10 @@ const Logger = require("./Logger");
 const config = require("../config");
 
 // Load all extensions
-const extensions = require("../Extensions");
-extensions.ShardClientUtil.extend(Discord.ShardClientUtil);
-extensions.MessageEmbed.extend(Discord.MessageEmbed);
+const Ex = require("../Extensions");
+Ex.ShardClientUtil.extend(Discord.ShardClientUtil);
+Ex.MessageEmbed.extend(Discord.MessageEmbed);
+Ex.GuildChannel.extend(Discord.GuildChannel);
 
 class NitroClient extends Discord.Client {
 

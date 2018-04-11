@@ -12,7 +12,7 @@ class HelpCommand extends Command {
                 if (!groups[key]) continue;
                 const value = Object.keys(groups[key]).map(c => `\u200b  **[${c}](http://)** - ${commands[c].help}`).join("\n");
                 fields.push({
-                    name: `${name} - ${desc}`,
+                    name: `${name}`,
                     value,
                 });
             }

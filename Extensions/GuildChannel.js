@@ -1,8 +1,8 @@
-const extend = require("./extend.js");
+const Extension = require("./Extension.js");
 const moment = require("moment");
 const Discord = require("discord.js");
 
-class GuildChannel extends Discord.GuildChannel {
+class GuildChannel extends Extension {
     /**
      * @typedef {Object} caseData
      * @property {String} action
@@ -73,6 +73,13 @@ class GuildChannel extends Discord.GuildChannel {
             .setFooter("yes/no")
             .sendTo(this);
     }
+
+    /**
+     * Check if bot has send message permissions
+     */
+    hasSendPerms() {
+        return this.permissionsFor(this.client).has("SEND_MESSAGES");
+    }
 }
 
-extend(GuildChannel);
+module.exports = GuildChannel;
