@@ -1,10 +1,49 @@
+const { Guild, GuildMember } = require("discord.js");
+const Duration = require("duration-js");
 const { Command, TIME } = require("../../Nitro");
 
 class MuteCommand extends Command {
 
-    async run ({message, bot, reply, t}) {
-        const [ user, reason ] = message.args;
-        const mutedRole = message.guild.roles.find(r => r.name.toLowerCase() === "muted")
+
+    async run({ message, bot, reply, t }) {
+        /** @type {Guild} */
+        const guild = message.guild
+        /** @type {GuildMember} */
+        const member = message.args[0];
+        /** @type {Duration} */
+        const duration = message.args[1];
+        /** @type {String} */
+        const reason = message.args[2];
+
+        let mutedRole = guild.roles.find(r => r.name.toLowerCase() === "muted")
+        if (!mutedRole) mutedRole = await createMutedRole(message.guild);
+
+        try {
+            await member.roles.add(mutedRole, "nitro mute");
+        } catch {
+            return reply.fail("Failed to mute user.");
+        }
+        await guild.userAction(member.user.id, "mute", reason);
+        await guild.modAction(message.author.id, "mute");
+        await reply.succ("Muted the user: ", member.user.tag);
+
+        bot.conTimers.add({
+            id: member.user.id,
+            time: duration.milliseconds(),
+            type: "mute",
+            guild: message.guild.id,
+            mute: mutedRole.id
+        })
+
+        const modlogID = await guild.modlog();
+        const modlog = guild.channels.get(modlogID);
+        if (modlog) modlog.createCase({
+            action: "mute",
+            user: `${member.user.tag} (${member.user.id})`,
+            mod: message.author,
+            reason,
+            length: duration.toString()
+        })
     }
 
     help = "Mute a user";
@@ -16,7 +55,7 @@ class MuteCommand extends Command {
         type: "duration",
         info: "The length of the mute.",
         example: "2h30m",
-        min: TIME.hour,
+        min: TIME.min,
         max: TIME.day * 7
     }, {
         type: "string",
@@ -25,6 +64,17 @@ class MuteCommand extends Command {
         default: "unspecified"
     }]
     wip = true;
+}
+
+/**
+ * @param {Guild} guild 
+ */
+async function createMutedRole(guild) {
+    const role = await guild.roles.create({ name: "Muted", permissions: { SEND_MESSAGES: false } }, "nitro muted role");
+    for (let channel in guild.channels.values()) {
+        await channel.updateOverwrite(role, { SEND_MESSAGES: false }, "nitro muted role");
+    }
+    return role;2
 }
 
 module.exports = MuteCommand;

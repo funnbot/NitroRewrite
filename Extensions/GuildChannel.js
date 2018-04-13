@@ -1,8 +1,8 @@
-const Extension = require("./Extension");
+const extend = require("./extend.js");
 const moment = require("moment");
-const { User, Message } = require("discord.js");
+const Discord = require("discord.js");
 
-class GuildChannel extends Extension {
+class GuildChannel extends Discord.GuildChannel {
     /**
      * @typedef {Object} caseData
      * @property {String} action
@@ -15,7 +15,6 @@ class GuildChannel extends Extension {
     /**
      * Create a case
      * @param {caseData} caseData 
-     * @param {GuildChannel} modlog 
      * @returns {Promise<Message>}
      */
     async createCase(caseData) {
@@ -76,4 +75,4 @@ class GuildChannel extends Extension {
     }
 }
 
-module.exports = GuildChannel;
+extend(GuildChannel);

@@ -17,11 +17,11 @@ class TempBanCommand extends Command {
         } catch (e) {
             return await m.edit("**Tempban failed**");
         }
-        await message.guild.userAction(member.user.id, "tempban");
+        await message.guild.userAction(member.user.id, "tempban", reason);
         await message.guild.modAction(message.author.id, "tempban");
         await m.edit("**Tempban complete**");
 
-        bot.timers.add({
+        bot.conTimers.add({
             id: member.user.id,
             time: duration.milliseconds(),
             type: "tempban",
@@ -34,7 +34,8 @@ class TempBanCommand extends Command {
             action: "tempban",
             user: `${member.user.tag} (${member.user.id})`,
             mod: message.author,
-            reason
+            reason,
+            length: duration.toString()
         });
     }
 

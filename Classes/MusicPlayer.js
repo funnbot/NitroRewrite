@@ -174,6 +174,7 @@ class GuildPlayer {
     }
 
     onPlayerError(error) {
+        this.kill();
         console.log(error);
     }
 

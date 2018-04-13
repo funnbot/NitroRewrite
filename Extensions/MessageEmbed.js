@@ -1,4 +1,4 @@
-const Extension = require("./Extension.js")
+const Extension = require("./Extension.js");
 const { COLORS: { NITRO, ACTION, MEMBERLOG } } = require("../config.js")
 const moment = require("moment");
 

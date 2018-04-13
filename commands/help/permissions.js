@@ -6,15 +6,9 @@ class PermissionsCommand extends Command {
         return send("change");
 
         let txt = `**Permissions**
-        Nitro uses a simple 4 role permission system.
-        The roles do not need any special permissions. It is the **name** of the role that matters.
-        Roles work in a hierarchy, higher level roles have access to lower level commands.
-        
-        \`User\` - By default, everyone is a user, and not required to have this role.
-        \`DJ\` - Music control commmands.
-        \`Moderator\` - Gives access to all moderator commands such as ban and purge.
-        \`Admin\` - Almost all server configuration commands such as prefix.
-        \`Nitro Commander\` - Complete control of all commands and features.`.unindent()
+        Nitro uses the inbuilt discord permissions to handle command permissions
+        For example, to give a moderator permission to ban a user, simply give them the Ban Members permission.
+        Because of this, there is usually no need to setup the permissions, and normal users are unable to access destructive commands.`.unindent()
 
         send(txt)
     }

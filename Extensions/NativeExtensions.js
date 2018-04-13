@@ -29,7 +29,9 @@ Object.defineProperties(String.prototype, {
     },
     shorten: {
         value: function(length = 2000, append = "") {
-            return this.substr(0, length - append.length) + append;
+            const sh = this.substr(0, length - append.length);
+            if (sh.length === this.length) return this;
+            else return this + append;
         }
     }
 })
@@ -62,6 +64,48 @@ Object.defineProperties(Array.prototype, {
         }
     }
 })
+
+/**
+ * Temporary until optional?.chaining?.operator
+ * @param {Object} current The object to access
+ * @param {...String} props The properties to access
+ * @returns {*?}
+ */
+Object.accessChain = function(current, ...props) {
+    while (props.length && current !== undefined)
+        current = current[props.shift()]
+    return current;
+}
+
+
+Object.removeProperty = function(obj, prop) {
+    let result = {};
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key) && key !== prop)
+            result[key] = obj[key];
+    }
+    return result;
+}
+
+/**
+ * Removes properties by creating a new object without 
+ * them because delete is slow.
+ * @param {Object} obj The object to remove from 
+ * @param {...String} props The props to remove
+ * @returns {Object}
+ */
+Object.removeProperties = function(obj, ...props) {
+    let result = {};
+    keys: for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            for (let i = 0; i < props.length; i++) {
+                if (key === props[i]) continue keys;
+            }
+            result[key] = obj[key];
+        }
+    }
+    return result;
+}
 
 global.typeof2 = value => {
     return value instanceof Array ? "array" : typeof value;

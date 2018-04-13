@@ -2,12 +2,40 @@ const { Command } = require("../../Nitro");
 
 class WarnCommand extends Command {
 
-    async run ({message, bot, reply, t}) {
-        send("test")
+    async run({ message, bot, reply, t }) {
+        const [user, reason] = message.args;
+        let txt = `**You have been warned in ${message.guild.name}**\n\n${reason !== "unspecified" ? `**Reason:** ${reason}` : 0}`;
+        try {
+            await user.send(txt);
+            reply.succ(`${user.tag} has been warned.`);
+        } catch {
+            reply(`${user}, ${txt}`);
+        }
+
+        await message.guild.userAction(user.id, "warn", reason);
+        await message.guild.modAction(message.author.id, "warn");
+
+        const modlogID = await message.guild.modlog();
+        const modlog = bot.channels.get(modlogID);
+        if (modlog) modlog.createCase({
+            action: "warn",
+            user: `${user.tag} (${user.id})`,
+            mod: message.author,
+            reason
+        });
     }
 
-    help = "";
-    wip = true;
+    help = "Warn a user.";
+    args = [{
+        type: "user",
+        info: "The user to warn.",
+        example: "@Badboy"
+    }, {
+        type: "string",
+        info: "The reason for warning.",
+        example: "Watch yourself.",
+        default: "unspecified"
+    }];
 }
 
 module.exports = WarnCommand;

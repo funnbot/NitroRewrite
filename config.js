@@ -4,9 +4,6 @@ const PREFIX = "?"
 module.exports = {
     PREFIX,
 
-    TOKEN: AUTH.TOKEN,
-    SHARDS: AUTH.SHARDS,
-
     DisabledGroups: [],
     DisabledCommands: [],
 
@@ -32,23 +29,24 @@ module.exports = {
             requserperm: false,
             modlog: false,
             serverlog: false,
-            disabledEvents: {},
-            filters: {},
-            adblock: false,
-            zalgo: false,
-            filterexempt: {},
-            ar: false,
-            blacklist: {}
+            disabledEvents: {}, // Disabled modlog events
+            filters: {}, // The filters for messages
+            adblock: false, // Block advert messages
+            zalgo: false, // Block zalgo messages
+            filterexempt: {}, // Ids exempt from the filter
+            ar: false, // The auto role
+            blacklist: {} // Ids that are blocked from the bot
         },
         user: {
-            trivia: 0
+            trivia: 0,
+            balance: 0,
         },
         channel: {
             irc: false
         },
         system: {
             timers: []
-        }
+        },
     },
 
     LAVALINK_NODES: [
@@ -146,32 +144,32 @@ module.exports = {
     },
     //The "Companies" and their keys used in stock market
     STOCKS: {
-        FunnCorp: {
-            key: "FNN",
+        FNN: {
+            name: "FunnCorp",
             base: 1.00
         },
-        Nitro: {
-            key: "NTO",
+        NTO: {
+            name: "Nitro",
             base: 0.70
         },
-        MopBot: {
-            key: "MPB",
+        MPB: {
+            name: "MopBot",
             base: 0.68
         },
-        Discord: {
-            key: "DSC",
+        DSC: {
+            name: "Discord",
             base: 0.64
         },
-        Pancake: {
-            key: "PAN",
+        PAN: {
+            name: "Pancake",
             base: 0.60
         },
-        Martin: {
-            key: "MTN",
+        MTN: {
+            name: "Martin",
             base: 0.57
         },
-        Alfred: {
-            key: "ALF",
+        ALF: {
+            name: "Alfred",
             base: 0.35
         }
     },

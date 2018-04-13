@@ -1,11 +1,4 @@
-const formatCur = require("format-currency")
 const Discord = require("discord.js")
-const { CUR } = require("../config.js")
-let formatOpts = {
-    symbol: CUR.sym,
-    code: CUR.code
-}
-
 /**
  * General util functions for Nitro.
  */
@@ -119,20 +112,6 @@ class Util {
             array: i.length != 1 ? end : '',
             object: Object.keys(i).length != 1 ? end : ''
         }[typeof2(i)];
-    }
-
-    /**
-     * Format currency.
-     * @param {Number} [amount=0] 
-     * @param {Boolean} noCode 
-     * @param {Boolean} noSymbol 
-     * @returns {string}
-     */
-    static formatBal(amount = 0, noCode, noSymbol) {
-        formatOpts.format = "%v"
-        noCode || (formatOpts.format = formatOpts.format + " %c")
-        noSymbol || (formatOpts.format = "%s" + formatOpts.format)
-        return formatCur(amount, formatOpts)
     }
 
     /**

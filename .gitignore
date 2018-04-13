@@ -7,3 +7,4 @@ Lavalink/
 .idea/
 config.js
 .vscode/
+benchmark.js

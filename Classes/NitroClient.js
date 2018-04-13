@@ -7,30 +7,17 @@ const EventEmitter = require("events");
 // Framework
 const Discord = require("discord.js");
 const CommandLoader = require("./CommandLoader");
-const ConsistenTimer = require("./ConsistentTimer");
+const ConsistentTimer = require("./ConsistentTimer");
 const Database = require("./Database");
 const MusicPlayer = require("./MusicPlayer");
 const Enum = require("./Enum");
 const Logger = require("./Logger");
 const config = require("../config");
 
-// Extensions
-const Message = require("../Extensions/Message.js");
-const ShardClientUtil = require("../Extensions/ShardClientUtil.js");
-const MessageEmbed = require("../Extensions/MessageEmbed.js");
-const GuildMember = require("../Extensions/GuildMember");
-const GuildChannel = require("../Extensions/GuildChannel");
-const Guild = require("../Extensions/Guild");
-const User = require("../Extensions/User");
-require("../Extensions/NativeExtensions.js");
-
-Message.extend(Discord.Message);
-MessageEmbed.extend(Discord.MessageEmbed);
-ShardClientUtil.extend(Discord.ShardClientUtil);
-GuildMember.extend(Discord.GuildMember);
-GuildChannel.extend(Discord.GuildChannel);
-Guild.extend(Discord.Guild);
-User.extend(Discord.User);
+// Load all extensions
+const extensions = require("../Extensions");
+extensions.ShardClientUtil.extend(Discord.ShardClientUtil);
+extensions.MessageEmbed.extend(Discord.MessageEmbed);
 
 class NitroClient extends Discord.Client {
 
@@ -41,7 +28,7 @@ class NitroClient extends Discord.Client {
         this.modlog = new EventEmitter();
         this.CommandLoader = new CommandLoader();
         this.Embed = Discord.MessageEmbed;
-        this.timers = new ConsistenTimer(this);
+        this.conTimers = new ConsistentTimer(this);
 
         this.SimpleStorage = {
             guild: {},
@@ -53,7 +40,8 @@ class NitroClient extends Discord.Client {
         this.initTime = Date.now();
         this._unhandledRejection();
         this.once("ready", () => {
-            this.player = new MusicPlayer(this);
+            // MUSIC IS DISABLED FOR NOW (lavalink not needed as such)
+            // this.player = new MusicPlayer(this);
             logger.info("Bot online.")
             this.updateStats();
         })
@@ -77,6 +65,7 @@ class NitroClient extends Discord.Client {
 
     async init() {
         await this.db.formatDb();
+        await this.conTimers.restartTimers();
         this.commands = this.CommandLoader.load()
         this.login(config.TOKEN);
     }

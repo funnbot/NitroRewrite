@@ -1,7 +1,8 @@
-const Extension = require("./Extension");
+const Discord = require("discord.js")
+const extend = require("./extend.js");
 
-class GuildMember extends Extension {
+class GuildMember extends Discord.GuildMember {
 
 }
 
-module.exports = GuildMember;
+extend(GuildMember);
