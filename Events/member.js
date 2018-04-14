@@ -56,7 +56,7 @@ function replaceValues(str, user, guild) {
         "{total}": guild.memberCount,
         "{totalth}": totalth
     };
-    const reg = /{user}|{name}|{tag}|{total}/g;
+    const reg = /\{user\}|\{name\}|\{tag\}|\{total\}|\{totalth\}/g;
     return str.replace(reg, t => rep[t]);
 }
 
@@ -97,7 +97,7 @@ function clipAvatar(AVATAR) {
         const canvas = createCanvas(256, 256);
         const ctx = canvas.getContext("2d");
 
-        loadImage(await Image.readUrl (AVATAR + "?size=2048")).then(avatar => {
+        loadImage(await Image.readUrl(AVATAR + "?size=2048")).then(avatar => {
             ctx.drawImage(avatar, 0, 0, 256, 256);
             ctx.globalCompositeOperation = "destination-in";
             ctx.beginPath();

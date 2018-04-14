@@ -22,19 +22,15 @@ class MLChannelCommand extends Command {
         }
     }
 
-    options() {
-        return {
-            help: "Set the channel memberlog messages are sent in.",
-            userPerms: ["MANAGE_GUILD"],
-            alias: ["memberlogchannel", "mlchan"],
-            arg: {
-                type: "channel",
-                info: "The channel memberlog messages are sent in.",
-                example: "#memberlog",
-                default: true
-            }
-        }
-    }
+    help = "Set the channel memberlog messages are sent in.";
+    userPerms = ["MANAGE_GUILD"];
+    alias = ["memberlogchannel", "mlchan"];
+    arg = {
+        type: "channel",
+        info: "The channel memberlog messages are sent in.",
+        example: "#memberlog",
+        default: true
+    };
 }
 
 module.exports = MLChannelCommand;

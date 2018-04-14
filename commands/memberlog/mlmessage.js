@@ -18,27 +18,25 @@ class MLMessageCommand extends Command {
         return await reply.succ(when + " message set.");
     }
 
-    options() { return {
-        help: "Set the memberlog join or leave message and type",
-        alias: "mlmsg",
-        userPerms: ["MANAGE_GUILD"],
-        args: [{
-            type: "selection",
-            items: ["join", "leave"],
-            info: "For the `join` or `leave` message.",
-            example: "join"
-        }, {
-            type: "selection",
-            items: ["text", "embed", "image", "disable"],
-            info: "The type of message to send. `text`, `embed`, `image`, or `disable` to turn off.",
-            example: "embed"
-        }, {
-            type: "string",
-            info: "The text sent in the message.",
-            example: "Welcome {name} to HQ.",
-            default: null
-        }]
-    }}
+    help = "Set the memberlog join or leave message and type";
+    alias = "mlmsg";
+    userPerms = ["MANAGE_GUILD"];
+    args = [{
+        type: "selection",
+        items: ["join", "leave"],
+        info: "For the `join` or `leave` message.",
+        example: "join"
+    }, {
+        type: "selection",
+        items: ["text", "embed", "image", "disable"],
+        info: "The type of message to send. `text`, `embed`, `image`, or `disable` to turn off.",
+        example: "embed"
+    }, {
+        type: "string",
+        info: "The text sent in the message.",
+        example: "Welcome {name} to HQ.",
+        default: null
+    }];
 }
 
 module.exports = MLMessageCommand;

@@ -31,7 +31,7 @@ class Database {
         // Default dosnt need to be duplicated here
         const def = ITEMS[table][item];
         // Fetch the current data to edit
-        const data = await r.table(table).get(id);
+        let data = await r.table(table).get(id);
         // If the value to be set is matching the default
         if (isDefault(value, def)) {
             // If its default and theres nothing set already, return;
@@ -39,6 +39,7 @@ class Database {
             // Delete from obj
             delete data[item];
         } else {
+            if (!data) data = {id};
             // Updating the value
             data[item] = value;
         }
@@ -61,7 +62,7 @@ class Database {
         try {
             var data = await r.table(table).filter(predicate);
         } catch (e) {
-            logger.table(e);
+            logger.db(e);
         }
         return data;
     }
