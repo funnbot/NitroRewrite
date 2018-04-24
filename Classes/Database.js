@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 const { TABLES, DBNAME, DBPASS, ITEMS } = require("../config.js");
 const Storage = require("./SimpleStorage");
-let r = require("rethinkdbdash")();
+let r = require("rethinkdbdash")({
+    password: DBPASS
+});
 
 class Database {
     constructor() {
