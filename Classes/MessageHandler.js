@@ -11,8 +11,8 @@ class MessageHandler extends EventEmitter {
     constructor(bot) {
         super();
         this.bot = bot;
-        this.alias = new Alias(bot.commands);
         this.cooldown = new Cooldown();
+        Alias.mapDefaults(bot.commands);
 
         this.addListeners();
     }
@@ -32,10 +32,7 @@ class MessageHandler extends EventEmitter {
             try {
                 var message = await channel.messages.fetch(id);
                 await message.guild.members.fetch(message.author);
-            } catch (e) {
-                return;
-            }
-
+            } catch { return; }
             return this.emit("editRaw", message);
         }
     }
@@ -44,14 +41,14 @@ class MessageHandler extends EventEmitter {
         // Setup the message extensions
         await message.SetupExtension();
         this.emit("new", message);
-        return await this.onCommand(message, this);
+        return this.onCommand(message, this);
     }
 
     async onMessageEdit(oldMessage, message) {
         // Setup the message extensions
         await message.SetupExtension();
         this.emit("edit", oldMessage, message);
-        if (message.edits.length <= 3) return await this.onCommand(message, this);
+        if (message.edits.length <= 3) return this.onCommand(message, this);
     }
 
     async onCommand(message, { bot, alias }) {
@@ -61,17 +58,17 @@ class MessageHandler extends EventEmitter {
         if (!message.content.toLowerCase().startsWith(message.prefix) &&
             !message._mention(message.content)) return;
 
+        this.alias = new Alias();
+
         if (message.channel.type === "text") return await this.onGuildCommand(message, this);
         else if (message.channel.type === "dm") return await this.onDMCommand(message, this);
     }
 
     async onGuildCommand(message, { bot, alias }) {
-        const blacklist = await message.guild.blacklist();
-        if (blacklist[message.author.id]) return;
-        if (blacklist[message.channel.id]) return;
         // Always have current member cached
         await message.guild.members.fetch(message.author);
         if (!message.member) return;
+        if (await isBlacklisted(message)) return;
         // Map the custom aliases
         alias.mapCustom(await message.guild.alias());
         // Turn alias to normal command
@@ -120,6 +117,20 @@ class MessageHandler extends EventEmitter {
         // Execute the command
         return await command.exec(message);
     }
+}
+
+async function isBlacklisted(message) {
+    const bl = await message.guild.blacklist();
+    if (message.author.id === message.guild.ownerID ||
+        message.author.id === FUNNBOT) return 0;
+    if (bl[message.author.id]) return 1;
+    const roles = message.member.roles.keys(),
+        l = roles.length
+    for (let i = 0; i < l; i++) {
+        const role = roles[i];
+        if (bl[role]) return 1;
+    }
+    return 0;
 }
 
 module.exports = MessageHandler;

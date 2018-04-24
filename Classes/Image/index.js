@@ -1,81 +1,43 @@
 const gm = require("gm").subClass({ imageMagick: true });
 //const Sharp = require("sharp"); // >n< NO TOUCHY >n< //
-const nodecanvas = require("canvas");
+const canvas = require("canvas");
 const mfs = require("../../Functions/mfs.js");
 const snekfetch = require("snekfetch");
 
-const path = "./Classes/Image/images";
 // Store images so dont need to read each time
 let imageFiles;
 
 class Image {
-    /**
-     * Read an image from images
-     */
-    static readFile(filename) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(path + filename, (err, buffer) => {
-                if (err) return reject(err);
-                resolve(buffer);
-            });
-        });
+    static getStaticFile(name) {
+        if (!imageFiles[name]) throw name + " isnt a thing";
+        return imageFiles[name];
     }
 
-    /**
-     * Read from a URL
-     */
     static async readUrl(url) {
-        try {
-            var res = await snekfetch.get(url);
-        } catch {
-            return null;
-        }
+        var res = await snekfetch.get(url);
         if (!res.headers["content-type"].startsWith("image")) return null;
         return res.body;
     }
 
-    static async loadFile(filename) {
-        if (!imageFiles) imageFiles = await mfs.readDir(path);
-        return imageFiles[filename];
+    static canvas(width, height) {
+        const canv = canvas.createCanvas(width, height);
+        const ctx = canv.getContext("2d");
+        return { canvas: canv, ctx };
     }
 
     static canvasImage(buf) {
-        const img = new nodecanvas.Image();
+        const img = new canvas.Image();
         img.src = buf;
         return img;
     }
-}
 
-
-class Magick {
-    constructor(...options) {
-        this.image = gm(...options);
+    static createGM(...args) {
+        return gm(...args);
     }
 
-    get gm() { return this.image; }
-
-    /**
-     * Conver to buffer and send
-     *
-     * @param {Function} send
-     * @param {String} [format="PNG"]
-     * @memberof Image
-     */
-    async send(send, text = "", format) {
-        try {
-            var buffer = await this._toBuffer(format);
-            await send(text, { files: [buffer] });
-        } catch (e) {
-            logger.err(e);
-            return e;
-        }
-    }
-
-
-    /** @private */
-    _toBuffer(format = "PNG") {
+    static gmBuffer(img, format = "PNG") {
         return new Promise((resolve, reject) => {
-            this.image.stream(format, (err, stdout, stderr) => {
+            img.stream(format, (err, stdout, stderr) => {
                 if (err) { return reject(err) }
                 const chunks = []
                 stdout.on("data", (chunk) => { chunks.push(chunk) })
@@ -84,33 +46,46 @@ class Magick {
             })
         })
     }
+
+    /**
+     * Create a wrapped text caption.
+     * @param {String} text
+     * @param {Number} w width
+     * @param {Number} h height
+     * @param {String} [font="helvetica.ttf"]
+     * @param {Number} [size=15] font size
+     * @param {String} [fill="black"] text color 
+     * @param {String} [gravity="center"]
+     * @param {String} [background="transparent"]
+     * @returns {Promise<Buffer>}
+     */
+    static async createCaption(text, w, h, font, size, fill, gravity, background) {
+        font = font.startsWith("/") ? `${__dirname}/fonts${font}` : `/Library/Fonts/${font}`;
+        size = size || 15;
+        fill = fill || "black";
+        gravity = gravity || "Center";
+        background = background || "transparent";
+
+        text = text.replace(/[^a-z0-9\s]/gi, '');
+
+        const image = Image.createGM()
+            .command("convert")
+            .out(`-background`).out(background)
+            .font(font, size)
+            .out("-fill").out(fill)
+            .out("-size").out(`${w}x${h}`)
+            .out("-gravity").out(gravity)
+            .out(`caption:${text}`)
+        return Image.gmBuffer(image);
+    }
+
+    static send(buf) {
+        return { files: [buf] };
+    }
+
+    static async loadFiles() {
+        imageFiles = await mfs.readDir("./Classes/Image/images");
+    }
 }
 
-class Canvas {
-    constructor(width, height) {
-        this.canvas = nodecanvas.createCanvas(width, height);
-        this.ctx = this.canvas.getContext("2d");
-    }
-
-    async drawImage(file, px, py, w, h) {
-        const img = new nodecanvas.Image();
-        img.src = await Image.loadFile(file);
-        this.ctx.drawImage(img, px, py, w, h);
-    }
-
-    async drawURL(url, px, py, w, h) {
-        const img = new nodecanvas.Image();
-        img.src = await Image.readUrl(url);
-        this.ctx.drawImage(img, px, py, w, h);
-    }
-
-    toBuffer() {
-        return this.canvas.toBuffer();
-    }
-
-    send() {
-        return { files: [this.toBuffer()] };
-    }
-}
-
-module.exports = { Magick, Canvas, Image }
+module.exports = Image;

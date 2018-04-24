@@ -5,7 +5,6 @@ const { carbonitex, discordbots } = require("../config.js");
 
 const embed = bot.embed
 embed.setTitle("So, you invited Nitro...")
-    .setDescription("")
     .addField("Getting Started", "Get the commands with `n!help`")
     .addField("Support Server", "https://discord.gg/aZ2PYhn")
     .setFooter("Hello")

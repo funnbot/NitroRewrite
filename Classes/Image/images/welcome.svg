@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+    <svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
+    
+     <g>
+      <title>Layer 1</title>
+      <ellipse ry="67" rx="67" id="svg_1" cy="75" cx="75" stroke-width="8" stroke="#ffffff" fill="none"/>
+      <text font-style="italic" font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="47" id="svg_2" y="52.5" x="163.5" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#ffffff">Welcome</text>
+      <text id="username" font-style="normal" font-weight="normal" xml:space="preserve" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" id="svg_10" y="78" x="267" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#ffffff">${name}</text>
+      <script type="application/ecmascript">
+        var maxWidth = 245;
+        var username = document.getElementById("username");
+        var width = username.getBBox().width;
+        if (width > maxWidth) {
+          var newFont = Math.round((width/maxWidth)/5);
+          username.setAttribute("font", newFont);
+        }
+      </script> 
+     </g>
+    </svg>

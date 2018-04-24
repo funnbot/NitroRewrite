@@ -13,6 +13,7 @@ class CreateFilterCommand extends Command {
 
         filters[name] = {
             words,
+            exempt: {},
             level: 1
         }
 

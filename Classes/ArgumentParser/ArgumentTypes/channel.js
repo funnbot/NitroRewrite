@@ -18,10 +18,9 @@ class ChannelArgument {
 }
 
 function findChannelByString(val, msg) {
-    let matches = msg.guild.channels.filter(c => c.name.toLowerCase().includes(val.toLowerCase()));
+    let matches = msg.guild.channels.filter(c => c.name.toLowerCase().includes(val.toLowerCase()) && c.type === "text");
     if (matches.size > 1) return [null, matches.size + " channels found, please specify"]; 
     if (matches.size === 1) return [matches.first(), null];
-
     return [null, "Channel with the name `" + val + "` not found."];
 }
 

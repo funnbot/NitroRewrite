@@ -28,17 +28,23 @@ class Database {
 
     async set(table, id, item, value) {
         if (!testInput(table, id, item, value)) return 0;
+        // Default dosnt need to be duplicated here
         const def = ITEMS[table][item];
-        try {
-            if (isDefault(value, def)) {
-                const data = await r.table(table).get(id);
-                if (!data) return value;
-                const wo = await r.table(table).get(id).without(item);
-                await r.table(table).insert(wo, { conflict: "replace" })
-            } else await r.table(table).insert({ id, [item]: value }, { conflict: "update" });
-        } catch (e) {
-            logger.db(e);
+        // Fetch the current data to edit
+        let data = await r.table(table).get(id);
+        // If the value to be set is matching the default
+        if (isDefault(value, def)) {
+            // If its default and theres nothing set already, return;
+            if (!data) return value;
+            // Delete from obj
+            delete data[item];
+        } else {
+            if (!data) data = {id};
+            // Updating the value
+            data[item] = value;
         }
+        // set it
+        await r.table(table).insert(data, { conflict: "replace" });
         return value;
     }
 
@@ -56,7 +62,7 @@ class Database {
         try {
             var data = await r.table(table).filter(predicate);
         } catch (e) {
-            logger.table(e);
+            logger.db(e);
         }
         return data;
     }

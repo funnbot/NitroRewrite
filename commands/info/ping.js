@@ -10,7 +10,7 @@ class PingCommand extends Command {
     }
 
     help = "Check if Nitro is alive.";
-    userPerms = ["ADMINISTRATOR"];
+    userPerm = "ADMINISTRATOR";
 }
 
 module.exports = PingCommand;

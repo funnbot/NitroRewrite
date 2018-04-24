@@ -44,7 +44,7 @@ class EditFilterCommand extends Command {
     }, {
         type: "string",
         info: "Words to add or remove",
-        example: "shoot heck"
+        example: "shoot heck",
     }];
 }
 

@@ -9,17 +9,16 @@ const imageReg = /{image}/gi;
 
 //Member Join
 bot.on("guildMemberAdd", (member) => {
-    guildMember(member, true)
+    guildMember(member, true);
 })
 
 //Member Leave
 bot.on("guildMemberRemove", async (member) => {
-    guildMember(member, false)
+    guildMember(member, false);
 })
 
 let guildMember = async (member, when) => {
     const { guild, user } = member;
-
     const mlchan = await guild.mlchan();
     const mljoin = await guild.mljoin();
     const mlleave = await guild.mlleave();
@@ -57,7 +56,7 @@ function replaceValues(str, user, guild) {
         "{total}": guild.memberCount,
         "{totalth}": totalth
     };
-    const reg = /{user}|{name}|{tag}|{total}/g;
+    const reg = /\{user\}|\{name\}|\{tag\}|\{total\}|\{totalth\}/g;
     return str.replace(reg, t => rep[t]);
 }
 

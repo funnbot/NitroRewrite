@@ -21,9 +21,9 @@ class FortuneCommand extends Command {
         const txt = [`**${fm}**`, "", `${ls}`, `*${lot}*`].center();
 
         const msg = await send(`${f}`);
-        await timeout(500);
+        await promiseTimeout(500);
         await msg.edit(`${f}:arrow_right:`);
-        await timeout(500);
+        await promiseTimeout(500);
         await msg.edit(txt);
     }
 

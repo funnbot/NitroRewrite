@@ -8,19 +8,18 @@ class HelpCommand extends Command {
 
         if (!message.checkSuffix) {
             let fields = [];
-            for (let [key, [name, desc]] of Object.entries(HELP)) {
+            for (let [key, name] of Object.entries(HELP)) {
                 if (!groups[key]) continue;
-                const value = Object.keys(groups[key]).map(c => `  **[${c}](http://nitro.ws)** - ${commands[c].help}`).join("\n");
+                const value = Object.keys(groups[key]).map(c => `\u200b  **[${c}](http://)** - ${commands[c].help}`).join("\n");
                 fields.push({
-                    name: `${name} - ${desc}`,
-                    value
+                    name: `${name}`,
+                    value,
                 });
             }
 
             const embed = bot.embed;
             embed.fields = fields;
             embed.setColor("#36393E");
-
             return message.author.send(embed).catch(logger.debug);
         }
 

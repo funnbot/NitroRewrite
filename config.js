@@ -31,9 +31,6 @@ module.exports = {
             serverlog: false,
             disabledEvents: {}, // Disabled modlog events
             filters: {}, // The filters for messages
-            adblock: false, // Block advert messages
-            zalgo: false, // Block zalgo messages
-            filterexempt: {}, // Ids exempt from the filter
             ar: false, // The auto role
             blacklist: {} // Ids that are blocked from the bot
         },
@@ -76,71 +73,24 @@ module.exports = {
     },
 
     HELP: {
-        config: [
-            "Configuration",
-            "Change basic configuration for Nitro."
-        ],
-        mod: [
-            "Moderation",
-            "Manage users who are acting up."
-        ],
-        games: [
-            "Games",
-            "Play games with Nitro."
-        ],
-        fun: [
-            "Fun",
-            "Silly and random commands."
-        ],
-        image: [
-            "Image",
-            "Memes and image processing."
-        ],
-        memberlog: [
-            "Member Log",
-            "Welcome and say goodbye to users."
-        ],
-        donator: [
-            "Donator",
-            "View commands made for supporters."
-        ],
-        /*poll: [
-            "Polls",
-            "Create custom polls for users to vote on."
-        ],*/
-        tag: [
-            "Tags",
-            "Store custom text and make it easy to access."
-        ],
-        irc: [
-            "IRC",
-            "Send messages to other servers."
-        ],
-        economy: [
-            "Economy",
-            "Manage your money."
-        ],
-        /*trivia: [
-            "Trivia",
-            "Play trivia against your friends."
-        ],*/
-        help: [
-            "Tutorials",
-            "Learn how to use Nitro."
-        ],
-        filter: [
-            "Content Filter",
-            "Delete messages with swearing or ads."
-        ],
-        info: [
-            "Information",
-            "Get statistics of your server."
-        ],
-        crypto: [
-            "Crypto",
-            "Encrypt and decrypt things."
-        ]
-
+        help: "Tutorials",
+        config: "Configuration",
+        mod: "Moderation",
+        games: "Games",
+        fun: "Fun",
+        memes: "Memes",
+        image: "Images",
+        memberlog: "Member Log",
+        utility: "Utility",
+        poll: "Polls",
+        tag: "Tags",
+        irc: "IRC",
+        economy: "Economy",
+        help: "Tutorials",
+        filter: "Content Filter",
+        info: "Info",
+        crypto: "Crypto",
+        music: "Music"
     },
     //The "Companies" and their keys used in stock market
     STOCKS: {
@@ -173,19 +123,29 @@ module.exports = {
             base: 0.35
         }
     },
-    //Numbers
-    NUMBERS: [
-        ":zero:",
-        ":one:",
-        ":two:",
-        ":three:",
-        ":four:",
-        ":five:",
-        ":six:",
-        ":seven:",
-        ":eight:",
-        ":nine:",
-    ],
+    // the best emojis
+    EMOTES: {
+        NUMBERS: [
+            ":zero:",
+            ":one:",
+            ":two:",
+            ":three:",
+            ":four:",
+            ":five:",
+            ":six:",
+            ":seven:",
+            ":eight:",
+            ":nine:",
+        ],
+
+        STATUS: {
+            online: "<:online:432677635282305027>",
+            offline: "<:offline:432677635580231690>",
+            idle: "<:away:432677635412328458>",
+            dnd: "<:dnd:432677636381212672>"
+        }
+    },
+
     //Map permission names to a easier to read format
     PERMISSIONS: {
         ADMINISTRATOR: "Administrator",

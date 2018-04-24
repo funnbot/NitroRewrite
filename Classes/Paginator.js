@@ -27,6 +27,14 @@ class Paginator {
             action(item, index);
         }
     }
+
+    *pageValues(p = 1) {
+        const page = this.getPage(p);
+        const len = page.length;
+        for (let i = 0; i    < len; i++) {
+            yield page[i];
+        }
+    }
 }
 
 module.exports = Paginator;

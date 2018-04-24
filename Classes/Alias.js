@@ -1,25 +1,33 @@
+let defaultAlias = {};
+
 class Alias {
     constructor(commands) {
         this.aliases = {}
-        this.mapDefaults(commands)
     }
 
-    mapDefaults(commands) {
-        Object.keys(commands).forEach(c => {
-            commands[c].alias.forEach(a => {
-                this.aliases[a] = c
-            })
-        })
+    static mapDefaults(commands) {
+        const keys = Object.keys(commands);
+        for (let c of keys) {
+            const cmd = commands[c];
+            if (!cmd.alias) continue;
+            for (let a of cmd.alias) {
+                defaultAlias[a] = c;
+            }
+        }
     }
 
     mapCustom(custom) {
-        Object.keys(custom).forEach(c => {
-            this.aliases[c] = custom[c]
-        })
+        const keys = Object.keys(custom),
+            len = keys.length;
+        for (let i = 0; i < len; i++) {
+            this.aliases[keys[i]] = custom[keys[i]];
+        }
     }
 
     run(message) {
-        return this.aliases[message.command] || message.command
+        return defaultAlias[message.command] ||
+            this.aliases[message.command] ||
+            message.command
     }
 
 }
