@@ -35,9 +35,9 @@ class Image {
         return gm(...args);
     }
 
-    static gmBuffer(buffer, format = "PNG") {
+    static gmBuffer(img, format = "PNG") {
         return new Promise((resolve, reject) => {
-            buffer.stream(format, (err, stdout, stderr) => {
+            img.stream(format, (err, stdout, stderr) => {
                 if (err) { return reject(err) }
                 const chunks = []
                 stdout.on("data", (chunk) => { chunks.push(chunk) })
