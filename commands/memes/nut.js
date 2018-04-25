@@ -8,7 +8,7 @@ class NutCommand extends Command {
         const nut = Image.canvasImage(Image.getStaticFile("nutmeme"));
         ctx.drawImage(nut, 0, 0, 612, 612);
 
-        const caption = await Image.createCaption(input, 590, 145, "Arial.ttf", 40, "black", "northwest");
+        const caption = await Image.createCaption(input, 590, 145, "arial.ttf", 40, "black", "northwest");
         ctx.drawImage(Image.canvasImage(caption), 20, 8, 590, 145);
 
         const file = Image.send(canvas.toBuffer());

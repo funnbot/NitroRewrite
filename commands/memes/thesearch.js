@@ -7,7 +7,7 @@ class TheSearchCommand extends Command {
         const { canvas, ctx } = Image.canvas(700, 612);
         const thesearch = Image.canvasImage(Image.getStaticFile("thesearch"));
         ctx.drawImage(thesearch, 0, 0, 700, 612);
-        const caption = await Image.createCaption(input.toUpperCase(), 162, 69, "/comicsans.ttf", 18 - input.length / 10, "#171819");
+        const caption = await Image.createCaption(input.toUpperCase(), 162, 69, "comicsans.ttf", 18 - input.length / 10, "#171819");
         ctx.drawImage(Image.canvasImage(caption), 60, 330, 162, 69);
         const file = Image.send(canvas.toBuffer());
 

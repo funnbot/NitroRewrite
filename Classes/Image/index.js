@@ -60,7 +60,7 @@ class Image {
      * @returns {Promise<Buffer>}
      */
     static async createCaption(text, w, h, font, size, fill, gravity, background) {
-        font = font.startsWith("/") ? `${__dirname}/fonts${font}` : `/Library/Fonts/${font}`;
+        font = `${__dirname}/fonts/${font}`;
         size = size || 15;
         fill = fill || "black";
         gravity = gravity || "Center";
