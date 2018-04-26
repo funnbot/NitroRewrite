@@ -2,13 +2,9 @@ const { Command } = require("../../Nitro");
 
 class AvatarCommand extends Command {
 
-    async run({ message, bot, send, t }) {
+    async run({ message, bot, reply, t }) {
         const user = message.args[0];
-        const embed = new bot.Embed();
-        embed.setDescription("**Here is the avatar for:** " + user.username)
-            .setImage(user.displayAvatarURL({ size: 2048 }))
-            .nitroColor();
-        return send(embed);
+        return reply("Here is the avatar for: " + user.username + "\n" + user.displayAvatarURL({ size: 2048 }))
     }
 
     help = "Get someones avatar";
