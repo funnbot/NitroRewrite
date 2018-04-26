@@ -1,6 +1,7 @@
 const extend = require("./extend.js");
 const Discord = require("discord.js");
-const { PREFIX } = require("../config.js");
+const { PREFIX } = require("../config");
+const Image = require("../Classes/Image");
 
 const Locale = new(require("../Classes/Locale/index.js"));
 
@@ -54,7 +55,7 @@ class Message extends Discord.Message {
             } else if (c === " ") { // a space
                 // If in a quote, add the space
                 if (inQuote) argsRaw[current] += c;
-                // If the last space in a line, bump to next arg, extra spaces will be shown at end of args 
+                // If the last space in a line, bump to next arg, extra spaces will be shown at end of arg
                 else if (n !== " ") current++;
                 else argsRaw[current] += c;
             } else argsRaw[current] += c // Add any other char to current arg
@@ -105,25 +106,31 @@ class Message extends Discord.Message {
         return this.author.checkPermission(this.channel, ...perms);
     }
 
-    async fetchImage(returnAvatarOnFail) {
-        try {
-            var messages = await this.channel.messages.fetch({ limit: 3 })
-        } catch (e) {
-            return logger.warn(e);
-        }
+    async fetchImage(avatar = true) {
+        const messages = await this.channel.messages.fetch({ limit: 3 })
         for (let m of messages.values()) {
+            const urls = m.content.split(/\s+/g);
+            for (let u of urls) {
+                if (!u) continue;
+                if (/^<.+>$/.test(url)) url = url.substring(1, -1);
+                const buf = Image.readUrl(url);
+                if (buf) return buf;
+            }
             if (m.attachments.size) {
                 let url = m.attachments.first().url;
-                if (this._imageUrl(url)) return url;
+                const buf = await Image.readUrl(url);
+                if (buf) return buf;
             }
             if (m.embeds.length) {
                 if (m.embeds[0].thumbnail) {
                     let url = m.embeds[0].thumbnail.url;
-                    if (this._imageUrl(url)) return url;
+                    const buf = await Image.readUrl(url);
+                    if (buf) return buf;
                 }
             }
         }
-        return returnAvatarOnFail ? this.author.displayAvatarURL() : null;
+        const url = this.author.displayAvatarURL();
+        return avatar ? Image.readUrl(url) : null;
     }
 
     _imageUrl(url) {

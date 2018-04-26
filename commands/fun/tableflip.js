@@ -1,6 +1,6 @@
 const { Command } = require("../../Nitro");
 
-class TableFlip extends Command {
+class TableFlipCommand extends Command {
 
     async run({ message, bot, send, t }) {
         const msg = await send("(°-°)\\ ┬─┬");

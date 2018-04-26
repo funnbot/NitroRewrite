@@ -46,7 +46,7 @@ class Util {
         let counter = array.length,
             temp, rn;
         while (counter > 0) {
-            rn = Math.floor(Math.random() * count + 1);
+            rn = Math.floor(Math.random() * counter + 1);
             counter--
             temp = array[counter];
             array[counter] = array[rn];

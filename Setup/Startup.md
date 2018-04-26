@@ -17,5 +17,3 @@ In the 1st one,
 ```bash
 npm start
 ```
-
-#### Works like a charm.

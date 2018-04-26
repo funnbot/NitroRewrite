@@ -14,8 +14,13 @@ class Image {
     }
 
     static async readUrl(url) {
-        var res = await snekfetch.get(url);
-        if (!res.headers["content-type"].startsWith("image")) return null;
+        try {
+            var res = await snekfetch.get(url);
+        } catch {
+            return null;
+        }
+        const type = res.headers["content-type"];
+        if (!type || !type.contains("image")) return null;
         return res.body;
     }
 
@@ -47,6 +52,44 @@ class Image {
         })
     }
 
+    static buffer(img) {
+        return new Promise((resolve, reject) => {
+            if (img.constructor.name === "Canvas") {
+                img.toBuffer((err, buff) => {
+                    if (err) return reject(err);
+                    return resolve(buff);
+                })
+            } else if (img instanceof gm) {
+                img.stream(format, (err, stdout, stderr) => {
+                    if (err) { return reject(err) }
+                    const chunks = []
+                    stdout.on("data", (chunk) => { chunks.push(chunk) })
+                    stdout.once("end", () => { resolve(Buffer.concat(chunks)) })
+                    stderr.once("data", (data) => { reject(String(data)) })
+                })
+            } else reject("Invalid format " + img);
+        })
+    }
+
+    static async searchChannel(channel) {
+        const msgs = await channel.messages.fetch({ limit: 3 });
+        for (let m of msgs.values()) {
+            const urls = m.content.split(/\s+/g);
+            for (let u of urls) {
+                if (!u) continue;
+                if (/^<.+>$/.test(u)) u = u.substring(1, -1);
+                const buf = await Image.readUrl(u);
+                if (buf) return buf;
+            }
+            if (m.attachments.size) {
+                let url = m.attachments.first().url;
+                const buf = await Image.readUrl(url);
+                if (buf) return buf;
+            }
+        }
+        return null;
+    }
+
     /**
      * Create a wrapped text caption.
      * @param {String} text
@@ -60,7 +103,7 @@ class Image {
      * @returns {Promise<Buffer>}
      */
     static async createCaption(text, w, h, font, size, fill, gravity, background) {
-        font = font.startsWith("/") ? `${__dirname}/fonts${font}` : `/Library/Fonts/${font}`;
+        font = `${__dirname}/fonts/${font}`;
         size = size || 15;
         fill = fill || "black";
         gravity = gravity || "Center";
