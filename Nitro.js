@@ -4,7 +4,7 @@ const Database = require("./Classes/Database.js");
 const NitroClient = require("./Classes/NitroClient.js");
 const MessageHandler = require("./Classes/MessageHandler.js");
 const Cycle = require("./Classes/Cycle.js");
-const Image = require("./Classes/Image/index.js");
+const Image = require("./Classes/Image");
 const Paginator = require("./Classes/Paginator.js");
 const Command = require("./Classes/Command.js");
 
