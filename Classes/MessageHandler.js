@@ -48,7 +48,8 @@ class MessageHandler extends EventEmitter {
         // Setup the message extensions
         await message.SetupExtension();
         this.emit("edit", oldMessage, message);
-        if (message.edits.length <= 3) return this.onCommand(message, this);
+        if (message.edits.length <= 3 && oldMessage.content !== message.content)
+             return this.onCommand(message, this);
     }
 
     async onCommand(message, { bot, alias }) {
