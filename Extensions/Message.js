@@ -107,30 +107,10 @@ class Message extends Discord.Message {
     }
 
     async fetchImage(avatar = true) {
-        const messages = await this.channel.messages.fetch({ limit: 3 })
-        for (let m of messages.values()) {
-            const urls = m.content.split(/\s+/g);
-            for (let u of urls) {
-                if (!u) continue;
-                if (/^<.+>$/.test(url)) url = url.substring(1, -1);
-                const buf = Image.readUrl(url);
-                if (buf) return buf;
-            }
-            if (m.attachments.size) {
-                let url = m.attachments.first().url;
-                const buf = await Image.readUrl(url);
-                if (buf) return buf;
-            }
-            if (m.embeds.length) {
-                if (m.embeds[0].thumbnail) {
-                    let url = m.embeds[0].thumbnail.url;
-                    const buf = await Image.readUrl(url);
-                    if (buf) return buf;
-                }
-            }
-        }
-        const url = this.author.displayAvatarURL();
-        return avatar ? Image.readUrl(url) : null;
+        let buf = await Image.searchChannel(this.channel);
+        if (!avatar) return buf;
+        if (!buf) buf = await Image.readUrl(this.author.displayAvatarURL());
+        return buf;
     }
 
     _imageUrl(url) {
