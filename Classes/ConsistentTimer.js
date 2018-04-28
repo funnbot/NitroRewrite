@@ -7,18 +7,19 @@ class ConsistentTimer {
     }
 
     async restartTimers() {
-        this.timerData = await this.bot.timers();
-        for (let timer of this.timerData) {
+        let timerData = await this.bot.timers();
+        for (let timer of timerData) {
             if (!this.bot.guilds.has(timer.guild)) continue;
             const now = Date.now(),
-                end = timer.s + timer.l;
+                end = timer.start + timer.time;
             if (end < now) {
-                this[timer.type](timer.guild, id, timer.m);
+                this[timer.type](timer);
             } else {
-                const left = end - now;
-                await this.add(id, left, timer.type);
+                timer.time = end - now;
+                await this.add(timer);
             }
         }
+        await this.bot.timers(this.timerData);
     }
 
     /**
@@ -36,11 +37,9 @@ class ConsistentTimer {
      * @param {TimeData} timeData Data about the timer
      */
     async add(timer) {
-        this.timerData.push({
-            start: Date.now(),
-            ...timer
-        });
-        this.timers.push(setTimeout(() => this[timer.type](timer), timer.time));
+        timer.start = Date.now();
+        this.timerData.push(timer);
+        this.timers.push(setTimeout((self) => self[timer.type](timer), timer.time, this));
         await this.bot.timers(this.timerData);
     }
 

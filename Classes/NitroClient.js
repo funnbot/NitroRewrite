@@ -42,6 +42,7 @@ class NitroClient extends Discord.Client {
         this.initTime = Date.now();
         this._unhandledRejection();
         this.once("ready", () => {
+            this.conTimers.restartTimers();
             // MUSIC IS DISABLED FOR NOW (lavalink not needed as such)
             if (!config.DIS_MUSIC) this.player = new MusicPlayer(this);
             logger.info("Bot online.")
@@ -67,7 +68,6 @@ class NitroClient extends Discord.Client {
 
     async init() {
         await this.db.formatDb();
-        await this.conTimers.restartTimers();
         await Image.loadFiles();
         this.commands = this.CommandLoader.load()
         this.login(config.TOKEN);

@@ -38,7 +38,6 @@ class Guild extends Discord.Guild {
         if (!user.mod) user.mod = {};
         if (!user.mod[action]) user.mod[action] = 0;
         user.mod[action]++;
-        userData[id] = user;
         return this.setUserData(id, user);
     }
 }

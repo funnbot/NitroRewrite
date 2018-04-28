@@ -42,7 +42,8 @@ module.exports = {
             irc: false
         },
         system: {
-            timers: []
+            timers: [],
+            usage: {}
         },
     },
 

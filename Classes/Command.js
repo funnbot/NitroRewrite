@@ -105,6 +105,10 @@ class Command {
         this.reply = setupReply(message);
 
         logger.cmd(message.command)
+        // Save the command usage
+        const us = await this.bot.usage();
+        us[message.command] = (us[message.command] || 0) + 1;
+        await this.bot.usage(us);
         try {
             await this.run(this);
         } catch (e) {

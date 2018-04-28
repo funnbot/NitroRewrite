@@ -7,6 +7,7 @@ class LoadPlaylistCommand extends Command {
     }
 
     help = "";
+    wip = true;
 }
 
 module.exports = LoadPlaylistCommand;

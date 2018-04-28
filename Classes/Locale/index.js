@@ -19,7 +19,7 @@ module.exports = class Locale {
     }
 
     buildFunctions() {
-        let english = this.locales.find(f => f.LANG = "en");
+        let english = this.locales.find(f => f.LANG === "en");
         for (let key of Object.keys(english)) {
             if (key === "LANG") continue;
             this[key] = this.t(key);
@@ -44,12 +44,8 @@ module.exports = class Locale {
             let split = splitMap[this.lang] || splitMap["en"];
             split = split[key] || splitMap["en"][key];
             if (Array.isArray(text)) return text;
-            let res = "";
-            let index = 0;
-            for (let txt of inp) {
-                res += split[index] + txt;
-            }
-            if (inp.length == 0) res = split[0];
+            if (inp.length === 0) return split[0];
+            const res = split.map((s, i) => s + (inp[i]||'')).join("")
             return res;
         }
     }

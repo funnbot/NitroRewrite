@@ -1,7 +1,6 @@
 {
     "LANG": "br_en",
 
-    
     "PING_TEST": "Testing ping with a cup of tea...",
     "PING_DONE": "**Pong! Oops! I spilled my tea** Latency: {}MS Websocket: {}MS.",
 

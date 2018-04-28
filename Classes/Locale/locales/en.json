@@ -3,7 +3,7 @@
 
     
     "PING_TEST": "Testing ping...",
-    "PING_DONE": "**Pong!** Latency: {}MS Websocket: {}MS.",
+    "PING_DONE": "**Pong!** Latency: {} MS Websocket: {} MS.",
 
     "SETLANG_LIST": "Here are the available locales:\n{}",
     "SETLANG_SET": "Locale set to: `{}`.",
