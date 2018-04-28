@@ -13,7 +13,8 @@ class PixelateCommand extends Command {
     }
 
     help = "Pixelate an image.";
-    alias = "pixel"
+    alias = "pixel";
+    cooldown = 5;
 }
 
 module.exports = PixelateCommand;

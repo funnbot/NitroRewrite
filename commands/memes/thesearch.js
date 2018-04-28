@@ -15,7 +15,7 @@ class TheSearchCommand extends Command {
     }
 
     help = "The search continues meme";
-    cooldown = 20;
+    cooldown = 5;
     arg = {
         type: "string",
         info: "A stupid idea",

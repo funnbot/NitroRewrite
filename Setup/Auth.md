@@ -10,6 +10,8 @@ module.exports = {
     DBPASS: "", // Not used
     DBDIR: "", // Not used
 
+    DIS_MUSIC: false, // Disable music and the requiment for lavalink
+
     DBL_PASS: "", // The discordbotlist webhook server
     DBL_PORT: "",
 

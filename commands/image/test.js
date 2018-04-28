@@ -9,6 +9,7 @@ class TestCommand extends Command {
     }
 
     help = "";
+    wip = true;
 }
 
 module.exports = TestCommand;

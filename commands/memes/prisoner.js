@@ -20,6 +20,7 @@ class PrisonerCommand extends Command {
         info: "The message for the prisoner.",
         example: "I pirated a movie."
     }
+    cooldown = 5;
 }
 
 module.exports = PrisonerCommand;

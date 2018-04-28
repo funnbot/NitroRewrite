@@ -27,7 +27,7 @@ class PunchCommand extends Command {
     }
 
     help = "Sucker punch a user";
-    cooldown = 20;
+    cooldown = 5;
     arg = {
         type: "user",
         info: "The user to punch.",

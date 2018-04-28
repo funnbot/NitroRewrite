@@ -17,7 +17,7 @@ class DeathNoteCommand extends Command {
     }
 
     help = "Put someone on your death note";
-    cooldown = 20;
+    cooldown = 5;
     arg = {
         type: "user",
         info: "The user to add.",

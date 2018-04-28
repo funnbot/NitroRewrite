@@ -20,7 +20,7 @@ class ListFiltersCommand extends Command {
 
     }
 
-    help = "";
+    help = "List the filters or words in a filter.";
     usage = "";
     alias = ["filterlist", "wordlist", "listwords"];
     userPerms = ["MANAGE_GUILD"];

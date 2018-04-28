@@ -16,7 +16,7 @@ class NutCommand extends Command {
     }
 
     help = "The nut button meme";
-    cooldown = 20;
+    cooldown = 5;
     arg = {
         type: "string",
         info: "Text to put in the meme",

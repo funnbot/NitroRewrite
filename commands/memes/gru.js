@@ -26,6 +26,7 @@ class GruCommand extends Command {
         info: "The text delimited by `|`",
         example: "Find a gru meme template | Create a custom gru meme generator | Nobody uses it"
     };
+    cooldown = 5;
 }
 
 module.exports = GruCommand;

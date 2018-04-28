@@ -35,17 +35,18 @@ class ShipCommand extends Command {
         return reply(await Image.out(out));
     }
 
-    help = "Ship ";
+    help = "Ship a user";
     args = [{
         type: "user",
-        info: "The user",
+        info: "The user to ship",
         example: "@user"
     }, {
         type: "user",
-        info: "The other",
+        info: "The other user to ship",
         example: "@user",
         default: true
     }]
+    cooldown = 5;
 }
 
 module.exports = ShipCommand;
