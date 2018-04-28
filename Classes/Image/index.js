@@ -1,5 +1,5 @@
 const gm = require("gm").subClass({imageMagick: true});
-//const Sharp = require("sharp"); // >n< NO TOUCHY >n< //
+const sharp = require("sharp");
 const canvas = require("canvas");
 const mfs = require("../../Functions/mfs.js");
 const snekfetch = require("snekfetch");
@@ -24,6 +24,10 @@ class Image {
         return res.body;
     }
 
+    static sharp(...args) {
+        return sharp(...args);
+    }
+
     static canvas(width, height) {
         const canv = canvas.createCanvas(width, height);
         const ctx = canv.getContext("2d");
@@ -40,6 +44,10 @@ class Image {
         return gm(...args);
     }
 
+    static gm(...args) {
+        return gm(...args);
+    }
+
     static gmBuffer(img, format = "PNG") {
         return new Promise((resolve, reject) => {
             img.stream(format, (err, stdout, stderr) => {
@@ -52,7 +60,7 @@ class Image {
         })
     }
 
-    static buffer(img) {
+    static buffer(img, format = "PNG") {
         return new Promise((resolve, reject) => {
             if (img.constructor.name === "Canvas") {
                 img.toBuffer((err, buff) => {
@@ -66,6 +74,11 @@ class Image {
                     stdout.on("data", (chunk) => { chunks.push(chunk) })
                     stdout.once("end", () => { resolve(Buffer.concat(chunks)) })
                     stderr.once("data", (data) => { reject(String(data)) })
+                })
+            } else if (img instanceof sharp) {
+                img.toBuffer((err, data) => {
+                    if (err) return reject(err);
+                    return resolve(data);
                 })
             } else reject("Invalid format " + img);
         })
@@ -88,6 +101,15 @@ class Image {
             }
         }
         return null;
+    }
+
+    static async overlayImages(base, imgs) {
+        let current = Image.sharp(base);
+        for (let i = 0; i < imgs.length; i++) {
+            const { buffer, top, left} = imgs[i];
+            current = Image.sharp(await current.overlayWith(buffer, {top, left}).toBuffer());
+        }
+        return await current.toBuffer();
     }
 
     /**
@@ -122,8 +144,15 @@ class Image {
         return Image.gmBuffer(image);
     }
 
-    static send(buf) {
-        return { files: [buf] };
+    static send(buffer) {
+        if (!(buffer instanceof Buffer)) return logger.err(buffer);
+        if (buffer.byteLength > 8388608) return undefined;
+        return { files: [{name: "nitro.png", attachment: buffer}] };
+    }
+
+    static async out(img, format) {
+        const buf = await Image.buffer(img, format);
+        return Image.send(buf);
     }
 
     static async loadFiles() {

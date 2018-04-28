@@ -6,10 +6,11 @@ class SwirlCommand extends Command {
         let buf = await message.fetchImage();
         const gm = Image.createGM(buf);
         gm.swirl(factor);
-        reply(Image.send(await Image.gmBuffer(gm)));
+        reply(Image.send(await Image.buffer(gm)));
     }
 
     help = "Swirl an image.";
+    cooldown = 5;
     arg = {
         type: "int",
         info: "The swirl factor.",

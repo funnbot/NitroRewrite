@@ -10,6 +10,7 @@ class SwirlCommand extends Command {
     }
 
     help = "The negative of an image.";
+    cooldown = 5;
 }
 
 module.exports = SwirlCommand;

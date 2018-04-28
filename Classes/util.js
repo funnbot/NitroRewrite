@@ -90,6 +90,12 @@ class Util {
         return o;
     }
 
+    static delimiter(text, del, min = 2) {
+        const opts = text.split(del).map(s => s.trim()).filter(t => t);
+        if (opts.length < min) return null;
+        return opts;
+    }
+
     /**
      * Add ordinal indicator
      * @static
