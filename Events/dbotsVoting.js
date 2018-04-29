@@ -65,6 +65,8 @@ async function startServer() {
     }
 }
 
+startServer();
+
 function isRunning() {
     return new Promise((resolve, reject) => {
         const tester = net.createServer()
