@@ -14,16 +14,16 @@ async function handleRequest(req) {
     if (!isAuthorized(req)) return;
     const body = await readData(req);
     const data = parseData(body) || {};
-    console.log(data);
     const { bot: botID, user, type } = data;
     if (!botID || !user || !type) return;
-    if (type !== "upvote") return;
+    if (type !== "upvote" || type !== "test") return;
     if (bot.user.id !== botID) return;
 
     await addDailies(user);
 }
 
 async function addDailies(id) {
+    console.log(id);
     const user = await bot.users.fetch(id);
     if (!user) return;
     logger.info(`${user.username}(${user.id}) voted`);
@@ -51,7 +51,6 @@ function readData(req) {
 }
 
 function isAuthorized(req) {
-    console.log(req);
     const { authorization: auth } = req.headers;
     return auth && auth === DBL_PASS;
 }
