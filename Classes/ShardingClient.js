@@ -6,7 +6,7 @@ const { ShardingManager } = require("discord.js");
 class ShardingClient {
     constructor() {
         this.shardingManager = new ShardingManager("./bot.js", {
-            shardCount: SHARDS,
+            totalShards: SHARDS,
             token: TOKEN
         });
     }
