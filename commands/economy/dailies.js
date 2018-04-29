@@ -23,7 +23,7 @@ class DailiesCommand extends Command {
         return reply(`**__To recieve your daily rewards.__**
 Go to <https://discordbots.org/bot/264087705124601856/vote>, 
 and click vote, you might need to login with your discord account.
-The reward is ${message.guild.formatBal(10)}.`);
+The reward is ${message.guild.formatBal(50)}.`);
         }
 
         help = "Recieve daily rewards.";
