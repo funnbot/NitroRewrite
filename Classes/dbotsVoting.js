@@ -7,7 +7,7 @@ const app = createServer(handleRequest);
 logger.info(`Voting server started on ${DBL_PORT}`);
 
 function handler(req, res) {
-    await handleRequest(req);
+    handleRequest(req);
     res.end();
 }
 
