@@ -60,8 +60,8 @@ async function startServer() {
         await isRunning();
         app.listen(DBL_PORT)
         logger.info(`Voting server started on ${DBL_PORT}`);
-    } catch {
-
+    } catch(e) {
+        console.log(e);
         logger.info("Voting server running.")
     }
 }
@@ -73,7 +73,7 @@ function isRunning() {
         const tester = net.createServer()
             .once('error', e => {
                 if (e.code != 'EADDRINUSE') return resolve();
-                return reject();
+                return reject(e);
             })
             .once('listening', () => {
                 tester.once('close', () => resolve());
