@@ -72,7 +72,7 @@ function isRunning() {
     return new Promise((resolve, reject) => {
         const tester = net.createServer()
             .once('error', e => {
-                if (e.code != 'EADDRINUSE') return resolve();
+                if (e.code != 'EADDRINUSE') return reject(e);
                 return reject(e);
             })
             .once('listening', () => {
