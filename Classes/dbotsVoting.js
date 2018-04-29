@@ -12,6 +12,7 @@ function handler(req, res) {
 }
 
 async function handleRequest(req) {
+    console.log(req);
     if (!isAuthorized(req)) return;
     const body = await readData(req);
     const data = parseData(body) || {};
