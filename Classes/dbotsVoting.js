@@ -2,7 +2,7 @@ const { DBL_PASS, DBL_PORT } = require("../config.js");
 const bot = require("../bot.js");
 const { createServer } = require("http");
 
-const app = createServer(handleRequest);
+const app = createServer(handler);
 
 logger.info(`Voting server started on ${DBL_PORT}`);
 
