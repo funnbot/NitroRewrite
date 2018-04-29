@@ -1,10 +1,9 @@
 const { DBL_PASS, DBL_PORT } = require("../config.js");
+const net = require("net");
 const bot = require("../bot.js");
 const { createServer } = require("http");
 
 const app = createServer(handler);
-
-logger.info(`Voting server started on ${DBL_PORT}`);
 
 function handler(req, res) {
     handleRequest(req);
@@ -56,4 +55,23 @@ function isAuthorized(req) {
     return auth && auth === DBL_PASS;
 }
 
-app.listen(DBL_PORT);
+async function startServer() {
+    try {
+        await isRunning();
+        app.listen(DBL_PORT)
+        logger.info(`Voting server started on ${DBL_PORT}`);
+    } catch {
+        logger.info("Voting server running.")
+    }
+}
+
+function isRunning() {
+    return new Promise((resolve, reject) => {
+        const tester = net.createServer()
+            .once('error', reject)
+            .once('listening', () => {
+                tester.once('close', resolve);
+            })
+            .listen(port);
+    })
+}
