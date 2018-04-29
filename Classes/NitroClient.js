@@ -47,6 +47,7 @@ class NitroClient extends Discord.Client {
             if (!config.DIS_MUSIC) this.player = new MusicPlayer(this);
             logger.info("Bot online.")
             this.updateStats();
+            this.user.setActivity("n!help");
         })
 
     }
