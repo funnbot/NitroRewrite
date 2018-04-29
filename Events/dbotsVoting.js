@@ -76,7 +76,7 @@ function isRunning() {
                 return reject(e);
             })
             .once('listening', () => {
-                tester.once('close', () => resolve());
+                tester.once('close', () => resolve()).close();
             })
             .listen(DBL_PORT);
     })
