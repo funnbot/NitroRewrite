@@ -7,6 +7,7 @@ class SayCommand extends Command {
     }
 
     help = "Makes Nitro say a message";
+    userPerm = "MANAGE_MESSAGES";
     alias = ["echo"];
     arg = {
         type: "string",

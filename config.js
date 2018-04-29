@@ -1,5 +1,5 @@
 const AUTH = require("./auth");
-const PREFIX = "?"
+const PREFIX = "n!";
 
 module.exports = {
     PREFIX,
