@@ -54,7 +54,7 @@ function readData(req) {
 
 function isAuthorized(req) {
     const { authorization: auth } = req.headers;
-    return auth && auth === process.env.DBL_PASS;
+    return auth && auth === DBL_PASS;
 }
 
-app.listen(process.env.DBL_PORT);
+app.listen(DBL_PORT);
