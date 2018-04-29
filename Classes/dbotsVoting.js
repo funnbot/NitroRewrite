@@ -4,6 +4,8 @@ const { createServer } = require("http");
 
 const app = createServer(handleRequest);
 
+logger.info(`Voting server started on ${DBL_PORT}`);
+
 function handler(req, res) {
     handleRequest(req);
     res.end();
@@ -16,7 +18,7 @@ async function handleRequest(req) {
 
     const { bot: botID, user, type } = data;
     if (!botID || !user || !type) return;
-    if (test !== "upvote") return;
+    if (type !== "upvote") return;
     if (bot.user.id !== botID) return;
 
     await addDailies(user);
