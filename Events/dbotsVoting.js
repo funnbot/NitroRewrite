@@ -14,7 +14,7 @@ async function handleRequest(req) {
     if (!isAuthorized(req)) return;
     const body = await readData(req);
     const data = parseData(body) || {};
-
+    console.log(data);
     const { bot: botID, user, type } = data;
     if (!botID || !user || !type) return;
     if (type !== "upvote") return;
