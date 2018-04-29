@@ -16,7 +16,7 @@ async function handleRequest(req) {
     const data = parseData(body) || {};
     const { bot: botID, user, type } = data;
     if (!botID || !user || !type) return;
-    if (type !== "upvote" || type !== "test") return;
+    if (type !== "upvote" && type !== "test") return;
     if (bot.user.id !== botID) return;
 
     await addDailies(user);
