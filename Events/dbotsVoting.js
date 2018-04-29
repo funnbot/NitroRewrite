@@ -51,6 +51,7 @@ function readData(req) {
 }
 
 function isAuthorized(req) {
+    console.log(req);
     const { authorization: auth } = req.headers;
     return auth && auth === DBL_PASS;
 }
