@@ -6,7 +6,7 @@ class LockDownCommand extends Command {
         const ms = message.args[0];
         const role = (message.args[1] || message.guild).id;
 
-        const overwrites = message.channel.permissionOverwrites.get(role);
+        const overwrites = message.channel.permissionOverwrites.get(role) || {};
         let current = null;
         if (overwrites.allowed.has("SEND_MESSAGES")) current = true;
         else if (overwrites.denied.has("SEND_MESSAGES")) current = false;
