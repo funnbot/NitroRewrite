@@ -23,10 +23,9 @@ async function handleRequest(req) {
 }
 
 async function addDailies(id) {
-    console.log(id);
     const user = await bot.users.fetch(id);
     if (!user) return;
-    logger.info(`${user.username}(${user.id}) voted`);
+    logger.info(`${user.id} voted`);
     user.wallet.add(50);
 }
 
