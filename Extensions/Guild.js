@@ -19,7 +19,7 @@ class Guild extends Discord.Guild {
     }
 
     async triviaWin(id) {
-        let user = this.getUserData(id);
+        let user = await this.getUserData(id);
         if (!user.trivia) user.trivia = 0;
         user.trivia++;
         return this.setUserData(id, user);

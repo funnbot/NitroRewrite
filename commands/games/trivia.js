@@ -137,7 +137,7 @@ async function win(bot, message, user, worth) {
     message.channel.cache.delete("trivia");
     message.channel.send(`**${user.tag} answered the question correctly, here is your reward.**`)
     await message.guild.triviaWin(user.id);
-    await message.guild.balance(user.id, worth, true);
+    await user.wallet.add(worth);
 }
 
 function shuffle(array) {

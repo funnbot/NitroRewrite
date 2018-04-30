@@ -60,9 +60,7 @@ async function startServer() {
         await isRunning();
         app.listen(DBL_PORT)
         logger.info(`Voting server started on ${DBL_PORT}`);
-    } catch(e) {
-        logger.info("Voting server running.")
-    }
+    } catch {}
 }
 
 startServer();
