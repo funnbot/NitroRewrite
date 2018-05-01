@@ -10,7 +10,7 @@ handler.on("new", async message => {
 })
 
 handler.on("edit", async (oldMessage, message) => {
-    bot.modlog.emit(MODLOG.messageEdit, oldMessage, message);
+    bot.modlog.emit("messageEdit", oldMessage, message);
 })
 
 handler.on("editRaw", async message => {
