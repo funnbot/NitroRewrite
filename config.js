@@ -32,7 +32,8 @@ module.exports = {
             disabledEvents: {}, // Disabled modlog events
             filters: {}, // The filters for messages
             ar: false, // The auto role
-            blacklist: {} // Ids that are blocked from the bot
+            blacklist: {}, // Ids that are blocked from the bot
+            rolemeroles: []
         },
         user: {
             trivia: 0,

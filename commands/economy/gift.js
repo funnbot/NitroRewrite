@@ -5,6 +5,7 @@ class GiftCommand extends Command {
     async run({ message, bot, reply, t }) {
         const [user, am] = message.args;
         if (user.id === message.author.id) return reply.fail("You can't give yourself money.");
+        if (user.bot) return reply.fail("Robots don't know how to handle money.");
         if (!await message.author.wallet.hasEnough(am)) return reply.fail("You do not have enough money.");
         await message.author.wallet.sub(am);
         await user.wallet.add(am);

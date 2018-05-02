@@ -9,7 +9,7 @@ class BalanceCommand extends Command {
         const embed = bot.embed
             .setTitle(":atm: " + user.tag + " :atm:")
             .nitroColor()
-        embed.setDescription("You have **" + message.guild.formatBal(bal) + "**");
+        embed.setDescription("\u200B                 **" + message.guild.formatBal(bal) + "**");
         return await reply(embed);
     }
 
