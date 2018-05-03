@@ -31,6 +31,7 @@ class NitroClient extends Discord.Client {
         this.CommandLoader = new CommandLoader();
         this.Embed = Discord.MessageEmbed;
         this.conTimers = new ConsistentTimer(this);
+        this.isBeta = config.BETA;
 
         this.SimpleStorage = {
             guild: {},
