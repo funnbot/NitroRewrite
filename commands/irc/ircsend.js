@@ -34,7 +34,6 @@ class IRCSendCommand extends Command {
     }
 
     help = "Send a message to an IRC channel.";
-    wip = true;
     args = [{
         type: "id",
         info: "The id of an IRC channel.",
