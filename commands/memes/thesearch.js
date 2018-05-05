@@ -15,6 +15,7 @@ class TheSearchCommand extends Command {
     }
 
     help = "The search continues meme";
+    botPerm = "ATTACH_FILES";
     cooldown = 5;
     arg = {
         type: "string",

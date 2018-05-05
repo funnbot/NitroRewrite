@@ -1,5 +1,3 @@
-'use strict';
-// lit af
 const { Command, util: { cap, round } } = require("../../Nitro");
 
 class MLMessageCommand extends Command {

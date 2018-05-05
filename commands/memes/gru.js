@@ -21,6 +21,7 @@ class GruCommand extends Command {
     }
 
     help = "The gru meme.";
+    botPerm = "ATTACH_FILES";
     arg = {
         type: "string",
         info: "The text delimited by `|`",

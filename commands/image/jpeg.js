@@ -13,6 +13,7 @@ class JPEGCommand extends Command {
     }
 
     help = "Jpegify an image.";
+    botPerm = "ATTACH_FILES";
     alias = "jpegify";
     cooldown = 5;
 }

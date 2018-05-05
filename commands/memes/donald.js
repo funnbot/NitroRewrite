@@ -16,6 +16,7 @@ class DonaldCommand extends Command {
     }
 
     help = "Tweet like the Donald.";
+    botPerm = "EMBED_LINKS"
     arg = {
         type: "string",
         info: "The message in the tweet",

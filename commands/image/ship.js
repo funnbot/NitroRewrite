@@ -36,6 +36,7 @@ class ShipCommand extends Command {
     }
 
     help = "Ship a user";
+    botPerm = "ATTACH_FILES";
     args = [{
         type: "user",
         info: "The user to ship",

@@ -10,6 +10,7 @@ class SwirlCommand extends Command {
     }
 
     help = "Swirl an image.";
+    botPerm = "ATTACH_FILES";
     cooldown = 5;
     arg = {
         type: "int",

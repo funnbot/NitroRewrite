@@ -16,6 +16,7 @@ class NutCommand extends Command {
     }
 
     help = "The nut button meme";
+    botPerm = "ATTACH_FILES";
     cooldown = 5;
     arg = {
         type: "string",

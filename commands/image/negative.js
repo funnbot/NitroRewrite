@@ -10,6 +10,7 @@ class SwirlCommand extends Command {
     }
 
     help = "The negative of an image.";
+    botPerm = "ATTACH_FILES";
     cooldown = 5;
 }
 

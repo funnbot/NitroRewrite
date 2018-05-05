@@ -20,7 +20,7 @@ class DailiesCommand extends Command {
         //await message.author.transactions(transactions);
         return await reply(embed);*/
 
-        return reply(`**__To recieve your daily rewards.__**
+        return reply(`**__To receive your daily rewards.__**
 Go to <https://discordbots.org/bot/264087705124601856/vote>, 
 and click vote, you might need to login with your discord account.
 The reward is ${message.guild.formatBal(50)}.`);

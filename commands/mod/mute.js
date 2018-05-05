@@ -63,7 +63,6 @@ class MuteCommand extends Command {
         example: "Being a bad boi.",
         default: "unspecified"
     }]
-    wip = true;
 }
 
 /**

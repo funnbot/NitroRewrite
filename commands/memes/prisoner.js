@@ -15,6 +15,7 @@ class PrisonerCommand extends Command {
     }
 
     help = "The prisoners on a bench meme.";
+    botPerm = "ATTACH_FILES";
     arg = {
         type: "string",
         info: "The message for the prisoner.",

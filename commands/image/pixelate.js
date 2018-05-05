@@ -13,6 +13,7 @@ class PixelateCommand extends Command {
     }
 
     help = "Pixelate an image.";
+    botPerm = "ATTACH_FILES";
     alias = "pixel";
     cooldown = 5;
 }

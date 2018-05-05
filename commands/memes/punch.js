@@ -27,6 +27,7 @@ class PunchCommand extends Command {
     }
 
     help = "Sucker punch a user";
+    botPerm = "ATTACH_FILES";
     cooldown = 5;
     arg = {
         type: "user",

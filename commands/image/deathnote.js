@@ -17,6 +17,7 @@ class DeathNoteCommand extends Command {
     }
 
     help = "Put someone on your death note";
+    botPerm = "ATTACH_FILES";
     cooldown = 5;
     arg = {
         type: "user",
