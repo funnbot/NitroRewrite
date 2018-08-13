@@ -35,7 +35,7 @@ class StatsCommand extends Command {
             `Creator   :: ${s.CREATOR}`,
             `Modules   :: ${s.MODULES}`,
             `Commands  :: ${s.COMMANDS}`,
-            "Website   :: nitro.ws",
+            "Website   :: none",
             "Patreon   :: patreon.com/nitrobot",
             "PayPal    :: paypal.me/funnbot"
         ].join("\n") + "```**";
