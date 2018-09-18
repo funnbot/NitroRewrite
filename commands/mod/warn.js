@@ -26,6 +26,7 @@ class WarnCommand extends Command {
     }
 
     help = "Warn a user.";
+    userPerm = "MANAGE_MESSAGES";
     args = [{
         type: "user",
         info: "The user to warn.",

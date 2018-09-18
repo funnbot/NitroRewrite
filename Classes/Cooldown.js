@@ -26,4 +26,5 @@ class Cooldown {
     }
 }
 
-module.exports = Cooldown
+module.exports = Cooldown;
+
