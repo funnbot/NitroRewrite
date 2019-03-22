@@ -1,5 +1,6 @@
-const AUTH = require("./auth");
-const PREFIX = "n!";
+{
+  "token": "insert-bot-token-here",
+  "prefix": "!"
 
 module.exports = {
     PREFIX,
